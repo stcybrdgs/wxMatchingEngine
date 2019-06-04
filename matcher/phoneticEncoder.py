@@ -4,7 +4,7 @@ Created on Tue Jun  4 14:49:44 2019
 @author: Stacy
 
 Phonetic Encoding Modules:
-    these scripts process strings per encoding algorithms as
+    these scripts process strings per phonetic encoding algorithms as
     implemented in the python jellyfish and metaphone libraries, including:
         soundex
         # metaphone
