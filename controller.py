@@ -3,16 +3,17 @@
 Created on Tue Jun  4 15:11:52 2019
 @author: Stacy Bridges
 
-Phonetic Encoding Modules:
+phoneticEncoding.py
     def soundex(s)
     def metaphone(s)
     def doubleMetaphone(s)
     def nysiis(s)
     def matchRatingCodex(s)
-    def phonex(s) 
     
 """
 # IMPORTS  =============================
+import phoneticEncoding
+
 # GLOBALS  =============================
 # FUNCTIONS  ===========================
 # MAIN  ================================
