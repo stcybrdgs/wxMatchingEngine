@@ -18,7 +18,7 @@ distanceEncoder.py
     def hamming()
     def matchRatingComparison()
     
-stemmer.py
+stringCleaner.py
     def porterStemmer()
     
     
@@ -28,10 +28,12 @@ stemmer.py
 import json
 import sys
 sys.path.append('matcher/')
+sys.path.append('preProcessor/')
 
 # py files
 import phoneticEncoder
 import distanceEncoder
+import stringCleaner
 
 # GLOBALS  =============================
 
