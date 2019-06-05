@@ -6,12 +6,12 @@ Created on Tue Jun  4 16:57:36 2019
 Distance Encoding Modules:
     these scripts process strings per distance encoding algorithms as
     implemented in the python jellyfish library, including:
-        Levenshtein Distance
-        Damerau-Levenshtein Distance 
-        Jaro Distance
-        Jaro-Winkler Distance 
-        Hamming Distance
-        Match Rating Comparison  # Boolean based on Match Rating Codex
+        - Levenshtein Distance
+        - Damerau-Levenshtein Distance 
+        - Jaro Distance
+        - Jaro-Winkler Distance 
+        - Hamming Distance
+        - Match Rating Comparison  # Boolean based on Match Rating Codex
 """
 
 # IMPORTS  =========================================
