@@ -34,54 +34,26 @@ import distanceEncoder
 
 # MAIN  ================================
 def main():
-    # read and parse json file of modules and methods
+    # menu:
+    # read and parse json file of modules and methods into console menu
+    print('\n----------------------  MENU  ----------------------')
+    print('m  -  menu\ne  -  exit')
+    j = 0; txt = ' - '
     with open('modulesMethods.json') as json_file:
         data = json.load(json_file)
-        print(data)
-        
         for m in data['modules']:
-            print('Module: ' + m['module'])
+            print('\n')
+            print(m['module'] + ':')
             i = 0
             for f in m['methods']:
-                print('Methods: ', m['methods'][i])
+                if j >= 10: txt = '- '
+                print(j, txt, m['methods'][i])
+                j += 1
                 i += 1
+    json_file.close()
+    print('\n')
+    print('----------------------------------------------------')       
 
-    # __________________________________________________________ ADD MENU BEG
-    # USE THIS SECTION TO ADD MODULES AND METHODS 
-    # THE MENU
-    
-    # declare list of modules
-    modules = ['Phonetic Encoder', 'Distance Encoder']  
-    
-    # declare lists of methods that are in each module 
-    methods_0 = ['Soundex', 'Metaphone', 'Double Metaphone', 
-                 'NYSIIS', 'Match Rating Codex']  
-    methods_1 = ['Levenshtein Distance', 'Damerau Levenshtein Distance', 
-                 'Jaro Distance', 'Jaro-Winkler Distance', 
-                 'Hamming Distance', 'MatchRatingComparison']
-
-    # declare lists of methods for each module 
-    # (module[0] goes with methods_0, module[1] goes with methods_1, etc)
-    methods = [methods_0, methods_1] 
-    
-    # __________________________________________________________ ADD MENU END
-    
-    
-    # print the menu to the console
-    print('\n----------------------  MENU  ----------------------')
-    print('m  -  menu\ne -  exit\n')
-    i = 0; j = 0; txt = ' - '  # sentinels
-    for module in modules:
-        print(module, ':')
-        for method in methods[i]:
-            if j >= 10: txt = '- '
-            print(j, txt, method)
-            j += 1
-        i += 1
-        print('\n')
-    print('----------------------------------------------------')    
-    
-    
     # get menu selection from user
     choice = input('Select a menu item: ')
     
