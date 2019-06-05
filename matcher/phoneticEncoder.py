@@ -22,6 +22,7 @@ Phonetic Encoding Modules:
 import jellyfish
 from metaphone import doublemetaphone
 
+
 # FUNCTIONS  =======================================
 '''
 The Soundex algorithm converts a word (typically a name) to a 
