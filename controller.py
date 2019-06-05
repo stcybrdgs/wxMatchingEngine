@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+'''
 Created on Tue Jun  4 15:11:52 2019
 @author: Stacy Bridges
 
@@ -18,7 +18,11 @@ distanceEncoder.py
     def hamming()
     def matchRatingComparison()
     
-"""
+stemmer.py
+    def porterStemmer()
+    
+    
+'''
 # IMPORTS  =============================
 # sys path
 import json
@@ -38,22 +42,51 @@ def main():
     # read and parse json file of modules and methods into console menu
     print('\n----------------------  MENU  ----------------------')
     print('m  -  menu\ne  -  exit')
-    j = 0; txt = ' - '
+    
+    # create arrays to contain menu information
+    # so that correct method is triggered when user makes a menu choice
+    menuNumber = []  # array to contain menu numbers
+    menuMethod = []  # array to contain methods that go with each menu number
+    
+    j = 0
+    txt = ' - '
     with open('modulesMethods.json') as json_file:
         data = json.load(json_file)
+        
+        # print out the module name and a menu number
         for m in data['modules']:
             print('\n')
             print(m['module'] + ':')
             i = 0
+            
+            # print out the method name
             for f in m['methods']:
                 if j >= 10: txt = '- '
                 print(j, txt, m['methods'][i])
+                # push method name and menu number to array
+                menuNumber.append(j) 
+                menuMethod.append(m['methods'][i]) 
                 j += 1
                 i += 1
     json_file.close()
+    
     print('\n')
     print('----------------------------------------------------')       
 
+    '''
+    # TEST menu arrays
+    print('menuNumber array: ')
+    i = 0
+    for item in menuNumber:
+        print(i, ' - ', menuMethod[i])
+        i += 1
+    print('\n')
+    
+    '''
+    # declare strings to pass to methods
+    s1 = 'Jellyfish'
+    s2 = 'Smellyfish'
+    
     # get menu selection from user
     choice = input('Select a menu item: ')
     
