@@ -6,11 +6,11 @@ Created on Tue Jun  4 14:49:44 2019
 Phonetic Encoding Modules:
     these scripts process strings per phonetic encoding algorithms as
     implemented in the python jellyfish and metaphone libraries, including:
-        soundex
-        # metaphone
-        double metaphone
-        nysiis
-        match rating approach codex
+        - soundex
+        - # metaphone
+        - double metaphone
+        - nysiis
+        - match rating approach codex
 
     rem: 
     a combo of Soundex and Metaphone typically results in an 
