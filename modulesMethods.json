@@ -1,0 +1,18 @@
+{
+	"modules": [{
+			"module": "Phonetic Encoder",
+			"methods": [
+				"1",
+				"2"
+			]
+		},
+		{
+			"module": "Distance Encoder",
+			"methods": [
+				"three",
+				"four",
+				"five"
+			]
+		}
+	]
+}
