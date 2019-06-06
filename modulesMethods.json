@@ -15,9 +15,9 @@
 			"module": "Distance Encoder",
 			"file": "distanceEncoder.py",
 			"methods": [
-				"Levenshtein Distance", "Damerau Levenshtein Distance",
+				"Levenshtein Distance", "Damerau-Levenshtein Distance",
 				"Jaro Distance", "Jaro-Winkler Distance",
-				"Hamming Distance", "MatchRatingComparison"
+				"Hamming Distance", "Match Rating Comparison"
 			],
 			"defs":[
 				"levenshtein(s1, s2)", "damerauLevenshtein(s1, s2)", 
@@ -29,14 +29,10 @@
 			"module": "String Cleaner",
 			"file": "stringCleanerpy",
 			"methods": [
-				"Porter Stemmer",
-				"End of Day",
-				"Pizza"
+				"Porter Stemmer"
 			],
 			"defs":[
-				"porterStemmer(renaming the menu)",
-				"newFunction(pizza)",
-				"newFunction(endOfDay)"
+				"porterStemmer(s)"
 			]
 		}		
 	]
