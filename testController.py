@@ -96,9 +96,12 @@ def main():
     # process the user's menu selection
     while choice != 'e':
         # catch invalid user selection
+        
+        # assign valid user selection to correct function
         for i in menuNumbers:
             if i != choice: print('Invalid selection.')
-            else:
+
+    # result = menuNumbers[choice](s1)
         
         
         # process valid user selection
