@@ -15,6 +15,8 @@ Phonetic Encoding Modules:
     rem: 
     a combo of Soundex and Metaphone typically results in an 
     initial high number of positive matches 
+
+matcher/
     
 """
 

@@ -12,6 +12,9 @@ Distance Encoding Modules:
         - Jaro-Winkler Distance 
         - Hamming Distance
         - Match Rating Comparison  # Boolean based on Match Rating Codex
+        
+matcher/
+        
 """
 
 # IMPORTS  =========================================
@@ -24,7 +27,7 @@ deletions, and subsititutions required to change one word to
 another.
 '''
 def levenshtein(s1, s2):
-    return jellyfish.levenshtein_distance(s1, s2)
+    return jellyfish.levenshtein_distance(s1, s2) # return one value
     # end function  -----------
 
 '''    
@@ -33,7 +36,7 @@ distance counts transpositions (such as ifhs for fish) as
 a single edit.
 '''
 def damerauLevenshtein(s1, s2):
-    return jellyfish.damerau_levenshtein_distance(s1, s2)
+    return jellyfish.damerau_levenshtein_distance(s1, s2) # return one value
     # end function  -----------
 
 '''
@@ -42,7 +45,7 @@ point response in [0,1] where 0 represents two completely
 dissimilar strings and 1 represents identical strings.
 '''    
 def jaro(s1, s2):
-    return jellyfish.jaro_distance(s1, s2)
+    return jellyfish.jaro_distance(s1, s2) # return one value
     # end function  -----------
 
 '''
@@ -51,7 +54,7 @@ gives a floating point response in [0,1] where 0 represents two completely
 dissimilar strings and 1 represents identical strings.
 '''    
 def jaroWinkler(s1, s2):
-    return jellyfish.jaro_winkler(s1, s2)
+    return jellyfish.jaro_winkler(s1, s2) # return one value
     # end function  -----------
 
 '''
@@ -59,7 +62,7 @@ Hamming distance is the measure of the number of characters that
 differ between two strings.
 '''    
 def hamming(s1, s2):
-    return jellyfish.hamming_distance(s1, s2)
+    return jellyfish.hamming_distance(s1, s2) # return one value
     # end function  -----------
 
 '''
@@ -73,8 +76,8 @@ match_rating_codex() then compared according to the MRA algorithm.
 
 MRA does not perform well with encoded names differing in length by more than 2.
 '''
-def matchRatingComparison():
-    return jellyfish.match_rating_comparison(s1, s2)
+def matchRatingComparison(s1, s2):
+    return jellyfish.match_rating_comparison(s1, s2) # return two values
     # end function  -----------    
     
 
