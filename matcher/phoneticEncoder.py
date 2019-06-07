@@ -68,7 +68,7 @@ def nysiis(s):
 '''
 The Match Rating Approach algorithm is an algorithm for determining whether or 
 not two names are pronouncedsimilarly. The algorithm consists of an encoding 
-function (similar to soundex or nysiis)
+function that is similar to soundex or nysiis.
 '''    
 def matchRatingCodex(s):
     return jellyfish.match_rating_codex(s)
