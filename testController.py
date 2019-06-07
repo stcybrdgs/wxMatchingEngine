@@ -3,7 +3,7 @@
 Created on Tue Jun  4 15:11:52 2019
 @author: Stacy Bridges
 
-matcher/
+processor/
     phoneticEncoder.py
         def soundex(s)
         def metaphone(s)
@@ -29,7 +29,7 @@ preProcessor/
 import json
 import sys
 import importlib  # use importlib to import module stored as string
-sys.path.append('matcher/')
+sys.path.append('processor/')
 sys.path.append('preProcessor/')
 
 # py files
@@ -125,8 +125,13 @@ def callMethod(string):
     # stored as a string
     importModule = importlib.import_module(moduleDef)
     function = getattr(importModule, methodString)
-    if numArgs == 1: return function(s)
-    else: return function(s1, s2) 
+    if numArgs == 1: 
+        print('Input string(s): {}'.format(s))
+        return function(s)
+    else: 
+        print('Input string(s): {}, {}'.format(s1, s2))
+        return function(s1, s2) 
+    
 
     
 # MAIN  ================================
@@ -140,6 +145,7 @@ def main():
     while choice != 'e':
         match = False
         methodName = ''
+        
         # catch invalid user selection
         for i in menuNumbers:
             if choice == str(menuNumbers[i]): 
@@ -153,7 +159,7 @@ def main():
             # call method that was selected by the user
             result = callMethod(methodName)
             print('Result: ', result)
-        choice = input('Select a menu item:')
+        choice = input('Select a menu item: ')
        
     # end program
     print('Done.')
