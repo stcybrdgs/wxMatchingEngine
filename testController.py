@@ -28,6 +28,7 @@ preProcessor/
 # sys path
 import json
 import sys
+import importlib  # use importlib to import module stored as string
 sys.path.append('matcher/')
 sys.path.append('preProcessor/')
 
@@ -36,32 +37,37 @@ import phoneticEncoder
 import distanceEncoder
 import stringCleaner
 
+
 # GLOBALS  =============================
+# create arrays to contain menu information so that
+# the correct method is triggered when user makes a menu choice
+menuNumbers = []  # array to contain menu numbers
+menuMethods = []  # array to contain methods that go with each menu number
+methodDefs = [] # array to contain the defs that go with each menu number
+
+# declare test strings to pass to methods
+s = "belly wish"
+s1 = "jelly fish"
+s2 = "deli fish"
 
 
-# MAIN  ================================
-def main():
-    # menu:
+# LOCAL FUNCTIONS  =====================
+def menu():
     # read and parse json file of modules and methods into console menu
     print('\n----------------------  MENU  ----------------------')
     print('m  -  menu\ne  -  exit')
-    
-    # create arrays to contain menu information
-    # so that correct method is triggered when user makes a menu choice
-    menuNumbers = []  # array to contain menu numbers
-    menuMethods = []  # array to contain methods that go with each menu number
     
     j = 0
     txt = ' - '
     with open('modulesMethods.json') as json_file:
         data = json.load(json_file)
-        
+
         # print out the module name and a menu number
         for m in data['modules']:
             print('\n')
             print(m['module'] + ':')
             i = 0
-            
+                
             # print out the method name
             for f in m['methods']:
                 if j >= 10: txt = '- '
@@ -69,63 +75,93 @@ def main():
                 # push method name and menu number to array
                 menuNumbers.append(j) 
                 menuMethods.append(m['methods'][i]) 
+                methodDefs.append(m['methodDefs'][i])
                 j += 1
                 i += 1
     json_file.close()
     
     print('\n')
-    print('----------------------------------------------------')       
+    print('----------------------------------------------------')    
 
-    '''
-    # TEST menu arrays
-    print('menuNumber array: ')
-    i = 0
-    for item in menuNumber:
-        print(i, ' - ', menuMethod[i])
-        i += 1
-    print('\n')
+def getModuleDef(string):
+    moduleDef = "empty"
+    with open('modulesMethods.json') as json_file:
+        data = json.load(json_file)
+        
+        # find module based on string (ie, the module where the
+        # user's selected method is located)
+        for m in data['modules']:
+            # print out the method name
+            for f in m['methodDefs']:
+                if string == f:
+                    print('string: {}, methodDef: {}, module: {}'.format(string, f, m['moduleDef']))
+                    moduleDef = m['moduleDef']
+    json_file.close()
+    return moduleDef
     
+def callMethod(string):
     '''
-    # declare strings to pass to methods
-    s1 = 'Jellyfish'
-    s2 = 'Smellyfish'
+    # template
+    import amodule 
+    varstring = 'f'  # 'f' is function by amodule.py import
+    function = getattr(amodule,varstring) 
+    function()
+    '''
+    print('callMethod()' + ', ' + string + ',' + s + ',' +  s1 + ',' + s2)
+    # call function with 2 args if 's1' is found in methodName, else
+    # call function with 1 arg
     
-    # get menu selection from user
+    methodString = ""
+    locof1 = string.find('1')
+    locofpar = string.find('(')
+    if locof1 < 1: 
+        print('call function(s)') # call function(s)
+        methodString = string[0:locofpar]
+    else: 
+        print('call function(s1, s2)') # call function(s1, s2)  
+        methodString = string[0:locof1-2]
+
+    print('calling ', methodString, '()')
+    moduleDef = getModuleDef(string)
+    print('here2')
+    print(moduleDef, methodString)
+    # use importlib to import the correct module that was 
+    # stored as a string
+    importModule = importlib.import_module(moduleDef)
+    function = getattr(importModule, methodString)
+    result = function(s)
+    print(result)
+       
+    
+# MAIN  ================================
+def main():
+    # print test menu to console
+    menu()      
+    # testCount = 0
+    # get and process the user's menu selection
     choice = input('Select a menu item: ')
-    
-    # process the user's menu selection
     while choice != 'e':
+        match = False
+        methodName = ''
         # catch invalid user selection
-        
-        # assign valid user selection to correct function
         for i in menuNumbers:
-            if i != choice: print('Invalid selection.')
-
-    # result = menuNumbers[choice](s1)
-        
-        
-        # process valid user selection
+            if choice == str(menuNumbers[i]): 
+                match = True
+                methodName = methodDefs[i]
+        # if testCount >=5: break
+        if choice == 'e': break # end program
+        elif choice == 'm':  menu()
+        elif match != True:
+            print('You selection is not valid.')
         else:
-            if choice not in menuNumbers: 
-                print('Your selection is not valid.') 
-            else:
-                if choice == 'e': break # end program
-                if choice == 'm': menu()
-                if choice == '1': spacy_modules.tokenizer()
-                if choice == '2': spacy_modules.tagger()
-                if choice == '3': spacy_modules.parser()
-                if choice == '4': spacy_modules.ner()
-                if choice == '5': spacy_modules.matcher()
-                if choice == '6': jf_phoneme.soundex()
-                if choice == '7': jf_phoneme.nysiis()
-                if choice == '7b': dm_doubleMetaphone.dlbMetaphone()
-                if choice == '8': jf_distance.levenshtein()
-                if choice == '9': jf_distance.jaroWinkler()
-                if choice == '0': jf_match.mrc()
+            # call method that was selected by the user
+            print(methodName)
+            # methodObj = callMethod(methodName)
+            callMethod(methodName)
         
-        # get new user selection
-        choice = input('\nSelect a menu item: ')
-        
+        choice = input('Select a menu item:')
+        # testCount += 1
+       
     # end program
     print('Done.')
 
