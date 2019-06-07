@@ -94,44 +94,40 @@ def getModuleDef(string):
             # print out the method name
             for f in m['methodDefs']:
                 if string == f:
-                    print('string: {}, methodDef: {}, module: {}'.format(string, f, m['moduleDef']))
+                    print('method: {}, methodDef: {}, module: {}'.format(string, f, m['moduleDef']))
                     moduleDef = m['moduleDef']
     json_file.close()
     return moduleDef
     
 def callMethod(string):
     '''
-    # template
+    # template to run function stored as string:
     import amodule 
     varstring = 'f'  # 'f' is function by amodule.py import
     function = getattr(amodule,varstring) 
     function()
     '''
-    print('callMethod()' + ', ' + string + ',' + s + ',' +  s1 + ',' + s2)
     # call function with 2 args if 's1' is found in methodName, else
     # call function with 1 arg
-    
     methodString = ""
     locof1 = string.find('1')
     locofpar = string.find('(')
+    numArgs = 0
     if locof1 < 1: 
-        print('call function(s)') # call function(s)
+        numArgs = 1 
         methodString = string[0:locofpar]
     else: 
-        print('call function(s1, s2)') # call function(s1, s2)  
+        numArgs = 2
         methodString = string[0:locof1-2]
 
-    print('calling ', methodString, '()')
     moduleDef = getModuleDef(string)
-    print('here2')
-    print(moduleDef, methodString)
     # use importlib to import the correct module that was 
     # stored as a string
     importModule = importlib.import_module(moduleDef)
     function = getattr(importModule, methodString)
-    result = function(s)
-    print(result)
-       
+    if numArgs == 1: return function(s)
+    else: return function(s1, s2) 
+
     
 # MAIN  ================================
 def main():
@@ -140,6 +136,7 @@ def main():
     # testCount = 0
     # get and process the user's menu selection
     choice = input('Select a menu item: ')
+    result = ''
     while choice != 'e':
         match = False
         methodName = ''
@@ -148,19 +145,15 @@ def main():
             if choice == str(menuNumbers[i]): 
                 match = True
                 methodName = methodDefs[i]
-        # if testCount >=5: break
         if choice == 'e': break # end program
         elif choice == 'm':  menu()
         elif match != True:
             print('You selection is not valid.')
         else:
             # call method that was selected by the user
-            print(methodName)
-            # methodObj = callMethod(methodName)
-            callMethod(methodName)
-        
+            result = callMethod(methodName)
+            print('Result: ', result)
         choice = input('Select a menu item:')
-        # testCount += 1
        
     # end program
     print('Done.')
