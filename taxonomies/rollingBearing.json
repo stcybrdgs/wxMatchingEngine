@@ -1,0 +1,55 @@
+{
+	"roller bearings": {
+		"ball bearings": {
+			"radial ball bearings": [
+				"single row deep groove ball bearings",
+				"single row angular contact ball bearings",
+				"duplex angular contact ball bearings",
+				"four-point contact ball bearings",
+				"double row angular contact ball bearings",
+				"self-aligning ball bearings",
+				"ball bearing for rolling bearing units"
+			],
+			"thrust ball bearings": [
+				"single direction thrust ball bearings",
+				"double direction angular contact thrust ball bearings",
+				"high-speed duplex angular contact ball bearings (for axial loads)"
+			]
+		}, 
+		"roller bearings": {
+			"radial roller bearings": [
+				"single row cylindrical roller bearings",
+				"double row cylindrical roller bearings",
+				"needle roller bearings",
+				"single row tapered roller bearings",
+				"double row tapered roller bearings",
+				"spherical roller bearings"
+			],
+			"thrust roller bearings": [
+				"cylindrical roller thrust bearings",
+				"needle roller thrust bearings",
+				"tapered roller thrust bearings",
+				"spherical roller thrust bearings"
+			]
+		}
+	},
+	"special application bearings": [
+		"ultra thin wall type ball bearings",
+		"ball screw support bearings",
+		"railway car journal roller bearings",
+		"ultra-clean vacuum bearings",
+		"sl-type cylindrical roller bearings",
+		"rubber molded bearings",
+		"insulated bearings megaohm series",
+		"clearance adjusting needle roller bearings",
+		"complex bearings",
+		"connecting rod needle roller bearings with cage",
+		"cam followers",
+		"roller followers"
+	],
+	"linear motion bearings": [
+		"linear ball bearings",
+		"linear roller bearings",
+		"linear flat roller bearings"
+	]
+}
