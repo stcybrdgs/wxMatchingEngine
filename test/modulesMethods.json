@@ -1,0 +1,44 @@
+{
+	"modules": 
+	[
+		{
+			"module": "Phonetic Encoder",
+			"moduleDef": "phoneticEncoder",
+			"file": "phoneticEncoder.py",
+			"methods": [
+				"Soundex", "Metaphone", "Double Metaphone",
+				"NYSIIS", "Match Rating Codex"
+			],
+			"methodDefs": [
+    			"soundex(s)", "metaphone(s)", "doubleMetaphone(s)",
+    			"nysiis(s)", "matchRatingCodex(s)"
+    		]	
+		},
+		{
+			"module": "Distance Encoder",
+			"moduleDef": "distanceEncoder",
+			"file": "distanceEncoder.py",
+			"methods": [
+				"Levenshtein Distance", "Damerau-Levenshtein Distance",
+				"Jaro Distance", "Jaro-Winkler Distance",
+				"Hamming Distance", "Match Rating Comparison"
+			],
+			"methodDefs": [
+				"levenshtein(s1, s2)", "damerauLevenshtein(s1, s2)", 
+				"jaro(s1, s2)", "jaroWinkler(s1, s2)", "hamming(s1, s2)", 
+				"matchRatingComparison(s1, s2)"
+			]
+		},
+		{
+			"module": "String Cleaner",
+			"moduleDef": "stringCleaner",
+			"file": "stringCleaner.py",
+			"methods": [
+				"Porter Stemmer"
+			],
+			"methodDefs": [
+				"porterStemmer(s)"
+			]
+		}		
+	]
+}
