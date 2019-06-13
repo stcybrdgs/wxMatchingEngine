@@ -3,13 +3,17 @@
 Created on Thr Jun 13 14:49:44 2019
 @author: Stacy
 
-methods for first run of the NERS Tester
-    test_NERS_loader()	
-    test_NERS_preProcessor()
-	test_NERS_trainer()
-	test_NERS_matcher()
-
-test/
+load files to be used by the nlp processor:
+    - stores
+        - taxonomies
+        - lookups (suppliers, etc)
+        - models
+            - master docs (mdm, erp, etc)
+        - pickles
+    - io
+        - match docs (tenders, etc)
+        
+processor/
     
 """
 
@@ -18,14 +22,12 @@ test/
 
 
 # FUNCTIONS  =======================================
-def test_NERS_loader():
-    print('Running The Loader...')
+def load():
     '''
     tx =  taxonomy
     lk =  lookup
     erp = erp
     tdr = tender
-    '''
     '''
     print('Running the loader...')
     
@@ -37,7 +39,6 @@ def test_NERS_loader():
         print('erp doc loaded.')
     elif d == 'tdr':
         print('tender doc loaded.')
-    '''
     
     # load taxonomies  -------------------------
     # (future spring loads taxonomies based on market domain)
@@ -60,14 +61,4 @@ def test_NERS_loader():
     # for test, use tender
     #   tender = nlp(f5)  # io/input/tender.csv
     
-	
-def test_NERS_preProcessor():
-    print('Running The Pre-Processor...') 
-    
-def test_NERS_trainer():
-    print('Running The NERS Trainer...')
-	
-def test_NERS_matcher():
-    print('Running The NERS Matcher...')
-
 

@@ -22,6 +22,13 @@ processor/
 preProcessor/
     stringCleaner.py
         def porterStemmer(s)
+
+test/
+    nersTester.py  
+        test_NERS_loader()	
+        test_NERS_preProcessor()
+    	test_NERS_trainer()
+    	test_NERS_matcher()        
     
 '''
 # IMPORTS  =============================
@@ -36,17 +43,14 @@ sys.path.append('../stores/')
 sys.path.append('test/')
 
 # py files
-import phoneticEncoder
-import distanceEncoder
-import stringCleaner
+#import phoneticEncoder
+#import distanceEncoder
+#import stringCleaner
 # import loader
 # import preprocessor
 # import trainer
 # import matcher
-import test_NERS_loader
-import test_NERS_preProcessor
-import test_NERS_trainer
-import test_NERS_matcher
+import nersTester
 
 
 # GLOBALS  =============================
@@ -178,28 +182,31 @@ def main():
         choice = input('Select a menu item: ')
     
     # begin WrWx NERS methods  -------------------
-    print('\nStarting WrWx NERS Tester --------------------')
+    print('\n//// Starting WrWx NERS Tester  ////')
     while choice != 'e':
         if choice == '12':         
-            print('You selected The Loader')
+            nersTester.test_NERS_loader()
         elif choice == '13':         
-            print('You selected The Pre-Processor')        
+            nersTester.test_NERS_preProcessor()       
         elif choice == '14':         
-            print('You selected The NERS Trainer')
+            nersTester.test_NERS_trainer()
         elif choice == '15':         
-            print('You selected The NERS Matcher')
+            nersTester.test_NERS_matcher()
         elif choice == 'e': break # end program
         elif choice == 'm':  
-            print('\n12 - {}\n13 - {}\n14 - {}\n15 - {}\n'.format(
-                    'The Loader', 'The Pre-Processor', 
+            print('\n----------------')
+            print('\ne - {}\nm - {}\n12 - {}\n13 - {}\n14 - {}\n15 - {}\n'.format(
+                    'exit', 'menu','The Loader', 'The Pre-Processor', 
                     'The NERS Trainer', 'The NERS Matcher'
                     )
             )
+            print('\n----------------')
         else: 
             print('Your selection is not valid.\nPlease choose from the NERS Tester menu.\n(press \'m\' for menu)')   
         choice = input('Select a menu item: ')
         
     # end program
     print('Done.')
+
 
 if __name__ == '__main__' : main()
