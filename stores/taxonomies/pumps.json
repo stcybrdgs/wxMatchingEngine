@@ -1,4 +1,26 @@
 {
-
-
+	"pumps": {
+		"dynamic": {
+			"centrifugal": [
+                "axial flow",
+                "mixed flow",
+                "peripheral"                
+			],
+			"special effect": [
+				"jet",
+				"electromagnetic"
+			]
+		}, 
+		"positive displacement": {
+			"reciprocating": [
+				"piston",
+				"plunger",
+				"diaphragm"				
+			],
+			"rotary": [
+				"single rotor",
+				"multiple rotor"
+			]
+		}
+	}
 }
