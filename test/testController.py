@@ -39,6 +39,14 @@ sys.path.append('test/')
 import phoneticEncoder
 import distanceEncoder
 import stringCleaner
+# import loader
+# import preprocessor
+# import trainer
+# import matcher
+import test_NERS_loader
+import test_NERS_preProcessor
+import test_NERS_trainer
+import test_NERS_matcher
 
 
 # GLOBALS  =============================
@@ -49,9 +57,9 @@ menuMethods = []  # array to contain methods that go with each menu number
 methodDefs = [] # array to contain the defs that go with each menu number
 
 # declare test strings to pass to methods
-s = "belly wish"
-s1 = "jelly fish"
-s2 = "deli fish"
+s = "Ball Bearing, Bll Brng"
+s1 = "Centrifugal Pump"
+s2 = "Centrfigal puMP"
 
 
 # LOCAL FUNCTIONS  =====================
@@ -135,7 +143,6 @@ def callMethod(string):
         print('Input string(s): {}, {}'.format(s1, s2))
         return function(s1, s2) 
     
-
     
 # MAIN  ================================
 def main():
@@ -145,10 +152,16 @@ def main():
     # get and process the user's menu selection
     choice = input('Select a menu item: ')
     result = ''
+
+    # begin general library methods  --------------
     while choice != 'e':
         match = False
         methodName = ''
         
+        # move to WrWx NERS methods if choice >= 12
+        wxMethods = ['12', '13', '14', '15']
+        if choice in wxMethods: break
+    
         # catch invalid user selection
         for i in menuNumbers:
             if choice == str(menuNumbers[i]): 
@@ -157,13 +170,35 @@ def main():
         if choice == 'e': break # end program
         elif choice == 'm':  menu()
         elif match != True:
-            print('You selection is not valid.')
+            print('Your selection is not valid.')
         else:
             # call method that was selected by the user
             result = callMethod(methodName)
             print('Result: ', result)
         choice = input('Select a menu item: ')
-       
+    
+    # begin WrWx NERS methods  -------------------
+    print('\nStarting WrWx NERS Tester --------------------')
+    while choice != 'e':
+        if choice == '12':         
+            print('You selected The Loader')
+        elif choice == '13':         
+            print('You selected The Pre-Processor')        
+        elif choice == '14':         
+            print('You selected The NERS Trainer')
+        elif choice == '15':         
+            print('You selected The NERS Matcher')
+        elif choice == 'e': break # end program
+        elif choice == 'm':  
+            print('\n12 - {}\n13 - {}\n14 - {}\n15 - {}\n'.format(
+                    'The Loader', 'The Pre-Processor', 
+                    'The NERS Trainer', 'The NERS Matcher'
+                    )
+            )
+        else: 
+            print('Your selection is not valid.\nPlease choose from the NERS Tester menu.\n(press \'m\' for menu)')   
+        choice = input('Select a menu item: ')
+        
     # end program
     print('Done.')
 
