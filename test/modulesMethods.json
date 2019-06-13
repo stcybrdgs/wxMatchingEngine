@@ -63,10 +63,10 @@
 				"The NERS Matcher"
 			],
 			"methodDefs": [
-				"test_NERS_loader",
-				"test_NERS_preProcessor",
-				"test_NERS_trainer",
-				"test_NERS_matcher"
+				"test_NERS_loader(d)",
+				"test_NERS_preProcessor()",
+				"test_NERS_trainer()",
+				"test_NERS_matcher()"
 			]
 		}
 	]

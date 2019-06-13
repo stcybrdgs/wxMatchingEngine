@@ -1,0 +1,42 @@
+# LOADER  ===========================
+# load files
+#
+# load taxonomies   -------------------------
+# (future spring loads taxonomies based on market domain)
+tx_bearings = nlp(f1)  # taxonomies/bearings.json
+tx_pumps = nlp(f2)  # taxonomies/pumps.json
+
+# load lookups   ------------------------------
+# (future sprint loads lookups based on target master)
+lk_suppliers = nlp(f3)  # lookups/bhSuppliers.json
+
+# load models   -------------------------------
+# rem only one master per run
+md_erp = nlp(f4)  # models/erp10.csv
+
+# load pickles   -------------------------------
+
+# load match docs  -------------------------
+# rem only one match doc per run
+tender = nlp(f5)  # io/input/tender.csv
+
+
+# PRE- PROCESSOR  ==================
+# nltk stopwords
+# lemmatizer / stemmer
+
+
+# NERS  =============================
+# TRAINER  -----------------------------------------------------
+
+# rem future method() for pulling suppliers lookup from master
+
+# def trainer():
+# train md_erp on phonetic and distance encoding
+# train md_erp on suppliers 
+# (for future sprint, do pickles and persistend store)
+
+# train tender on phonetic and distance encoding
+#  
+
+# MATCHER  ---------------------------------------------------
