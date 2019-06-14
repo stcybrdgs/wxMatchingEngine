@@ -50,9 +50,10 @@ def loadDoc(d):
             if d == storeFolders[i]:
                 path = '../stores/' + d + '/'
 
-    filename = os.listdir(path)  # get ['filename'] as a list
+    # get the filename of the doc that needs to be loaded
+    filename = os.listdir(path)
 
-    return filename[0]  # use list indexing to return 'filename'
+    return filename # TEST
 
     #filename.find(sub,start,end)
     # make sure file extension is in supported types

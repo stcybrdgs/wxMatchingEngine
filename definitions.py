@@ -2,6 +2,7 @@
 ---------------------------------------
 io/
     input/
+    # contains file to be matched -> one per job
         tender.csv
     output/
 ---------------------------------------
@@ -23,10 +24,10 @@ processor/
         def hamming(s1, s2)
         def matchRatingComparison(s1, s2)
     loader.py
-    # imports: [ csv, xlrd ]
-        def import_csv(f)
-        def import_txt(f)
-        def import_xls(f)
+    # imports: [ csv, xlrd, os, sys ]
+        def import_csv(d)
+        def import_txt(d)
+        def import_xls(d)
         def loadAll()
         def loadDoc(d)
     phoneticEncoder.py
