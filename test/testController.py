@@ -41,6 +41,7 @@ sys.path.append('../io/')
 sys.path.append('../ners/')
 sys.path.append('../processor/')
 sys.path.append('../stores/')
+sys.path.append('C:/Users/Owner/Anaconda3/Lib/site-packages') # jellyfish path
 sys.path.append('test/')
 
 # py files
