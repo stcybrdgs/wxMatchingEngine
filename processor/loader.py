@@ -1,52 +1,40 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thr Jun 13 14:49:44 2019
-@author: Stacy
-
-load files to be used by the nlp processor:
-    - stores
-        - taxonomies
-        - lookups (suppliers, etc)
-        - models
-            - master docs (mdm, erp, etc)
-        - pickles
-    - io
-        - match docs (tenders, etc)
-
-processor/
+@author: Stacy Bridges
 
 """
 
 # IMPORTS  =========================================
-
+import csv
+import xlrd
 
 
 # FUNCTIONS  =======================================
+# import csv file where arg f == 'path/filename.ext'
+def import_csv(f):
+    pass
+
+# import txt file based where arg f == 'path/filename.ext'
+def import_txt(f):
+    with open(f) as infile:
+        fileObj = infile.read()
+    return fileObj
+
+# import Excel file where arg f == 'path/filename.ext'
+def import_xls(f):
+    pass
+
 def loadAll():
     pass
 
 # load a single document into the engine as determined by
-# the single passed-in argument
+# the single passed-in argument representing which doc to import:
+#   lookup, master, model , pickle , taxonomy
 def loadDoc(d):
-    '''
-    lookup
-    master
-    model
-    pickle
-    taxonomy
+        # detect docs
+    # choose import function depending on doctype
 
-
-    '''
-    print('Running the loader...')
-
-    if d == 'tx':
-        print('taxonomy doc loaded.')
-    elif d == 'lk':
-        print('lookup doc loaded.')
-    elif d == 'erp':
-        print('erp doc loaded.')
-    elif d == 'tdr':
-        print('tender doc loaded.')
 
     # load taxonomies  -------------------------
     # (future spring loads taxonomies based on market domain)
@@ -68,3 +56,5 @@ def loadDoc(d):
     # rem only one match doc per run
     # for test, use tender
     #   tender = nlp(f5)  # io/input/tender.csv
+
+    pass
