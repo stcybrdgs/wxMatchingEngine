@@ -13,52 +13,38 @@ import sys
 
 
 # FUNCTIONS  =======================================
-'''
-import_csv(d)
-    - receives arg == 'path/filename.csv'
-    - imports csv file and returns to caller
-'''
+# receive arg == 'path/filename.csv' and
+# return doc obj to caller
 def import_csv(d):
-    '''
-    stuff goes here
-    '''
     # TEST
     print('import_csv: ' + d)
 
+# receive arg == 'path/filename.csv' and
+# return doc obj to caller
+def import_json(d):
+    # TEST
+    print('import_json: ' + d)
 
-'''
-import_txt(d)
-    - receives arg == 'path/filename.txt'
-    - imports txt file and returns to caller
-'''
+# receive arg == 'path/filename.csv' and
+# return doc obj to caller
 def import_txt(d):
     with open(d) as infile:
         fileObj = infile.read()
     return fileObj
 
-    # TEST
-    # print('import_txt: ' + d)
-
-'''
-import_xls(d)
-    - receives arg == 'path/filename.xls'
-    - imports xls file and returns to caller
-'''
+# receive arg == 'path/filename.csv' and
+# return doc obj to caller
 def import_xls(d):
+    # TEST
+    print('import_xls: ' + d)
     pass
 
-'''
-'''
-def loadAll():
+# function description
+def load_all():
     pass
 
-'''
-loadDoc(d)
-    - loads a single document into the engine per string arg 'd'
-    - the doc choices are:
-    -   io/ match
-    -   stores/ lookup, master, model, pickle, taxonomy
-'''
+# load a doc per arg whose value is an index in
+# ['match', 'lookup', 'master', 'model', 'pickle', 'taxonomy']
 def loadDoc(d):
     # get the path to the doc that neads to be loaded
     path = ''
@@ -76,15 +62,18 @@ def loadDoc(d):
     file_path = path + file_name
     file_ext = file_name[file_name.find('.'):len(file_name)]
 
-    # call the import method that's appropriate for the file extension
-    # and return doc obj to caller
+    # call the import method that's appropriate for the file .ext
+    # and return a doc obj to the caller
     docObj =''
-    if file_ext == '.txt':
-        docObj = import_txt(file_path)
-    elif file_ext == '.csv':
+    if file_ext == '.csv':
         docObj = import_csv(file_path)
+    elif file_ext == '.json':
+        docObj = import_json(file_path)
+    elif file_ext == '.txt':
+        docObj = import_txt(file_path)
     elif file_ext == '.xls':
         docObj = import_xls(file_path)
+
 
     # TEST ----------------------------------------------------
     print(docObj[0:100])

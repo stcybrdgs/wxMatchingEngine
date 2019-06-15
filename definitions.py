@@ -26,9 +26,10 @@ processor/
     loader.py
     # imports: [ csv, xlrd, os, sys ]
         def import_csv(d)
+        def import_json(d)
         def import_txt(d)
         def import_xls(d)
-        def loadAll()
+        def load_all()
         def loadDoc(d)
     phoneticEncoder.py
     # imports: []

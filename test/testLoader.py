@@ -31,7 +31,7 @@ def main():
     #   from store/ : lookup, match, master, model , pickle , taxonomy
 
     # create an obj for the doc that is to be matched against the master
-    matchDoc = loader.loadDoc('lookup')  #  ../processor/
+    matchDoc = loader.loadDoc('match')  #  ../processor/
 
     print(matchDoc)
 
