@@ -15,6 +15,9 @@ ners/
         def trainer()
 ---------------------------------------
 processor/
+    nlpObjectCreator.py
+    # imports: [ spacy ]
+        def create_nlp_object(d)
     distanceEncoder.py
     # imports: []
         def levenshtein(s1, s2)
@@ -23,6 +26,15 @@ processor/
         def jaroWinkler(s1, s2)
         def hamming(s1, s2)
         def matchRatingComparison(s1, s2)
+    phoneticEncoder.py
+    # imports: []
+        def soundex(s)
+        def metaphone(s)
+        def doubleMetaphone(s)
+        def nysiis(s)
+        def matchRatingCodex(s)
+---------------------------------------
+preprocessor/
     loader.py
     # imports: [ csv, xlrd, os, sys ]
         def import_csv(d)
@@ -32,26 +44,18 @@ processor/
         def import_xls(d)
         def load_all()
         def loadDoc(d)
-    phoneticEncoder.py
-    # imports: []
-        def soundex(s)
-        def metaphone(s)
-        def doubleMetaphone(s)
-        def nysiis(s)
-        def matchRatingCodex(s)
-    preprocessor.py
+    stringCleaner.py
     # imports: [jellyfish, spacy, re, unicodedata2]
+    # files: [ stop_words.txt ]
         def string_cleaner(d)
         def remove_accents(d)
         def remove_special_chars(d)
         def remove_whitespace(d)
         def normalizer(d)
+        def remove_stop_words(d)
         def lemmatizer(d)
         def porterStemmer(d)
-        def remove_stop_words(d)
-    processor.py
-    # imports[]
-        def create_nlp_object(d)
+
 
 ---------------------------------------
 stores/

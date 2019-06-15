@@ -12,8 +12,9 @@ import os
 # rem use importlib to import module stored as string
 sys.path.append('../io/')
 sys.path.append('../ners/')
+sys.path.append('../preprocessor/')
 sys.path.append('../processor/')
-sys.path.append('../stores/')
+sys.path.append('../store/')
 
 # IMPORT FUNCTIONS  =====================
 import loader
@@ -22,16 +23,16 @@ import processor
 
 # MAIN  =================================
 def main():
-    ts1 = ' 88325| Plummer housing by SKF with 2100  (mm) bolt hole and 700 (mm) in   height|se511609k7 ? (not sure, ask Enrìque Lòpez)'
+    ts = ' 88325| Plummer housing by SKF with 2100  (mm) bolt hole and 700 (mm) in   height|se511609k7 ? (not sure, ask Enrìque Lòpez)'
     ts2 = '18132| Örsted Müller asked for the needle  bearing set by   NKX, 110 MM bolt-hole centr distance, height 30 mm, weight 1.83 kg|NKX 15z? (not sure)'
-    print(ts1)
+    print(ts)
 
     # clean the test string
-    ts1 = preprocessor.string_cleaner(ts1)
-    print(ts1)
+    ts = preprocessor.string_cleaner(ts)
+    print(ts)
 
     # create nlp object from test string
-    processor.create_nlp_object(ts1)
+    processor.create_nlp_object(ts)
 
     # end program
     print('Done.')

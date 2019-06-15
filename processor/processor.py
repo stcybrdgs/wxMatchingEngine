@@ -8,14 +8,14 @@ processor/
     # imports[]
         def create_nlp_object(d)
 
-
 """
 # IMPORT  LIBS  ========================
 import spacy
 from spacy.lang.en.examples import sentences
+from spacy.lang.en.stop_words import STOP_WORDS
+from spacy.lang.en.examples import sentences
 
 # IMPORT FUNCTIONS  =====================
-import preprocessor
 
 # GLOBALS  =========================================
 
@@ -30,15 +30,9 @@ def create_nlp_object(d):
     nlp = spacy.load('en_core_web_sm')
     nlp_obj = nlp(d)
 
-    # groom stop words out of nlp object
-    nlp_obj = preprocessor.remove_stop_words(nlp_obj)
-
     # TEST
     print(nlp_obj.text)
     '''
     for token in nlp_obj:
         print(token.text)
     '''
-
-
-    # how do you pass nlp objects?

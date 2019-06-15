@@ -46,6 +46,24 @@ rem 'sm' model has no word2vector capability
 # (for future sprint, do pickles and persistend store)
 # train tender on phonetic and distance encoding
 
+MULTIPROCESSING
+Multiprocessing means that several processes are executed simultaneously,
+usually over several Central Processing Units (CPUs) or CPU cores, thus
+saving time. An example is the training of machine learning models or neural
+networks, which are intensive and time-consuming processes. By distributing
+these on a large amount of processing units, a lot of time can be saved.
+In Python, this is done using the multiprocessing package.
+
+REM STOP WORDS
+# remove stop words from doc object
+#   stop words are most common filter words
+#   rem matching tokens will return True for is_stop
+#   you need to create nlp object before working with stop words
+#   because the doc needs to be tokenized
+I CHOSE TO NOT USE SPACY STOP_WORDS BUT INSTEAD TO REMOVE THE WORDS
+DIRECTLY FROM THE INPUT DOC BEFORE TURNING IT INTO AN NLP OBJECT
+
+
 -------------------------
 ADD CUSTOM STOP WORDS IN SPACY
 customize_stop_words = [

@@ -10,11 +10,10 @@ processor/
         def remove_accents(d)
         def remove_special_chars(d)
         def remove_whitespace(d)
-        def remove_stop_words(d)
         def normalizer(d)
+        def remove_stop_words(d)
         def lemmatizer(d)
         def porterStemmer(d)
-        def remove_stop_words(d)
 
 """
 
@@ -23,8 +22,6 @@ import re # good
 import jellyfish
 import unicodedata2
 import spacy
-from spacy.lang.en.stop_words import STOP_WORDS
-from spacy.lang.en.examples import sentences
 
 # GLOBALS  =========================================
 # define special characters to be removed by the string cleaner
@@ -39,6 +36,7 @@ def string_cleaner(d):
     d = remove_special_chars(d)
     d = remove_whitespace(d)
     d = normalizer(d)
+    d = remove_stop_words(d)
     # d = lemmatizer(d)
     # porterStemmer
     return d
@@ -55,21 +53,6 @@ def remove_accents(d):
     d = d.decode("utf-8")
     return str(d)
 
-# perform look-up based lemmatization
-# rem to provide a lookup lemmatizer for your language, import the lookup
-# table and add it to the Language class as lemma_lookup:
-def lemmatizer(d):
-    pass
-
-def normalizer(d):
-    d = d.lower()
-    return d
-
-# Reduce the string token to its stem and return root word
-def porterStemmer(s):
-    # print('Porter Stemmer...')
-    return jellyfish.porter_stem(s)
-
 # remove special characters from the doc object
 # and return to caller
 def remove_special_chars(d):
@@ -84,20 +67,21 @@ def remove_whitespace(d):
     d = re.sub(' +', ' ', d)  # remove duplicative whitespace
     return d
 
-# remove stop words from doc object
-#   stop words are most common filter words
-#   rem matching tokens will return True for is_stop
-#   you need to create nlp object before working with stop words
-#   because the doc needs to be tokenized
-def remove_stop_words(d):
-
-    # TEST
-    #print(d.text)
-    for token in nlp_obj:
-        print(token.text)
-    '''
-    for word in d:
-        if word.is_stop == True:
-            print(word)
-    '''
+def normalizer(d):
+    d = d.lower()
     return d
+
+# remove words from doc if they appear in stop_words.txt
+def remove_stop_words(d):
+    return d
+
+# perform look-up based lemmatization
+# rem to provide a lookup lemmatizer for your language, import the lookup
+# table and add it to the Language class as lemma_lookup:
+def lemmatizer(d):
+    pass
+
+# Reduce the string token to its stem and return root word
+def porterStemmer(s):
+    # print('Porter Stemmer...')
+    return jellyfish.porter_stem(s)
