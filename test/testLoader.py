@@ -9,7 +9,8 @@ import sys
 import os
 
 # PATHS ================================
-#import importlib  # use importlib to import module stored as string
+# import importlib
+# rem use importlib to import module stored as string
 sys.path.append('../io/')
 sys.path.append('../ners/')
 sys.path.append('../processor/')
@@ -29,13 +30,11 @@ def main():
     #   from io/ :    match
     #   from store/ : lookup, match, master, model , pickle , taxonomy
 
-    # create an obj for the match doc to be matched against the master
-    matchDoc = loader.loadDoc('match')
+    # create an obj for the doc that is to be matched against the master
+    matchDoc = loader.loadDoc('lookup')  #  ../processor/
 
     print(matchDoc)
 
-    # confirm output
-    #print('Filename: {}'.format(fileName))
 
     # end program
     print('Done.')

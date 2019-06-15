@@ -11,33 +11,53 @@ import csv
 import os
 import sys
 
-# PATHS ================================
-sys.path.append('C:/Users/Owner/Anaconda3/Lib/site-packages')
 
 # FUNCTIONS  =======================================
-# import csv file where arg f == 'path/filename.ext'
+'''
+import_csv(d)
+    - receives arg == 'path/filename.csv'
+    - imports csv file and returns to caller
+'''
 def import_csv(d):
-    pass
+    '''
+    stuff goes here
+    '''
+    # TEST
+    print('import_csv: ' + d)
 
-# import txt file based where arg f == 'path/filename.ext'
+
+'''
+import_txt(d)
+    - receives arg == 'path/filename.txt'
+    - imports txt file and returns to caller
+'''
 def import_txt(d):
     with open(d) as infile:
         fileObj = infile.read()
     return fileObj
 
-# import Excel file where arg f == 'path/filename.ext'
+    # TEST
+    # print('import_txt: ' + d)
+
+'''
+import_xls(d)
+    - receives arg == 'path/filename.xls'
+    - imports xls file and returns to caller
+'''
 def import_xls(d):
     pass
 
+'''
+'''
 def loadAll():
     pass
+
 '''
-def loadDoc(d)
-    loads a single document into the engine per string arg 'd'
-    (where the doc is imported from either the 'io' or 'store' folders)
-    and creates a doc object per one of the following options:
-    #   in folder io/ the doc obj can be:   match
-    #   in folder io/ the doc obj can be:   lookup, master, model , pickle , taxonomy
+loadDoc(d)
+    - loads a single document into the engine per string arg 'd'
+    - the doc choices are:
+    -   io/ match
+    -   stores/ lookup, master, model, pickle, taxonomy
 '''
 def loadDoc(d):
     # get the path to the doc that neads to be loaded
@@ -47,16 +67,31 @@ def loadDoc(d):
     else:
         storeFolders = ['lookup', 'master', 'model', 'pickle', 'taxonomy']
         for i in storeFolders:
-            if d == storeFolders[i]:
+            if d == i:
                 path = '../stores/' + d + '/'
 
-    filename = os.listdir(path)  # get ['filename'] as a list
+    # get file_name, file_path, file_ext
+    file = os.listdir(path)  # get ['filename'] as a list obj
+    file_name = file[0]  # extract filename as str from  list obj
+    file_path = path + file_name
+    file_ext = file_name[file_name.find('.'):len(file_name)]
 
-    return filename[0]  # use list indexing to return 'filename'
+    # call the import method that's appropriate for the file extension
+    # and return doc obj to caller
+    docObj =''
+    if file_ext == '.txt':
+        docObj = import_txt(file_path)
+    elif file_ext == '.csv':
+        docObj = import_csv(file_path)
+    elif file_ext == '.xls':
+        docObj = import_xls(file_path)
 
-    #filename.find(sub,start,end)
-    # make sure file extension is in supported types
-    # pass filename to correct import function
+    # TEST ----------------------------------------------------
+    print(docObj[0:100])
+    print('{}, {}, {}'.format(file_path, file_name, file_ext))
+    return file_name  # use list indexing to return 'filename'
+    # ---------------------------------------------------------
+
 
     # lookup
 
