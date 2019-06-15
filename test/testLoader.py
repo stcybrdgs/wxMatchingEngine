@@ -19,6 +19,7 @@ sys.path.append('../stores/')
 
 # IMPORT FUNCTIONS  =====================
 import loader
+import preprocessor
 
 # GLOBAL VARS  =========================
 
@@ -27,13 +28,18 @@ import loader
 # MAIN  ================================i
 def main():
     # rem detect and load doc options
-    #   from io/ :    match
-    #   from store/ : lookup, match, master, model , pickle , taxonomy
-
+    #   from io/ :    mark
+    #   from store/ : lookup, master, model, taxonomy
+    '''# TEST LOADER
     # create an obj for the doc that is to be matched against the master
-    matchDoc = loader.loadDoc('match')  #  ../processor/
+    matchDoc = loader.loadDoc('master')  #  ../processor/
 
     print(matchDoc)
+    '''
+
+    # TEST remove_special_chars(d)
+    s = 'Here ! are @ some #$ spec!ial chars |}{}'
+    preprocessor.string_cleaner(s)
 
 
     # end program

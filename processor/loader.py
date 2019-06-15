@@ -15,24 +15,35 @@ import sys
 # FUNCTIONS  =======================================
 # receive arg == 'path/filename.csv' and
 # return doc obj to caller
+# (works with Excel-generated csv files)
+# (needs pipe delimiter)
 def import_csv(d):
-    # TEST
-    print('import_csv: ' + d)
+    with open(d) as infile:
+        fileObj = csv.reader(infile, delimiter='|')
+    return fileObj
 
-# receive arg == 'path/filename.csv' and
+    # print('import_csv: ' + d)
+
+# receive arg == 'path/filename.json' and
 # return doc obj to caller
 def import_json(d):
     # TEST
     print('import_json: ' + d)
 
-# receive arg == 'path/filename.csv' and
+# receive arg == 'path/filename.p' and
+# return doc obj to caller
+def import_pickle(d):
+    # TEST
+    print('import_pickle: ' + d)
+
+# receive arg == 'path/filename.txt' and
 # return doc obj to caller
 def import_txt(d):
     with open(d) as infile:
         fileObj = infile.read()
     return fileObj
 
-# receive arg == 'path/filename.csv' and
+# receive arg == 'path/filename.xls' and
 # return doc obj to caller
 def import_xls(d):
     # TEST
@@ -44,14 +55,14 @@ def load_all():
     pass
 
 # load a doc per arg whose value is an index in
-# ['match', 'lookup', 'master', 'model', 'pickle', 'taxonomy']
+# ['mark', 'lookup', 'master', 'model', 'pickle', 'taxonomy']
 def loadDoc(d):
     # get the path to the doc that neads to be loaded
     path = ''
-    if d == 'match':
-        path = '../io/input/'
+    if d == 'mark':
+        path = '../io/input/mark/'
     else:
-        storeFolders = ['lookup', 'master', 'model', 'pickle', 'taxonomy']
+        storeFolders = ['lookup', 'master', 'model', 'taxonomy']
         for i in storeFolders:
             if d == i:
                 path = '../stores/' + d + '/'
@@ -75,7 +86,8 @@ def loadDoc(d):
         docObj = import_xls(file_path)
 
     # TEST ----------------------------------------------------
-    print(docObj[0:100])
+    #print(docObj[0:100])
+    print(docObj)
     print('{}, {}, {}'.format(file_path, file_name, file_ext))
     return file_name  # use list indexing to return 'filename'
     # ---------------------------------------------------------

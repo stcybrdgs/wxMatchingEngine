@@ -27,6 +27,7 @@ processor/
     # imports: [ csv, xlrd, os, sys ]
         def import_csv(d)
         def import_json(d)
+        def import_pickle(d)
         def import_txt(d)
         def import_xls(d)
         def load_all()
@@ -40,8 +41,11 @@ processor/
         def matchRatingCodex(s)
     preprocessor.py
     # imports: []
-        def preprocessor
-    stringCleaner.py
+        def lemmatizer(d):
+        def porterStemmer()
+        def preprocessor()
+        def remove_special_chars(d)
+        def stringcleaner()
     # imports: []
         def porterStemmer(s)
 ---------------------------------------
