@@ -74,7 +74,6 @@ def loadDoc(d):
     elif file_ext == '.xls':
         docObj = import_xls(file_path)
 
-
     # TEST ----------------------------------------------------
     print(docObj[0:100])
     print('{}, {}, {}'.format(file_path, file_name, file_ext))
