@@ -30,17 +30,19 @@ special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
                 '{', '}', '[', ']', '|', '\\', ':', ';', '\"', '\'',
                 '<', ',', '>', '?', '/']
 
+
 # FUNCTIONS  =======================================
 def string_cleaner(d):
     print('Running Preprocessor...')
-    # remove special characters
-    clean_doc = remove_special_chars(d)
-    clean_doc = remove_whitespace(clean_doc)
-    return clean_doc
+    d = remove_special_chars(d)
+    d = remove_stop_words(d)
+    d = remove_whitespace(d)
+    #clean_doc = lemmatizer(clean_doc)
+    d = normalizer(d)
+    # normalize text
+    # stemmer
+    return d
 
-    # nltk stopwords
-
-    # lemmatizer / stemmer
 
 # perform look-up based lemmatization
 # rem to provide a lookup lemmatizer for your language, import the lookup
@@ -49,33 +51,36 @@ def lemmatizer(d):
     pass
 
 
+def normalizer(d):
+    d = d.lower()
+    return d
+
+
 # Reduce the string token to its stem and return root word
 def porterStemmer(s):
     # print('Porter Stemmer...')
     return jellyfish.porter_stem(s)
+
 
 # remove special characters from the doc object
 # and return to caller
 def remove_special_chars(d):
     for char in special_chars:
         if d.find(char) >= 0:
-            print(char)
             d = d.replace(char, ' ')
     return d
 
-'''
-list = ['item', 'thing', 'string']
-for i in list:
-    z = re.match('(g\w+)\W(g\w+)', i)
-    if z: #do something
-'''
+
+# remove leadin, trailing, and duplicative whitespace
 def remove_whitespace(d):
-    d = re.sub(' +', ' ', d)
+    d = d.strip()  # remove leading and trailing whitespace
+    d = re.sub(' +', ' ', d)  # remove duplicative whitespace
     return d
+
 
 # remove stop words from doc object
 # rem stop words are most common words that are useful to filter out
 # rem stop words are separated by spaces and newlines and added as a multiline string.
 # rem matching tokens will return True for is_stop
-def stop_words(d):
-    pass
+def remove_stop_words(d):
+    return d

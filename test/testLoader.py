@@ -38,7 +38,7 @@ def main():
     '''
 
     # TEST remove_special_chars(d)
-    s = '22652|block    housing,     70mm high, 210 mm bolthole, 5.5 kg, from SKF|se509|1/2/2019|11|Ea|316.58'
+    s = ' 88325| Plummer housing by SKF with 2100  (mm) bolt hole and 700 (mm) in   height|se511609k7 ? (not sure, ask Mike)'
     nuD = preprocessor.string_cleaner(s)
     print(nuD)
 
