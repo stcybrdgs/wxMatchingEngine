@@ -38,9 +38,9 @@ def main():
     '''
 
     # TEST remove_special_chars(d)
-    s = 'Here ! are @ some #$ spec!ial chars |}{}'
-    preprocessor.string_cleaner(s)
-
+    s = '22652|block    housing,     70mm high, 210 mm bolthole, 5.5 kg, from SKF|se509|1/2/2019|11|Ea|316.58'
+    nuD = preprocessor.string_cleaner(s)
+    print(nuD)
 
     # end program
     print('Done.')

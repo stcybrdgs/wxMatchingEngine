@@ -42,11 +42,11 @@ processor/
     preprocessor.py
     # imports: []
         def lemmatizer(d):
-        def porterStemmer()
-        def preprocessor()
+        def porterStemmer(d)
         def remove_special_chars(d)
-        def stringcleaner()
-    # imports: []
+        def remove_whitespace(d)
+        def stringcleaner(d)
+    # imports: [jellyfish spacy re]
         def porterStemmer(s)
 ---------------------------------------
 stores/

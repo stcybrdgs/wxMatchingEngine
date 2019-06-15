@@ -9,6 +9,7 @@ processor/
 """
 
 # IMPORTS  =========================================
+import re
 import jellyfish
 import spacy
 from spacy.lang.en.examples import sentences
@@ -18,21 +19,24 @@ from spacy.lang.en.examples import sentences
 STOP_WORDS = set("""
 a about above across after afterwards again against all almost alone along
 already also although always am among amongst amount an and another any anyhow
-anyone anything anyway anywhere are around as at
-
-back be became because become becomes becoming been before beforehand behind
-being below beside besides between beyond both bottom but by
+anyone anything anyway anywhere are around as at back be became because
+become becomes becoming been before beforehand behind being below beside
+besides between beyond both bottom but by
 """.split())
 
+# define special characters to be removed by the string cleaner
+# rem periods are important, please do not remove them
 special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
                 '{', '}', '[', ']', '|', '\\', ':', ';', '\"', '\'',
-                '<', ',', '>', '.', '?', '/']
+                '<', ',', '>', '?', '/']
 
 # FUNCTIONS  =======================================
 def string_cleaner(d):
     print('Running Preprocessor...')
     # remove special characters
     clean_doc = remove_special_chars(d)
+    clean_doc = remove_whitespace(clean_doc)
+    return clean_doc
 
     # nltk stopwords
 
@@ -44,26 +48,29 @@ def string_cleaner(d):
 def lemmatizer(d):
     pass
 
-'''
-Reduce the string s to its stem using the common Porter stemmer.
-Stemming is the process of reducing a word to its root form, for example ‘stemmed’ to ‘stem’.
-Martin Porter’s algorithm is a common algorithm used for stemming that works for many purposes.
-'''
-# remove suffixes and return root word
+
+# Reduce the string token to its stem and return root word
 def porterStemmer(s):
     # print('Porter Stemmer...')
     return jellyfish.porter_stem(s)
 
-
-
+# remove special characters from the doc object
+# and return to caller
 def remove_special_chars(d):
-    print('Removing special characters... ') # test
-    print('Before: ' + d)
     for char in special_chars:
         if d.find(char) >= 0:
             print(char)
             d = d.replace(char, ' ')
-    print('After: ' + d)
+    return d
+
+'''
+list = ['item', 'thing', 'string']
+for i in list:
+    z = re.match('(g\w+)\W(g\w+)', i)
+    if z: #do something
+'''
+def remove_whitespace(d):
+    d = re.sub(' +', ' ', d)
     return d
 
 # remove stop words from doc object
