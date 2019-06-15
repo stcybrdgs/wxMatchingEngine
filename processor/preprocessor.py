@@ -3,8 +3,17 @@
 Created on Thur Jun 13 14:49:44 2019
 @author: Stacy
 
-
 processor/
+    preprocessor.py
+    # imports: [jellyfish, spacy, re, unicodedata2]
+        def stringcleaner(d)
+        def remove_accents(d)
+        def remove_special_chars(d)
+        def remove_whitespace(d)
+        def remove_stop_words(d)
+        def normalizer(d)
+        def lemmatizer(d)
+        def porterStemmer(d)
 
 """
 
@@ -12,18 +21,12 @@ processor/
 import re
 import jellyfish
 import spacy
+import unicodedata2
 from spacy.lang.en.examples import sentences
+from spacy.lang.en.stop_words import STOP_WORDS
 
 
 # GLOBALS  =========================================
-STOP_WORDS = set("""
-a about above across after afterwards again against all almost alone along
-already also although always am among amongst amount an and another any anyhow
-anyone anything anyway anywhere are around as at back be became because
-become becomes becoming been before beforehand behind being below beside
-besides between beyond both bottom but by
-""".split())
-
 # define special characters to be removed by the string cleaner
 # rem periods are important, please do not remove them
 special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
@@ -33,15 +36,27 @@ special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
 
 # FUNCTIONS  =======================================
 def string_cleaner(d):
-    print('Running Preprocessor...')
+    d = remove_accents(d)
     d = remove_special_chars(d)
-    d = remove_stop_words(d)
     d = remove_whitespace(d)
-    #clean_doc = lemmatizer(clean_doc)
+    d = remove_stop_words(d)
     d = normalizer(d)
-    # normalize text
-    # stemmer
+    # d = lemmatizer(d)
+    # porterStemmer
     return d
+
+
+# remove accents from a doc / string
+# receive doc obj as d and return processed obj
+def remove_accents(d):
+    try:
+        d = unicode(d, 'utf-8')
+    except (TypeError, NameError): # unicode is a default on python3
+        pass
+    d = unicodedata2.normalize('NFD', d)
+    d = d.encode('ascii', 'ignore')
+    d = d.decode("utf-8")
+    return str(d)
 
 
 # perform look-up based lemmatization

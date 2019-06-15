@@ -22,6 +22,13 @@ uses import csv to read csv files. It is common practice to use
 import pandas as pd to deal with csv files -- explore the
 advantages and swap in pandas if it seems useful.
 
+
+LU try / except error handling-- for example:
+     try:
+         d = unicode(d, 'utf-8')
+     except (TypeError, NameError): # unicode is a default on python3
+         pass
+         
 -------------------------
 MISC CODE
 
@@ -35,6 +42,12 @@ list = ['item', 'thing', 'string']
 for i in list:
     z = re.match('(g\w+)\W(g\w+)', i)
     if z: #do something
+
+STOP_WORDS
+from spacy.lang.en.examples import sentences
+from spacy.lang.en.stop_words import STOP_WORDS
+print(STOP_WORDS)  # TEST ONLY
+{'alone', 'ca', 'hereafter', 'two', 'almost', 'never', 'up', 'wherein', 'four', 'each', 'ours', 'that', 'though', 'latterly', 'ever', 'beforehand', 'itself', 'what', 'take', 'quite', 'most', 'least', 'together', 'nobody', 'every', 'again', 'no', 'is', 'thus', 'for', 'thereafter', 'anyway', 'you', 'any', 'well', 'has', 'will', 'only', 'whoever', 'somehow', 'latter', 'down', 'namely', 'have', 'these', 'cannot', 'six', 'sometime', 'before', 'forty', 'seemed', 'amongst', 'so', 'against', 'whole', 'once', 'can', 'who', 'therefore', '�ve', 'if', 'at', 'used', 'wherever', "'s", 'either', 'make', 'then', 'name', 'few', 'see', 'among', 'does', 'be', 'fifty', 'anyhow', '�ll', "'re", 'noone', 'elsewhere', 'get', '�re', 'nevertheless', 'onto', 'ourselves', 'first', 'do', 'around', 'seeming', 'throughout', 'someone', 'than', 'through', 'whose', "n't", 'nowhere', 'other', 'move', "'d", 'therein', 'are', 'those', 'thence', 'top', 'behind', 'myself', 'himself', 'upon', 'put', 'rather', 'them', 'which', 'not', 'too', 'others', 'afterwards', '�m', 'amount', "'ll", 'now', 'due', 'another', 'anything', 'otherwise', 'into', 'none', 're', 'by', 'less', 'one', 'eight', 'becomes', 'also', 'must', '�s', 'keep', 'except', 'hereupon', 'beside', 'sometimes', 'n�t', "'m", '�re', 'such', 'third', 'enough', 'off', 'whatever', 'thereby', 'anywhere', 'were', 'hence', 'somewhere', 'call', 'out', 'may', 'your', 'beyond', 'much', 'why', 'perhaps', 'there', 'still', 'whenever', 'him', 'hundred', 'give', 'with', 'their', 'however', 'where', 'after', 'say', 'was', 'being', 'whither', 'yourselves', 'already', 'while', 'everywhere', 'via', '�m', 'both', 'side', 'n�t', 'whereupon', 'would', 'various', 'hers', 'please', 'her', 'how', 'five', 'could', 'show', 'about', 'along', 'moreover', 'serious', 'yourself', 'thereupon', 'empty', 'although', 'between', 'whereafter', 'twelve', 'whether', 'full', 'herein', 'go', 'else', 'me', 'because', 'herself', '�ve', 'an', 'same', 'besides', 'mine', 'fifteen', 'should', 'might', 'several', 'unless', 'own', 'am', 'his', 'nothing', 'became', 'often', 'as', 'more', 'part', 'front', 'even', 'become', 'across', 'under', 'whom', 'always', 'of', 'within', 'becoming', '�ll', 'twenty', 'formerly', 'just', '�d', 'whence', 'and', 'below', 'above', 'the', 'during', 'its', 'it', 'very', 'on', 'regarding', 'next', 'had', 'toward', 'from', 'here', 'he', 'but', 'did', 'former', 'whereby', 'really', 'further', 'us', 'ten', 'this', 'until', 'whereas', 'back', 'since', 'hereby', 'anyone', 'seems', 'i', '�s', 'bottom', 'towards', 'everything', 'our', 'been', 'something', 'using', 'nor', 'many', 'in', "'ve", 'doing', 'without', 'or', 'sixty', 'last', 'nine', 'made', 'themselves', 'she', 'my', 'over', 'mostly', 'a', 'meanwhile', 'when', '�d', 'per', 'yours', 'they', 'three', 'to', 'some', 'we', 'eleven', 'seem', 'indeed', 'yet', 'everyone', 'thru', 'neither', 'all', 'done'}
 
 -------------------------
 

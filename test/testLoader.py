@@ -38,9 +38,11 @@ def main():
     '''
 
     # TEST remove_special_chars(d)
-    s = ' 88325| Plummer housing by SKF with 2100  (mm) bolt hole and 700 (mm) in   height|se511609k7 ? (not sure, ask Mike)'
+    s = ' 88325| Plummer housing by SKF with 2100  (mm) bolt hole and 700 (mm) in   height|se511609k7 ? (not sure, ask Enrìque Lòpez)\n18132| Örsted Müller asked for the needle  bearing set by   NKX, 110 MM bolt-hole centr distance, height 30 mm, weight 1.83 kg|NKX 15z? (not sure)'
+    print(s)
     nuD = preprocessor.string_cleaner(s)
     print(nuD)
+
 
     # end program
     print('Done.')

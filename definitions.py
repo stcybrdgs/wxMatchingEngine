@@ -40,15 +40,15 @@ processor/
         def nysiis(s)
         def matchRatingCodex(s)
     preprocessor.py
-    # imports: [jellyfish, spacy, re]
+    # imports: [jellyfish, spacy, re, unicodedata2]
         def stringcleaner(d)
-        def lemmatizer(d)
-        def normalizer(d)
-        def porterStemmer(d)
+        def remove_accents(d)
         def remove_special_chars(d)
         def remove_whitespace(d)
         def remove_stop_words(d)
-        def porterStemmer(s)
+        def normalizer(d)
+        def lemmatizer(d)
+        def porterStemmer(d)
 ---------------------------------------
 stores/
     lookups/
