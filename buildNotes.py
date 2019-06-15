@@ -29,6 +29,14 @@ LU try / except error handling-- for example:
      except (TypeError, NameError): # unicode is a default on python3
          pass
 
+
+# rem future method() for pulling suppliers lookup from master
+# def trainer():
+# train md_erp on phonetic and distance encoding
+# train md_erp on suppliers
+# (for future sprint, do pickles and persistend store)
+# train tender on phonetic and distance encoding
+
 -------------------------
 MISC CODE
 
