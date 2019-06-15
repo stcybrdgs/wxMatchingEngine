@@ -90,7 +90,14 @@ def remove_whitespace(d):
 #   you need to create nlp object before working with stop words
 #   because the doc needs to be tokenized
 def remove_stop_words(d):
+
+    # TEST
+    #print(d.text)
+    for token in nlp_obj:
+        print(token.text)
+    '''
     for word in d:
         if word.is_stop == True:
             print(word)
+    '''
     return d

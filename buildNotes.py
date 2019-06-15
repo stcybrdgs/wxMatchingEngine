@@ -32,6 +32,12 @@ LU try / except error handling-- for example:
      except (TypeError, NameError): # unicode is a default on python3
          pass
 
+RE: processor
+processor.py > create_nlp_object(d)
+needs to add language detection
+so it knows which model to load
+
+rem 'sm' model has no word2vector capability
 
 # rem future method() for pulling suppliers lookup from master
 # def trainer():
@@ -52,6 +58,7 @@ tokens = [token.text for token in doc if not token.is_stop]
 print('Original Article: %s' % (article))
 print()
 print(tokens)
+
 
 -------------------------
 MISC CODE
