@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat JUn 15
+Created on Sat Jun 15
 @author: Stacy Bridges
 
 processor/
