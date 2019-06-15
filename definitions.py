@@ -41,7 +41,7 @@ processor/
         def matchRatingCodex(s)
     preprocessor.py
     # imports: [jellyfish, spacy, re, unicodedata2]
-        def stringcleaner(d)
+        def string_cleaner(d)
         def remove_accents(d)
         def remove_special_chars(d)
         def remove_whitespace(d)

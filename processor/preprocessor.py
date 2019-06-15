@@ -6,7 +6,7 @@ Created on Thur Jun 13 14:49:44 2019
 processor/
     preprocessor.py
     # imports: [jellyfish, spacy, re, unicodedata2]
-        def stringcleaner(d)
+        def string_cleaner(d)
         def remove_accents(d)
         def remove_special_chars(d)
         def remove_whitespace(d)
@@ -18,10 +18,10 @@ processor/
 """
 
 # IMPORTS  =========================================
-import re
+import re # good
 import jellyfish
-import spacy
 import unicodedata2
+import spacy
 from spacy.lang.en.examples import sentences
 from spacy.lang.en.stop_words import STOP_WORDS
 

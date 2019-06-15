@@ -22,6 +22,9 @@ uses import csv to read csv files. It is common practice to use
 import pandas as pd to deal with csv files -- explore the
 advantages and swap in pandas if it seems useful.
 
+string_cleaner needs to add:
+chunking
+coreference resolution rem neural coref
 
 LU try / except error handling-- for example:
      try:
