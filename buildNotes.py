@@ -41,6 +41,19 @@ LU try / except error handling-- for example:
 # train tender on phonetic and distance encoding
 
 -------------------------
+ADD CUSTOM STOP WORDS IN SPACY
+customize_stop_words = [
+    'computing', 'filtered'
+]
+for w in customize_stop_words:
+    spacy_nlp.vocab[w].is_stop = True
+doc = spacy_nlp(article)
+tokens = [token.text for token in doc if not token.is_stop]
+print('Original Article: %s' % (article))
+print()
+print(tokens)
+
+-------------------------
 MISC CODE
 
 str.find(sub,start,end) # find substring

@@ -45,10 +45,14 @@ processor/
         def remove_accents(d)
         def remove_special_chars(d)
         def remove_whitespace(d)
-        def remove_stop_words(d)
         def normalizer(d)
         def lemmatizer(d)
         def porterStemmer(d)
+        def remove_stop_words(d)
+    processor.py
+    # imports[]
+        def create_nlp_object(d)
+
 ---------------------------------------
 stores/
     lookups/

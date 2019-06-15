@@ -7,7 +7,6 @@ Created on Sat Jun 15 2019
 import sys
 import os
 
-
 # PATHS ================================
 # import importlib
 # rem use importlib to import module stored as string

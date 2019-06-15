@@ -14,6 +14,7 @@ processor/
         def normalizer(d)
         def lemmatizer(d)
         def porterStemmer(d)
+        def remove_stop_words(d)
 
 """
 
@@ -22,8 +23,8 @@ import re # good
 import jellyfish
 import unicodedata2
 import spacy
-from spacy.lang.en.examples import sentences
 from spacy.lang.en.stop_words import STOP_WORDS
+from spacy.lang.en.examples import sentences
 
 # GLOBALS  =========================================
 # define special characters to be removed by the string cleaner
@@ -37,7 +38,6 @@ def string_cleaner(d):
     d = remove_accents(d)
     d = remove_special_chars(d)
     d = remove_whitespace(d)
-    d = remove_stop_words(d)
     d = normalizer(d)
     # d = lemmatizer(d)
     # porterStemmer
@@ -85,8 +85,12 @@ def remove_whitespace(d):
     return d
 
 # remove stop words from doc object
-# rem stop words are most common words that are useful to filter out
-# rem stop words are separated by spaces and newlines and added as a multiline string.
-# rem matching tokens will return True for is_stop
+#   stop words are most common filter words
+#   rem matching tokens will return True for is_stop
+#   you need to create nlp object before working with stop words
+#   because the doc needs to be tokenized
 def remove_stop_words(d):
+    for word in d:
+        if word.is_stop == True:
+            print(word)
     return d
