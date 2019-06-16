@@ -11,17 +11,20 @@ processor/
         def remove_special_chars(d)
         def remove_whitespace(d)
         def normalizer(d)
-        def remove_stop_words(d)
         def lemmatizer(d)
         def porterStemmer(d)
 
 """
 
-# IMPORTS  =========================================
-import re # good
-import jellyfish
+# IMPORT  LIBS  ========================
+import re
+import jellyfish  # for porter stemmer
 import unicodedata2
 import spacy
+import os
+
+# IMPORT FUNCTIONS  =====================
+import loader
 
 # GLOBALS  =========================================
 # define special characters to be removed by the string cleaner
@@ -36,7 +39,6 @@ def string_cleaner(d):
     d = remove_special_chars(d)
     d = remove_whitespace(d)
     d = normalizer(d)
-    d = remove_stop_words(d)
     # d = lemmatizer(d)
     # porterStemmer
     return d
@@ -67,12 +69,9 @@ def remove_whitespace(d):
     d = re.sub(' +', ' ', d)  # remove duplicative whitespace
     return d
 
+# change all strings to lowercase
 def normalizer(d):
     d = d.lower()
-    return d
-
-# remove words from doc if they appear in stop_words.txt
-def remove_stop_words(d):
     return d
 
 # perform look-up based lemmatization

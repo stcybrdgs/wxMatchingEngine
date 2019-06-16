@@ -20,8 +20,11 @@ import sys
 def import_csv(d):
     with open(d) as infile:
         fileObj = csv.reader(infile, delimiter='|')
-    return fileObj
-
+        doc = ''
+        for row in fileObj:
+            print(row)
+            
+    return doc
     # print('import_csv: ' + d)
 
 # receive arg == 'path/filename.json' and
@@ -30,7 +33,7 @@ def import_json(d):
     # TEST
     print('import_json: ' + d)
 
-# receive arg == 'path/filename.p' and
+# receive arg == 'path/filename.pickle' and
 # return doc obj to caller
 def import_pickle(d):
     # TEST
@@ -89,7 +92,7 @@ def loadDoc(d):
     #print(docObj[0:100])
     print(docObj)
     print('{}, {}, {}'.format(file_path, file_name, file_ext))
-    return file_name  # use list indexing to return 'filename'
+    return docObj  # use list indexing to return 'filename'
     # ---------------------------------------------------------
 
 

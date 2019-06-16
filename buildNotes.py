@@ -23,6 +23,8 @@ import pandas as pd to deal with csv files -- explore the
 advantages and swap in pandas if it seems useful.
 
 string_cleaner needs to add:
+lemmatizer
+porterStemmer
 chunking
 coreference resolution rem neural coref
 

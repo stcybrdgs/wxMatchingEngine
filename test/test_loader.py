@@ -25,14 +25,17 @@ import processor
 def main():
     ts = ' 88325| Plummer housing by SKF with 2100  (mm) bolt hole and 700 (mm) in   height|se511609k7 ? (not sure, ask Enrìque Lòpez)'
     ts2 = '18132| Örsted Müller asked for the needle  bearing set by   NKX, 110 MM bolt-hole centr distance, height 30 mm, weight 1.83 kg|NKX 15z? (not sure)'
-    print(ts)
+    t = loader.loadDoc('mark')
+    doc = t
+
+    print('print doc: ', doc)
 
     # clean the test string
-    ts = preprocessor.string_cleaner(ts)
-    print(ts)
+    #doc = preprocessor.string_cleaner(doc)
+    #print(doc)
 
     # create nlp object from test string
-    processor.create_nlp_object(ts)
+    #processor.create_nlp_object(doc)
 
     # end program
     print('Done.')

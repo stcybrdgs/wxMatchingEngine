@@ -7,6 +7,7 @@ processor/
     processor.py
     # imports[]
         def create_nlp_object(d)
+        def remove_stop_words(d)
 
 """
 # IMPORT  LIBS  ========================
@@ -30,9 +31,23 @@ def create_nlp_object(d):
     nlp = spacy.load('en_core_web_sm')
     nlp_obj = nlp(d)
 
+    # remove stop words
+    nlp_obj = remove_stop_words(nlp_obj)
+
     # TEST
     print(nlp_obj.text)
     '''
     for token in nlp_obj:
         print(token.text)
     '''
+
+# remove words from doc if they appear in stop_words.txt
+def remove_stop_words(d):
+    tokens = [token.text for token in d if not token.is_stop]
+    s = ''
+    i = 0
+    for t in tokens:
+        s = s + ' ' + tokens[i]
+        i += 1
+    print(s)
+    return d

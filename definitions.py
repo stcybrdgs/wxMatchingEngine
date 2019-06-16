@@ -14,26 +14,6 @@ ners/
     # imports: []
         def trainer()
 ---------------------------------------
-processor/
-    nlpObjectCreator.py
-    # imports: [ spacy ]
-        def create_nlp_object(d)
-    distanceEncoder.py
-    # imports: []
-        def levenshtein(s1, s2)
-        def damerauLevenshtein(s1, s2)
-        def jaro(s1, s2)
-        def jaroWinkler(s1, s2)
-        def hamming(s1, s2)
-        def matchRatingComparison(s1, s2)
-    phoneticEncoder.py
-    # imports: []
-        def soundex(s)
-        def metaphone(s)
-        def doubleMetaphone(s)
-        def nysiis(s)
-        def matchRatingCodex(s)
----------------------------------------
 preprocessor/
     loader.py
     # imports: [ csv, xlrd, os, sys ]
@@ -52,11 +32,29 @@ preprocessor/
         def remove_special_chars(d)
         def remove_whitespace(d)
         def normalizer(d)
-        def remove_stop_words(d)
         def lemmatizer(d)
         def porterStemmer(d)
-
-
+---------------------------------------
+processor/
+    nlpObjectCreator.py
+    # imports: [ spacy ]
+        def create_nlp_object(d)
+        def remove_stop_words(d)
+    distanceEncoder.py
+    # imports: []
+        def levenshtein(s1, s2)
+        def damerauLevenshtein(s1, s2)
+        def jaro(s1, s2)
+        def jaroWinkler(s1, s2)
+        def hamming(s1, s2)
+        def matchRatingComparison(s1, s2)
+    phoneticEncoder.py
+    # imports: []
+        def soundex(s)
+        def metaphone(s)
+        def doubleMetaphone(s)
+        def nysiis(s)
+        def matchRatingCodex(s)
 ---------------------------------------
 stores/
     lookups/
