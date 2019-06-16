@@ -10,7 +10,7 @@ import csv
 # import xlrd # need to put library in local folder for detection
 import os
 import sys
-
+import re
 
 # FUNCTIONS  =======================================
 # receive arg == 'path/filename.csv' and
@@ -42,8 +42,12 @@ def import_pickle(d):
 # receive arg == 'path/filename.txt' and
 # return doc obj to caller
 def import_txt(d):
+    fileObj = ''
     with open(d) as infile:
-        fileObj = infile.read()
+        for line in infile:
+            # use regex to remove trailing blank lines
+            fileObj = fileObj + re.sub(r'^\s+$', '', line)
+        #fileObj = infile.read()
     return fileObj
 
 # receive arg == 'path/filename.xls' and
