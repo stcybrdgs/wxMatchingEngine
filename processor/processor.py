@@ -29,25 +29,23 @@ def create_nlp_object(d):
 
     # create nlp object
     nlp = spacy.load('en_core_web_sm')
-    nlp_obj = nlp(d)
+    nlp_doc = nlp(d)
 
     # remove stop words
-    nlp_obj = remove_stop_words(nlp_obj)
+    nlp_doc = nlp(remove_stop_words(nlp_doc))
 
     # TEST
-    print(nlp_obj.text)
-    '''
-    for token in nlp_obj:
-        print(token.text)
-    '''
+    print('\n\nafter removing stop words: ')
+    sent = nlp_doc
+    print(sent.text)
+
 
 # remove words from doc if they appear in stop_words.txt
 def remove_stop_words(d):
     tokens = [token.text for token in d if not token.is_stop]
-    s = ''
+    doc_string = ''
     i = 0
-    for t in tokens:
-        s = s + ' ' + tokens[i]
+    for tok in tokens:
+        doc_string = doc_string + ' ' + tokens[i]
         i += 1
-    print(s)
-    return d
+    return doc_string

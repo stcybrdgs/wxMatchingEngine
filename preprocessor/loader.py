@@ -23,7 +23,7 @@ def import_csv(d):
         doc = ''
         for row in fileObj:
             print(row)
-            
+
     return doc
     # print('import_csv: ' + d)
 
@@ -88,12 +88,14 @@ def loadDoc(d):
     elif file_ext == '.xls':
         docObj = import_xls(file_path)
 
+    '''
     # TEST ----------------------------------------------------
     #print(docObj[0:100])
     print(docObj)
     print('{}, {}, {}'.format(file_path, file_name, file_ext))
+    '''
+
     return docObj  # use list indexing to return 'filename'
-    # ---------------------------------------------------------
 
 
     # lookup
