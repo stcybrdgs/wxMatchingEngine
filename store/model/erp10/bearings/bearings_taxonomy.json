@@ -11,25 +11,25 @@
 				"ball bearing for rolling bearing units"
 			],
 			"thrust": [
-				"single direction",
-				"double direction angular contact",
+				"single direction thrust bearing",
+				"double direction angular contact thrust bearing",
 				"high-speed duplex angular contact (for axial loads)"
 			]
-		}, 
+		},
 		"roller": {
 			"radial roller": [
-				"single row cylindrical",
-				"double row cylindrical",
-				"needle",
-				"single row tapered",
-				"double row tapered",
-				"spherical"
+				"single row cylindrical roller bearing",
+				"double row cylindrical roller bearing",
+				"needle roller bearing",
+				"single row tapered roller bearing",
+				"double row tapered roller bearing",
+				"radial spherical bearing"
 			],
 			"thrust": [
-				"cylindrical",
-				"needle",
-				"tapered",
-				"spherical"
+				"cylindrical thrust bearing",
+				"needle thrust bearing",
+				"tapered thrust bearing",
+				"spherical thrust bearing"
 			]
 		}
 	},
@@ -51,5 +51,12 @@
 		"linear ball bearings",
 		"linear roller bearings",
 		"linear flat roller bearings"
+	],
+	"housings":[
+		"plummer block housing",
+		"split plummer block housing",
+		"split pillow block housing",
+		"flanged housing",
+		"take-up housing"
 	]
 }

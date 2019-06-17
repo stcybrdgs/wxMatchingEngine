@@ -1,6 +1,6 @@
 Order ID|Description|Partcode
- 88325| Plummer housing by SKF with 2100  (mm) bolt hole and 700 (mm) in   height|se511609k7 ? (not sure, ask Enrìque Lòpez)
-18132| Örsted Müller asked for the needle  bearing set by   NKX, 110 MM bolt-hole centr distance, height 30 mm, weight 1.83 kg|NKX 15z? (not sure)
+88325| Plummer housing by SKF with 2100  (mm) bolt hole and 700 (mm) in   height|se511609k7 ? (not sure, ask Enrï¿½que Lï¿½pez)
+18132| ï¿½rsted Mï¿½ller asked for the needle  bearing set by   NKX, 110 MM bolt-hole centr distance, height 30 mm, weight 1.83 kg|NKX 15z? (not sure)
 22652|block housing, 70mm high, 210 m m bolthole, 5.5 kg, from >SKF<|se509
 74606|block housing with  center bolt distance 150 mm, weight 2.50 kg, and 60mm height|SKF SE510608
 84720|Plummer  block housing with blot hole distance 130 mm and center   height 50 mm - SKF is the supplier|se  511 609
@@ -13,7 +13,7 @@ Order ID|Description|Partcode
 93341|SKF plan  spherica l bearing, bore diameter 100 mm, net wt 4.142 kg, outer 150mm, inner 70mm, type ge|ge 100es
 60642|Radial bearings with bore dm 80 MM, 2 KG , 130 mm outer diam, type GE level1, inner width 50 mm|GE 100TXA 2LS SKF
 38244|SKF 51140 M thrust bearing |51140
- 25027|  2400 rpm clockwise  Parker gear pump with flange mounting, 198.4 x 128.2, 50.77 rectangle, working pressure 190 , 90 (cc per rev) |
+25027|  2400 rpm clockwise  Parker gear pump with flange mounting, 198.4 x 128.2, 50.77 rectangle, working pressure 190 , 90 (cc per rev) |
 48310|70 cc displacement   gear pump by Parker Hanfin with clockwise flange mountin 98.4 x 128.2, rectangular, mwp 160 , 2400 rpm|
 70859|Parker Hannifin cw gear pump, flange mount, 23 cc displacement, 98.4x128.2, 250 pressure bar, 3300 rpm|
 54098|Hill clockwise transfer   pump, flange mount, 3100 rpm,  28 cc displacement, 98.4x128.2, 250 pressure bar|p925 AAA

@@ -31,7 +31,8 @@ import loader
 # rem periods are important, please do not remove them
 special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
                 '{', '}', '[', ']', '|', '\\', ':', ';', '\"', '\'',
-                '<', ',', '>', '?', '/']
+                '<', ',', '>', '?']
+                # leave in '/' for cases such as 1/2 kg, etc
 
 # FUNCTIONS  =======================================
 def string_cleaner(d):

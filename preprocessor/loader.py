@@ -44,10 +44,10 @@ def import_pickle(d):
 def import_txt(d):
     fileObj = ''
     with open(d) as infile:
+        # fileObj = infile.read()
         for line in infile:
             # use regex to remove trailing blank lines
             fileObj = fileObj + re.sub(r'^\s+$', '', line)
-        #fileObj = infile.read()
     return fileObj
 
 # receive arg == 'path/filename.xls' and

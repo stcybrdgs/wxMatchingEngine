@@ -1,5 +1,5 @@
 {
-	"pump": {
+	"pumps": {
 		"dynamic": {
 			"centrifugal": [
                 "axial flow",
@@ -18,7 +18,10 @@
 				"diaphragm"
 			],
 			"rotary": [
-				"single rotor",
+				"single rotor": [
+					"internal gear pump",
+					"external gear pump"
+				],
 				"multiple rotor"
 			]
 		}

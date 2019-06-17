@@ -42,7 +42,7 @@ def create_nlp_object(d):
 
 # remove words from doc if they appear in stop_words.txt
 def remove_stop_words(d):
-    tokens = [token.text for token in d if not token.is_stop]
+    tokens =    [token.text for token in d if not token.is_stop]
     doc_string = ''
     i = 0
     for tok in tokens:
