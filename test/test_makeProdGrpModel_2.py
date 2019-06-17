@@ -67,6 +67,13 @@ def main():
     sentencizer = nlp.create_pipe("sentencizer")
     nlp.add_pipe(sentencizer)
 
+    '''
+    Model for component 'ner' not initialized.
+    Did you forget to load a model, or forget to call begin_training()?
+    ner = nlp.create_pipe("ner")
+    nlp.add_pipe(ner)
+    '''
+
     # get product group data file and feed the info into arrays
     # that will be used later to create custom tags for the nlp object
     txt_obj = ''
@@ -141,5 +148,10 @@ def main():
     # LU
     # textcat (TextCategorizer, Doc.cats)
     # custom components (Doc._.xxx, Token._.xxx, Span._.xxx)
+    # create_pipe, add_pipe
+
+    # TEST print  -----------------------
+    print('\n', nlp.pipeline)
+    print('\n', nlp.pipe_names)
 
 if __name__ == '__main__' : main()
