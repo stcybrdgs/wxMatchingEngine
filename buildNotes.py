@@ -2,6 +2,9 @@
 
 '''
 TO DOs
+create taxonomies for master files against the ETIM spec at:
+https://prod.etim-international.com/
+
 RE: loader.loadDoc()  ---------------
 The loader is designed to load one doc at a time. This approach
 is fine for the ../io/ folder because it will only
@@ -65,6 +68,34 @@ REM STOP WORDS
 I CHOSE TO NOT USE SPACY STOP_WORDS BUT INSTEAD TO REMOVE THE WORDS
 DIRECTLY FROM THE INPUT DOC BEFORE TURNING IT INTO AN NLP OBJECT
 
+------------------------
+MAKE MODELS FROM CSVs
+# try using this:
+data = ''
+with open('../store/model/erp10/pumps/prod_pumps_erp10.csv') as data:
+    data = csv.reader(data, delimiter='|')
+    headers = []
+    productIDs = []
+    products = []
+    suppliers = []
+    mpns = []
+    i = 0
+    for row in data:
+        if i == 0:
+            headers.append(row)
+        else:
+            productID = row[0]
+            product = row[1]
+            supplier = row[2]
+            mpn = row[3]
+
+            productIDs.append(productID)
+            products.append(product)
+            suppliers.append(supplier)
+            mpns.append(mpn)
+        i += 1
+print(headers)
+print(productIDs)
 
 -------------------------
 ADD CUSTOM STOP WORDS IN SPACY
