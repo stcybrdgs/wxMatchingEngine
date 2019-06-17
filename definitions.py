@@ -24,7 +24,7 @@ preprocessor/
         def import_xls(d)
         def load_all()
         def loadDoc(d)
-    stringCleaner.py
+    preprocessor.py
     # imports: [jellyfish, spacy, re, unicodedata2]
     # files: [ stop_words.txt ]
         def string_cleaner(d)

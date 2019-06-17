@@ -1,4 +1,4 @@
-Product ID|Product|Supplier|MfrPartNo|Description| Cost
+﻿Product ID|Product|Supplier|MfrPartNo|Description| Cost
 155A8267|Internal Gear Pump|PARKER HANNIFIN|3339111325|Direction of Rotation Clockwise (CW), Flange Mounting 98.4x18.2 - �50.77 rectangular, Maximum Working Pressure (Bar) 120, Max Speed (RPM) 100, Pump Displacement (cc per rev) 170| �87.39
 155A8292|Internal Gear Pump|PARKER HANNIFIN|339111329|Direction of Rotation Clockwise (CW), Flange Mounting 98.4x128.2 - �50.77 rectangular, Maximum Working Pressure (Bar) 160, Max Speed (RPM) 2400, Pump Displacement (cc per rev) 70| �35.64
 155A8266|External Gear Pump|PARKER HANNIFIN|3339111331|Direction of Rotation Clockwise (CW), Flange Mounting 98.4x128.2 - �50.77 rectangular, Maximum Working Pressure (Bar) 250, Max Speed (RPM) 3300, Pump Displacement (cc per rev) 23|�86.19

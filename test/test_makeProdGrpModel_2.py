@@ -7,16 +7,14 @@ these scripts test the functions needed to create an annotated
 nlp object from a csv product group. the pumps group is used for this code set.
 
 importing:  ------------------
-    the csv is imported twice:
-    on the first import, the data is captured in list format so that the
-    arrays can be used to capture:
+    the csv data is initially captured in list format before being
+    converted to a text object so that arrays can be used to capture:
         - productID
         - product
         - supplier
         - mpn
-
-    on the second import, the data is captured in string format as a text
-    object that can be turned into an nlp object.
+    the info in the arrays can then be used tag each corresponding token
+    with custom annotations
 
 custom tagging:    ------------
 after the nlp object is created, the array data is used to create custom
@@ -34,8 +32,10 @@ data for the use cases (1) erp vs mdm; and (2) tender vs erp
 # IMPORT LIBS  ======================================
 import os
 import sys
+import re
 import csv
 import spacy
+from spacy.lang.en import English
 #from spacy.lang.en.examples import sentences
 
 # PATHS ================================
@@ -56,11 +56,20 @@ import loader
 # FUNCTIONS  =======================================
 
 def main():
-    nlp = spacy.load('en_core_web_sm')
+    # get just the language with no model
+    nlp = English()
+    # nlp = spacy.load('en_core_web_sm')
 
-    # import csv -- first pass
+    # add the sentencizer component to the pipeline
+    # rem this component  splits sentences on punctuation such as . !  ?
+    # plugging it into pipeline to get just the sentence boundaries
+    # without the dependency parse.
+    sentencizer = nlp.create_pipe("sentencizer")
+    nlp.add_pipe(sentencizer)
+
     # get product group data file and feed the info into arrays
     # that will be used later to create custom tags for the nlp object
+    txt_obj = ''
     with open('../store/model/erp10/pumps/prod_pumps_erp10.csv') as data:
         data = csv.reader(data, delimiter='|')
         headers = []
@@ -70,6 +79,7 @@ def main():
         mpns = []
 
         # TEST list
+        print('contents of arrays for tagging:\n')
         testList = [headers, productIDs,
                     products, suppliers, mpns]
         i = 0
@@ -86,49 +96,32 @@ def main():
                 products.append(product)
                 suppliers.append(supplier)
                 mpns.append(mpn)
+
+            # create text object
+            # rem add a period at the end so that the spacy sentencizer
+            # knows how to detect the end of each record
+            txt_obj = txt_obj + ' '.join(row) + '.\n'
             i += 1
 
     # TEST print
     for item in testList:
         print(item)
 
-    # import csv -- first pass
-    # get product group data file and feed the info into a text object
-    csv_path = '../store/model/erp10/pumps/prod_pumps_erp10.csv'
-    txt_obj = '.'
-    with open (csv_path) as data:
-        reader = csv.reader(data, delimiter =' ', quotechar = ' ',
-                            quoting = csv.QUOTE_MINIMAL)
-        for row in reader:
-            txt_obj = txt_obj + '\'' + ' '.join(row) + '\'' + '\n'
-
     # clean the text object
     txt_obj = preprocessor.string_cleaner(txt_obj)
-    print(txt_obj)  # TEST
 
-    # write txt_obj to txt file
-    txt_path = '../store/model/erp10/pumps/prod_pumps_erp10.txt'
-    with open (txt_path, 'wt') as outfile:
-        for line in txt_obj:
-            outfile.writelines(line)
-            print('', end='', flush=True) # rem flush the output buffer
-
-    # read file back into text object
-    txt_obj = ''
-    txt_obj = loader.import_txt(txt_path)
-    #txt_obj = preprocessor.remove_whitespace(txt_obj)
-
-    print(txt_obj)  # TEST
-
+    # TEST PRINT
+    print('\n\ntxt_obj after cleaning:\n', txt_obj)
 
     # create the nlp object:
     pumps_erp10 = nlp(txt_obj)
 
+    # TEST print
+    print('\n\npumps_erp10 after sentencizer:\n')
     for sent in pumps_erp10.sents:
-        print(sent.text)
+        print(sent.text, '**End Row**', end='')
 
 
-
-    print('Done.')
+    print('\nDone.')
 
 if __name__ == '__main__' : main()
