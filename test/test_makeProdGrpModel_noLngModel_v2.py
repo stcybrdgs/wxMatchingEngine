@@ -1,31 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Jun 16
+Created on Mon Jun 17
 @author: Stacy Bridges
 
 these scripts test the functions needed to create an annotated
-nlp object from a csv product group. the pumps group is used for this code set.
-
-importing:  ------------------
-    the csv data is initially captured in list format before being
-    converted to a text object so that arrays can be used to capture:
-        - productID
-        - product
-        - supplier
-        - mpn
-    the info in the arrays can then be used tag each corresponding token
-    with custom annotations
-
-custom tagging:    ------------
-after the nlp object is created, the array data is used to create custom
-annotations for the corresponding tokens/spans. then, the tokens/spans for
-product and supplier are used to locate the strings that need to be further
-annotated with phonetic encodings for soundex and nysiis.
-
-storing:    -------------------
-the final version of the nlp object is saved as a pickle so that it can
-be imported into the match engine when necessary to compare against new
-data for the use cases (1) erp vs mdm; and (2) tender vs erp
+nlp object from a csv product group.
+the pumps group is used for this code set.
 
 """
 
@@ -133,9 +113,9 @@ def main():
         print(sent.text, '**end row**', end='')
 
     # TEST print  -----------------------
-    print('\n\ntokens in nlp obj:\n')
+    print('\n\ntoken.like_num in nlp obj:\n')
     for token in pumps_erp10:
-        print(token.like_num)
+        print(token.like_num,',', end='')
 
     # stuff we get:
     # token, .text, .i, .idx, .tag_, .lemma_
