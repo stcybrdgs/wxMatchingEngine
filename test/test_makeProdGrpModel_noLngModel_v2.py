@@ -7,6 +7,11 @@ these scripts test the functions needed to create an annotated
 nlp object from a csv product group.
 the pumps group is used for this code set.
 
+testing scenarios:
+-   load language model and use spacy span feature to create a custom
+    sentence segmenter
+-   don't load language model and create all-custom tagging components
+
 """
 
 # IMPORT LIBS  ======================================
