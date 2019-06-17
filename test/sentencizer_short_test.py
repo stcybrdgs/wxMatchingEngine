@@ -4,7 +4,14 @@ Created on Mon Jun 17
 @author: Stacy Bridges
 
 test specifying terminal chars for the sentencizer
-
+rem check parser diff |.| caps and lowercase
+rem check example of pipeline component for entity matching and
+    tagging with custom attributes
+rem decide if labels for product_id, sku, and mpn should be token- or ent-level
+rem To learn more about entity recognition in spaCy,
+    how to add your own entities to a document and how to train and update
+    the entity predictions of a model, see the usage guides on named entity
+    recognition and training the named entity recognizer.
 """
 
 # IMPORT LIBS  ======================================
@@ -21,6 +28,11 @@ sys.path.append('../preprocessor/')
 # IMPORT FUNCTIONS  =====================
 import preprocessor
 
+# GLOBALS  ==============================
+global s1
+global s2
+s1 = '155A8267|Internal Gear Pump|PARKER HANNIFIN|3339111325|Direction of Rotation Clockwise (CW), Flange Mounting 98.4x18.2 - �50.77 rectangular, Maximum Working Pressure (Bar) 120, Max Speed (RPM) 100, Pump Displacement (cc per rev) 170| �87.39 | ** end line **'
+s2 = '155A8292|Internal Gear Pump|PARKER HANNIFIN|339111329|Direction of Rotation Clockwise (CW), Flange Mounting 98.4x128.2 - �50.77 rectangular, Maximum Working Pressure (Bar) 160, Max Speed (RPM) 2400, Pump Displacement (cc per rev) 70| �35.64 | ** end line **'
 
 # CUSTOM PIPES  =========================
 def custom_sentencizer(doc):
@@ -43,20 +55,21 @@ def common_key_tagger(doc):
 
 # MAIN  =======================================
 def main():
-    # get just the language with no model
-    #nlp = English()
+    global s1
+    global s2
 
     # get english language model
+    # and remove the dependency-parcing pipeline
     nlp = spacy.load('en_core_web_sm', disable=['parser'])
 
-    # add pipeline components
+    # add custom pipe components to create the following pipeline:
+    # tokenizer -> tagger -> custom_sentencizer -> ner -> common_key_tagger
+    # consider adding: entity_ruler, merge_noun_chunks
+    # https://spacy.io/usage/processing-pipelines/
     nlp.add_pipe(custom_sentencizer, before="ner")  # Insert before the parser
     nlp.add_pipe(common_key_tagger, name="common_key_tagger", last=True)
 
     print(nlp.pipe_names)
-
-    # lu adding: entity_ruler, merge_noun_chunks
-    # https://spacy.io/usage/processing-pipelines/
 
     # add the sentencizer component to the pipeline
     # rem this component  splits sentences on punctuation such as . !  ?
@@ -65,25 +78,31 @@ def main():
     #sentencizer = nlp.create_pipe("sentencizer")
     #nlp.add_pipe(sentencizer)
 
-    s1 = '155A8267|Internal Gear Pump|PARKER HANNIFIN|3339111325|Direction of Rotation Clockwise (CW), Flange Mounting 98.4x18.2 - �50.77 rectangular, Maximum Working Pressure (Bar) 120, Max Speed (RPM) 100, Pump Displacement (cc per rev) 170| �87.39'
-    s2 = '155A8292|Internal Gear Pump|PARKER HANNIFIN|339111329|Direction of Rotation Clockwise (CW), Flange Mounting 98.4x128.2 - �50.77 rectangular, Maximum Working Pressure (Bar) 160, Max Speed (RPM) 2400, Pump Displacement (cc per rev) 70| �35.64'
-
     st1 = preprocessor.string_cleaner(s1)
     st2 = preprocessor.string_cleaner(s2)
 
     print(st1)
-    print(st2)
-
     print('\n\n')
 
     row1 = nlp(st1)
     row2 = nlp(st2)
     print(row1.text)
-    print(row2.text)
 
+    # print sentence segmentation:
+    print('\nshow sentence segmentation\n')
+    for sent in row1.sents:
+        print(sent.text)
 
+    # print token attributes:
+    print('\nshow token attributes:\n')
+    for token in row1:
+        print(token.text, token.lemma_, token.pos_, token.tag_, token.dep_,
+            token.shape_, token.is_alpha, token.is_stop)
 
-
+    # print entity attributes
+    print('\nshow entity attributes:\n')
+    for ent in row1.ents:
+        print(ent.text, ent.start_char, ent.end_char, ent.label_)
 
     # TEST print  -----------------------
     # print('\n', nlp.pipeline)
