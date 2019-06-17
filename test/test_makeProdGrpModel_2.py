@@ -78,8 +78,9 @@ def main():
         suppliers = []
         mpns = []
 
-        # TEST list
-        print('contents of arrays for tagging:\n')
+        # TEST print    -----------------------
+        #print('contents of arrays for tagging:\n')
+
         testList = [headers, productIDs,
                     products, suppliers, mpns]
         i = 0
@@ -100,28 +101,45 @@ def main():
             # create text object
             # rem add a period at the end so that the spacy sentencizer
             # knows how to detect the end of each record
-            txt_obj = txt_obj + ' '.join(row) + '.\n'
+            # and add all rows to text object except for header row
+            if i != 0:
+                txt_obj = txt_obj + ' '.join(row) + '.\n'
             i += 1
 
-    # TEST print
+    # TEST print  -----------------------
+    print('testList items:\n')
     for item in testList:
         print(item)
 
     # clean the text object
     txt_obj = preprocessor.string_cleaner(txt_obj)
 
-    # TEST PRINT
+    # TEST PRINT  -----------------------
     print('\n\ntxt_obj after cleaning:\n', txt_obj)
 
     # create the nlp object:
     pumps_erp10 = nlp(txt_obj)
 
-    # TEST print
+    # TEST print  -----------------------
     print('\n\npumps_erp10 after sentencizer:\n')
     for sent in pumps_erp10.sents:
-        print(sent.text, '**End Row**', end='')
+        print(sent.text, '**end row**', end='')
 
+    # TEST print  -----------------------
+    print('\n\ntokens in nlp obj:\n')
+    for token in pumps_erp10:
+        print(token.like_num)
 
+    # stuff we get:
+    # token, .text, .i, .idx, .tag_, .lemma_
+    # .is_punct, .is_space, .like_num
     print('\nDone.')
+
+    # stuff we don't get:
+    # pos, ent, chunking,
+
+    # LU
+    # textcat (TextCategorizer, Doc.cats)
+    # custom components (Doc._.xxx, Token._.xxx, Span._.xxx)
 
 if __name__ == '__main__' : main()
