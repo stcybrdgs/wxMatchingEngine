@@ -94,16 +94,26 @@ def main():
 
     # testing: setting entity annotations  --------------------------------------
     ents = [(e.text, e.start_char, e.end_char, e.label_) for e in nlp_obj_cln.ents]
-    print('Before', ents)
+    print('\nBefore', ents)
     # the model didn't recognise "FB" as an entity :(
 
-    product_id = doc.vocab.strings[u"ORG"]  # get hash value of entity label
-    fb_ent = Span(doc, 0, 1, label=ORG) # create a Span for the new entity
-    doc.ents = list(doc.ents) + [fb_ent]
+    # find token positions
+    print('\n\nfind token positions:\n')
+    for token in nlp_obj_cln:
+        print(token.text, token.i)
 
-    ents = [(e.text, e.start_char, e.end_char, e.label_) for e in doc.ents]
-    print('After', ents)
+    PRODUCT = nlp_obj_cln.vocab.strings[u"PRODUCT"]
+    # get hash value of entity label
+    igp = Span(nlp_obj_cln, 1, 4, label=PRODUCT) # create a Span for the new entity
+    nlp_obj_cln.ents = list(nlp_obj_cln.ents) + [igp]
 
+    ents = [(e.text, e.start_char, e.end_char, e.label_) for e in nlp_obj_cln.ents]
+    print('\nAfter', ents)
+
+    for e in nlp_obj_cln.ents:
+        if e.text == 'internal gear pump':
+            print(e.text, ' is a ', e.label_)
+# ken hubacher - machine learning guy in austin
 
 
 if __name__ == '__main__' : main()
