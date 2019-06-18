@@ -46,7 +46,7 @@ def main():
     # and remove the dependency-parcing pipeline
     nlp = spacy.load('en_core_web_sm', disable=['parser'])
 
-    # add custom pipe components to create the following pipeline:
+    # want to add custom pipe components to create the following pipeline:
     # tokenizer -> tagger -> custom_sentencizer -> ner -> common_key_tagger
     # consider adding: entity_ruler, merge_noun_chunks (https://spacy.io/usage/processing-pipelines/)
     nlp.add_pipe(custom_sentencizer, before="ner")  # Insert before the parser
@@ -92,7 +92,9 @@ def main():
         i += 1
     print('\n\n# of sents: ', i)
 
-    # testing: setting entity annotations  --------------------------------------
+    #--------------------------------------
+    # testing: setting entity annotations
+    #--------------------------------------
     ents = [(e.text, e.start_char, e.end_char, e.label_) for e in nlp_obj_cln.ents]
     print('\nBefore', ents)
     # the model didn't recognise "FB" as an entity :(

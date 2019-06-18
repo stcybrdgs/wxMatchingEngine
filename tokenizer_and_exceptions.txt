@@ -1,0 +1,13 @@
+Tokenizer exceptions
+spaCy’s tokenization algorithm lets you deal with whitespace-delimited chunks separately. This makes it easy to define special-case rules, without worrying about how they interact with the rest of the tokenizer. Whenever the key string is matched, the special-case rule is applied, giving the defined sequence of tokens. You can also attach attributes to the subtokens, covered by your special case, such as the subtokens LEMMA or TAG.
+
+Tokenizer exceptions can be added in the following format:
+
+TOKENIZER_EXCEPTIONS.PY (EXCERPT)
+TOKENIZER_EXCEPTIONS = {
+    "don't": [
+        {ORTH: "do", LEMMA: "do"},
+        {ORTH: "n't", LEMMA: "not", NORM: "not", TAG: "RB"}]
+
+IMPORTANT NOTE:
+If an exception consists of more than one token, the ORTH values combined always need to match the original string. 
