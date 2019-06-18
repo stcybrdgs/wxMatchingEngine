@@ -86,7 +86,7 @@ def main():
     nlp_obj_cln = nlp(txt_obj)
     print('\n\ntxt_obj_cln:\n')
 
- # TEST print  -----------------------
+    # TEST print  -----------------------
     i = 0
     for sent in nlp_obj_cln.sents:
         print(sent.text, '**end**')

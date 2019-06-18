@@ -11,3 +11,18 @@ TOKENIZER_EXCEPTIONS = {
 
 IMPORTANT NOTE:
 If an exception consists of more than one token, the ORTH values combined always need to match the original string. 
+
+The tokenizer consults the mapping table TOKENIZER_EXCEPTIONS to allow sequences of characters to be mapped to multiple tokens. Each token may be assigned a parto fo speech and one or more morphological features
+Token Attributes - provide ability to make linguistic annotations
+
+.
+ent_type_
+ent_iob_
+ent_id_
+lemma_
+is_alpha
+is_digit
+is_punct
+is_space
+like_num
+
