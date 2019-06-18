@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jun 17
+Created on Tue Jun 18
 @author: Stacy Bridges
 
-script to make custom sentence segmenter
+script to set entity annotations
 """
 
 # IMPORT LIBS  ======================================
@@ -85,7 +85,8 @@ def main():
     # create the nlp object:
     nlp_obj_cln = nlp(txt_obj)
     print('\n\ntxt_obj_cln:\n')
-    # TEST print  -----------------------
+
+ # TEST print  -----------------------
     i = 0
     for sent in nlp_obj_cln.sents:
         print(sent.text, '**end**')
@@ -115,7 +116,5 @@ def main():
     for e in nlp_obj_cln.ents:
         if e.text == 'internal gear pump':
             print(e.text, ' is a ', e.label_)
-# ken hubacher - machine learning guy in austin
-
 
 if __name__ == '__main__' : main()
