@@ -16,37 +16,36 @@ ners/
 ---------------------------------------
 preprocessor/
     loader.py
-    # imports: [ csv, xlrd, os, sys ]
-        def import_csv(d)
+    # imports: [ xlrd, csv, os, sys, re ]
+        def get_path(d)
         def import_json(d)
         def import_pickle(d)
-        def import_txt(d)
         def import_xls(d)
-        def load_all()
+        def import_csv(d)
+        def import_txt(d)
         def load_doc(d)
-    preprocessor.py
-    # imports: [jellyfish, spacy, re, unicodedata2]
-    # files: [ stop_words.txt ]
+    string_cleaner.py
+    # imports: [ unicodedata2, re ]
+        # def lemmatizer(d)
         def string_cleaner(d)
         def remove_accents(d)
         def remove_special_chars(d)
         def remove_whitespace(d)
         def normalizer(d)
-        def lemmatizer(d)
 ---------------------------------------
 processor/
     nlpObjectCreator.py
     # imports: [ spacy ]
         def create_nlp_object(d)
         def remove_stop_words(d)
-    distanceEncoder.py
-    # imports: []
+    distance_encoder.py
+    # imports: [ jellyfish ]
         def levenshtein(s1, s2)
-        def damerauLevenshtein(s1, s2)
+        def damerau_levenshtein(s1, s2)
         def jaro(s1, s2)
-        def jaroWinkler(s1, s2)
+        def jaro_winkler(s1, s2)
         def hamming(s1, s2)
-        def matchRatingComparison(s1, s2)
+        def match_rating_comparison(s1, s2)
     phoneticEncoder.py
     # imports: []
         def soundex(s)

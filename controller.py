@@ -19,7 +19,7 @@ sys.path.append('store/')
 
 # IMPORT FUNCTIONS  ================================
 import loader
-import preprocessor
+import string_cleaner
 import processor
 import distanceEncoder
 
@@ -32,15 +32,13 @@ def main():
     f_csv = 'io/input/test/tender.csv'
 
     d = loader.load_doc(f_csv)
-    d = preprocessor.string_cleaner(d)
+    d = string_cleaner.clean_doc(d)
 
     # rem matcher:
     # if (distanceEncoder.levenshtein(d, d1)) == 0: 100% match
 
-
-
     # print to to console
-    print('\n\n' + d)
+    print('\n' + d)
 
     print('Done')
 

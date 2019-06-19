@@ -2,9 +2,21 @@
 """
 Created on Thr Jun 13 14:49:44 2019
 @author: Stacy Bridges
+
+preprocessor/
+    loader.py
+    # imports: [ xlrd, csv, os, sys, re ]
+        def get_path(d)
+        def import_json(d)
+        def import_pickle(d)
+        def import_xls(d)
+        def import_csv(d)
+        def import_txt(d)
+        def load_doc(d)
+
 """
 # IMPORT LIBS  ======================================
-# import xlrd # py lib for working with excel files
+# import xlrd  # py lib for working with excel files
 import csv
 import os
 import sys
@@ -12,10 +24,6 @@ import re
 
 # HELPER FUNCTIONS  =================================
 # receive arg == '../path/filename.ext' and return doc obj to caller
-def import_json(d): pass
-def import_pickle(d): pass
-def import_xls(d): pass
-
 def get_path(d):
     '''
     # get file_name, file_path, file_ext
@@ -26,6 +34,10 @@ def get_path(d):
     '''
     pass
     # end function //
+
+def import_json(d): pass
+def import_pickle(d): pass
+def import_xls(d): pass
 
 def import_txt(d):
     doc = ''
