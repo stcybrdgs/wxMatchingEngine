@@ -4,36 +4,43 @@ Created on Wed Jun 19
 @author: Stacy Bridges
 
 """
-# IMPORT LIBS  =========================
+# IMPORT LIBS  =====================================
 import csv
 import sys
 import os
 import re
 
-# PATHS  ===============================
+# IMPORT PATHS  ====================================
 sys.path.append('io/')
 sys.path.append('ners/')
 sys.path.append('preprocessor/')
 sys.path.append('processor/')
 sys.path.append('store/')
 
-# FUNCTIONS  ===========================
+# IMPORT FUNCTIONS  ================================
 import loader
 import preprocessor
 import processor
+import distanceEncoder
 
-# GLOBALS  =============================
+# GLOBALS  =========================================
 
 
-# MAIN  ================================
+# MAIN  ============================================
 def main():
     f_txt = 'io/input/test/tender.txt'
     f_csv = 'io/input/test/tender.csv'
 
     d = loader.load_doc(f_csv)
+    d = preprocessor.string_cleaner(d)
+
+    # rem matcher:
+    # if (distanceEncoder.levenshtein(d, d1)) == 0: 100% match
+
+
 
     # print to to console
-    print(d)
+    print('\n\n' + d)
 
     print('Done')
 

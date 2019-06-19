@@ -3,14 +3,14 @@
 Created on Thr Jun 13 14:49:44 2019
 @author: Stacy Bridges
 """
-# IMPORTS  =========================================
+# IMPORT LIBS  ======================================
 # import xlrd # py lib for working with excel files
 import csv
 import os
 import sys
 import re
 
-# HELPER FUNCTIONS  =======================================
+# HELPER FUNCTIONS  =================================
 # receive arg == '../path/filename.ext' and return doc obj to caller
 def import_json(d): pass
 def import_pickle(d): pass
@@ -31,7 +31,8 @@ def import_txt(d):
     doc = ''
     with open(d) as data:
         for row in data:
-            doc = doc + re.sub(r'^\s+$', '', row) # regex removes blank line
+            # regex removes blank lines
+            doc = doc + re.sub(r'^\s+$', '', row)
     return doc
     # end function //
 
@@ -44,7 +45,7 @@ def import_csv(d):
     return doc
     # end function //
 
-# CONTROLLER FUNCTION  ====================================
+# CONTROLLER FUNCTION  =============================
 # call correct import method and return doc to caller
 # d == '../path/filename.ext
 def load_doc(d):
