@@ -26,11 +26,11 @@ from spacy.lang.en import English
 # PATHS ================================
 # import importlib
 # rem use importlib to import module stored as string
-sys.path.append('../io/')
-sys.path.append('../ners/')
-sys.path.append('../preprocessor/')
-sys.path.append('../processor/')
-sys.path.append('../store/')
+sys.path.append('../../io/')
+sys.path.append('../../ners/')
+sys.path.append('../../preprocessor/')
+sys.path.append('../../processor/')
+sys.path.append('../../store/')
 
 # IMPORT FUNCTIONS  =====================
 #import loader
@@ -62,7 +62,7 @@ def main():
     # get product group data file and feed the info into arrays
     # that will be used later to create custom tags for the nlp object
     txt_obj = ''
-    with open('../store/model/erp10/pumps/prod_pumps_erp10.csv') as data:
+    with open('../../store/model/erp10/pumps/prod_pumps_erp10.csv') as data:
         data = csv.reader(data, delimiter='|')
         headers = []
         productIDs = []

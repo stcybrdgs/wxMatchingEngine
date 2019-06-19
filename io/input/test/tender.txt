@@ -17,4 +17,4 @@ Order ID|Description|Partcode|Date|Qty|Unit|Value
 70859|Parker Hannifin cw gear pump, flange mount, 23 cc displacement, 98.4x128.2, 250 pressure bar, 3300 rpm||8/31/2018|1|each|31.75
 54098|Hill clockwise transfer   pump, flange mount, 3100 rpm,  28 cc displacement, 98.4x128.2, 250 pressure bar|p925 AAA|3/31/2019|10|Ea|101
 42784|Oil Safe Pump  |102000| 4/19/2019|13|Ea|362.96
-55952|1/4 connector, 1500 mm   long, 3.5 kg hyd pump by SKF (72914)|72914|11/18/2018|16|Ea|1274.24
+55952|1/4 connector, 1500 mm   long, 3.5 kg hyd pump by SKF (72914)|  72914|11/18/2018|16|Ea|1274.24

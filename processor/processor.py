@@ -9,6 +9,19 @@ processor/
         def create_nlp_object(d)
         def remove_stop_words(d)
 
+# TO DO:
+# tagger: lu token vs span vs ent -- which tag to use for which data?
+#   Product ID, Product, Supplier, MfrPartNo, Description
+#       ent: PRODUCT (token level), tok: soundex, tok NYSIIS
+#       ent: SUPPLIER (token level), tok: soundex, tok NYSIIS
+#       ent: PRODUCT_ID (token level)
+#       ent: MPN (token level)
+#       span: DESCRIPTION [x:x]
+#   pos == noun for chunking (?)
+#       if find( inProduct, isName) >= 0 where isName in [ taxonomy ]:
+#           cat(noun | noun | noun) = chunk = name of chunk
+#  tagger.add.label --> add new label to the pipe (can map a dictionary)
+
 """
 # IMPORT  LIBS  ========================
 import spacy

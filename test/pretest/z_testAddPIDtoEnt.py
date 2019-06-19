@@ -36,27 +36,15 @@ def common_key_tagger(doc):
 def custom_sentencizer(doc):
     pass
     return doc
-# TO DO:
-# tagger: lu token vs span vs ent -- which tag to use for which data?
-#   Product ID, Product, Supplier, MfrPartNo, Description
-#       ent: PRODUCT (token level), tok: soundex, tok NYSIIS
-#       ent: SUPPLIER (token level), tok: soundex, tok NYSIIS
-#       ent: PRODUCT_ID (token level)
-#       ent: MPN (token level)
-#       span: DESCRIPTION [x:x]
-#   pos == noun for chunking (?)
-#       if find( inProduct, isName) >= 0 where isName in [ taxonomy ]:
-#           cat(noun | noun | noun) = chunk = name of chunk
-#  tagger.add.label --> add new label to the pipe (can map a dictionary)
 
 # MAIN  =======================================
 def main():
     # get english language model
-    # and remove the dependency-parcing pipeline
-    nlp = spacy.load('en_core_web_sm')#, disable=['parser'])
+    nlp = spacy.load('en_core_web_sm') #, disable=['parser'])
 
     # want to add custom pipe components to create the following pipeline:
-    # tokenizer -> tagger -> custom_sentencizer -> ner -> common_key_tagger
+    # tokenizer -> custom_colname_tagger -> common_key_tagger
+    # custom_sentencizer -> ner ->
     # consider adding: entity_ruler, merge_noun_chunks (https://spacy.io/usage/processing-pipelines/)
     nlp.add_pipe(custom_sentencizer, before="tagger")  # Insert before the parser
     #nlp.add_pipe(field_val_tagger, name = "field_val_tagger", last=True)

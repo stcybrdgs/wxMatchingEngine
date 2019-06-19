@@ -3,7 +3,7 @@
 Created on Thur Jun 13 14:49:44 2019
 @author: Stacy
 
-processor/
+preprocessor/
     preprocessor.py
     # imports: [jellyfish, spacy, re, unicodedata2]
         def string_cleaner(d)
@@ -11,7 +11,7 @@ processor/
         def remove_special_chars(d)
         def remove_whitespace(d)
         def normalizer(d)
-        def lemmatizer(d)
+        # def lemmatizer(d)
         def porterStemmer(d)
 
 """
@@ -30,9 +30,11 @@ import loader
 # define special characters to be removed by the string cleaner
 # rem periods are important, please do not remove them
 special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
-                '{', '}', '[', ']', '|', '\\', ':', ';', '\"', '\'',
-                '<', ',', '>', '?']
+                '{', '}', '[', ']', '|', '\\', ';', '\"', '\'',
+                '<', '>', '?']
                 # leave in '/' for cases such as 1/2 kg, etc
+                # leave in ':' for skus that use it
+                # leave in ',' for EU numerical data that uses it
 
 # FUNCTIONS  =======================================
 def string_cleaner(d):
