@@ -35,6 +35,7 @@ sys.path.append('../preprocessor')
 
 # IMPORT FILES  ====================================
 import loader
+import string_cleaner
 
 # GLOBALS  =========================================
 
@@ -52,15 +53,30 @@ def commonkey_tagger(doc):
     # end function //
 
 def sentence_segmenter(doc):
-    rh = loader.get_row_heads()
-    print('\nHere\'s the row_heads in the sentence segmenter: {}'.format(rh))
+    # get the list of row heads
+    row_heads = loader.get_row_heads()
+    j = 0
+
+    # normalize row heads so that they can be compared to text in nlp obj
+    for rh in row_heads:
+        row_heads[j] = string_cleaner.normalizer(rh)
+        j += 1
+
+    # set each row head as a sentence start
+    j = 0
+    for rh in row_heads:
+        for token in doc:
+            if token.text == rh:
+                doc[token.i].is_sent_start = True
+        j += 1
+
     return doc
     # end function //
 
 # HELPER FUNCTIONS  ================================
 def create_nlp_pipeline(nlp):
     # create custom nlp pipeline
-    nlp.add_pipe(sentence_segmenter, before="parser")
+    nlp.add_pipe(sentence_segmenter, before='ner')
     nlp.add_pipe(commonkey_tagger, before="sentence_segmenter")
     nlp.add_pipe(apply_cleanup_rules, before="commonkey_tagger")
     nlp.add_pipe(colname_tagger, before="apply_cleanup_rules")
@@ -87,7 +103,8 @@ def process_nlp_object(d):
     # rem 'sm' model has no word2vector capability
 
     # load nlp language model
-    nlp = spacy.load('en_core_web_sm')
+    #nlp = spacy.load('en_core_web_sm')
+    nlp = spacy.load('en_core_web_sm', disable=['parser'])
 
     # create nlp pipeline
     nlp = create_nlp_pipeline(nlp)
@@ -105,6 +122,10 @@ def process_nlp_object(d):
     test(nlp, nlpd, d)
 
 def test(nlp, nlpd, d):
+    # rem d = txt obj
+    # rem nlp = nlp model (en)
+    # rem nlpd = nlp doc obj
+
     # PIPELINE
     print('\n\nHere\'s the customized NLP pipeline:')
     print(nlp.pipe_names)  # test print
@@ -130,7 +151,24 @@ def test(nlp, nlpd, d):
     print(ents)
 
     # print row heads
-    print('\nHere\'s the row heads: {}'.format(loader.get_row_heads()))
+    rh = loader.get_row_heads()
+    print('\nHere\'s the row heads: ')
+    j = 0
+    for h in rh:
+        print(rh[j], ' ', end='')
+        j += 1
+
+    # test the sentence segmenter
+    print('\n\nSentence Segmenter:')
+    for sent in nlpd.sents:
+        print(sent.text, end='')
+
+    print('\n\nSentence Segmenter (every other row):\n')
+    i = 0
+    for sent in nlpd.sents:
+        if i % 2 == 1:
+            print(sent.text, end ='')
+        i += 1
 
     # COLNAME TAGGER
     #for tok in d:

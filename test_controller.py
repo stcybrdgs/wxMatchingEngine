@@ -39,32 +39,8 @@ import processor
 import distance_encoder
 import nlp_object_processor
 
+
 # GLOBALS  =========================================
-'''
-# CUSTOM PIPES  ====================================
-def colname_tagger(d):
-    return d
-    # end function //
-
-def commonkey_tagger(d):
-    return d
-    # end function //
-
-def sentence_segmenter(d):
-    return d
-    # end function //
-
-# LOCAL FUNCTIONS  =================================
-def remove_stop_words(d):
-    tokens = [token.text for token in d if not token.is_stop]
-    doc = ''
-    i = 0
-    for tok in tokens:
-        doc = doc + ' ' + tokens[i]
-        i += 1
-    return doc
-    # end function //
-'''
 
 # MAIN  ============================================
 def main():
@@ -78,7 +54,7 @@ def main():
     # function path: preprocessor > loader.py > load_doc(d)
 
     print('\nHere\'s the input doc after initial loading:\n')
-    d = loader.load_doc(tender_txt)
+    d = loader.load_doc(tender_csv)
     print(d)
 
     print('\nHere\'s the input doc after string cleaning:\n')
@@ -91,6 +67,6 @@ def main():
     nlp_object_processor.process_nlp_object(d)
 
     # end program
-    print('Done')
+    print('\nDone')
 
 if __name__ == '__main__' : main()

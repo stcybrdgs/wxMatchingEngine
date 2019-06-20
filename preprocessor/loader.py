@@ -63,11 +63,11 @@ def import_txt(d):
             id_start = j
             id_end = id_start
             for char in row:
-                if i > 0:
-                    if char == '|' and id_end == id_start:
-                        id_end = j
-                        row_heads.append(row[id_start:id_end])
-                    j += 1
+                #if i > 0:  # skip header row
+                if char == '|' and id_end == id_start:
+                    id_end = j
+                    row_heads.append(row[id_start:id_end])
+                j += 1
             # populate txt obj
             doc = doc = doc + re.sub(r'^\s+$', '', line)
             i += 1
@@ -82,9 +82,9 @@ def import_csv(d):
         i = 0
         for row in csv_reader:
             # populate row_heads[]
-            if i > 0:
-                row_head = row[0]
-                row_heads.append(row_head)
+            #if i > 0:  # skip header row
+            row_head = row[0]
+            row_heads.append(row_head)
             # populate txt obj
             doc = doc + ('|'.join(row) + '\n')
             i += 1
