@@ -25,7 +25,7 @@ global product_ids
 product_ids = []
 
 # CUSTOM PIPES  =========================
-def stop_wordser(): pass
+def stop_words_filter(): pass
 def colname_tagger(): pass
 def commonkey_tagger(arg): pass
 def sentence_segmenter(): pass
@@ -43,10 +43,9 @@ def main():
     nlp.add_pipe(sentence_segmenter, name="sentence_segmenter", before="parser")
     nlp.add_pipe(commonkey_tagger, name="commonkey_tagger", before="sentence_segmenter")
     nlp.add_pipe(colname_tagger, name="colname_tagger", before="commonkey_tagger")
-    nlp.add_pipe(stop_wordser, name="stop_wordser", before="colname_tagger")
+    nlp.add_pipe(stop_words_filter, name="stop_words_filter", first=True)
 
     print(nlp.pipe_names)  # test print
-
 
 
     print('Done')

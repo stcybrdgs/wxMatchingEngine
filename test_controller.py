@@ -40,6 +40,19 @@ import distance_encoder
 
 # GLOBALS  =========================================
 
+# CUSTOM PIPES  ====================================
+def colname_tagger(d):
+    return d
+    # end function //
+
+def commonkey_tagger(d):
+    return d
+    # end function //
+
+def sentence_segmenter(d):
+    return d
+    # end function //
+
 # LOCAL FUNCTIONS  =================================
 def remove_stop_words(d):
     tokens = [token.text for token in d if not token.is_stop]
@@ -57,19 +70,42 @@ def main():
     f_txt = 'io/input/test/tender.txt'
     f_csv = 'io/input/test/tender.csv'
 
-    # test: preprocessor > loader.py > load_doc(d)
+    # --------------------------------------
+    # test loading and cleaning a document
+    # function path: preprocessor > loader.py > load_doc(d)
+
+    print('\nHere\'s the input doc after initial loading:\n')
     d = loader.load_doc(f_csv)
+    print(d)
+
+    print('\nHere\'s the input doc after string cleaning:\n')
     d = string_cleaner.clean_doc(d)
+    print(d)
 
     # rem in matcher if distanceEncoder.levenshtein(d, d1) == 0 then 100% match
 
-    # test: processor > nlp_object_processor.py > remove_stop_words(d)
-    nlp = spacy.load('en_core_web_sm')  # create nlp obj
-    d = remove_stop_words(d)
+    # --------------------------------------
+    # identify nlp language model and set up pipeline
+    nlp = spacy.load('en_core_web_sm')
+
+    # create custom nlp pipeline
+    nlp.add_pipe(sentence_segmenter, before="parser")
+    nlp.add_pipe(commonkey_tagger, before="sentence_segmenter")
+    nlp.add_pipe(colname_tagger, before="commonkey_tagger")
+
+    print('\n\nHere\'s the customized NLP pipeline:\n')
+    print(nlp.pipe_names)  # test print
 
 
-    # print to to console
-    print('\n' + d)
+
+    # --------------------------------------
+    # test stop words
+    # function path: processor > nlp_object_processor.py > remove_stop_words(d)
+
+    print('\nHere\'s the input doc after stop words:\n')
+    nd = nlp(d)
+    nd = nlp(remove_stop_words(nd))
+    print(nd.text)
 
     print('Done')
 
