@@ -34,6 +34,7 @@ preprocessor/
             def remove_special_chars(d)
             def remove_whitespace(d)
             def normalizer(d)
+            def apply_custom_rules(d)
         # controller function
             def string_cleaner(d)
 ---------------------------------------
@@ -57,11 +58,12 @@ processor/
     # imports[ spacy, STOP_WORDS ]
         # custom pipes
             def colname_tagger(d)
+            def remove_stop_words(d)
+            def apply_cleanup_rules(d)
             def commonkey_tagger(d)
             def sentence_segmenter(d)
         # helper functions
             def modify_stop_words()
-            def remove_stop_words(d)
         # controller function
             def process_nlp_object(d)
 

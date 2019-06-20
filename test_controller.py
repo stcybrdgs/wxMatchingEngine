@@ -23,7 +23,7 @@ import sys
 import os
 import re
 import spacy
-from spacy.lang.en.stop_words import STOP_WORDS
+# from spacy.lang.en.stop_words import STOP_WORDS
 
 # IMPORT PATHS  ====================================
 sys.path.append('io/')

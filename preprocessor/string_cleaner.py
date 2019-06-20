@@ -14,6 +14,7 @@ preprocessor/
             def remove_special_chars(d)
             def remove_whitespace(d)
             def normalizer(d)
+            def apply_custom_rules(d)
         # controller function
             def string_cleaner(d)
 
@@ -72,6 +73,9 @@ def normalizer(d):
     return d
     # end function //
 
+def apply_custom_rules(d):
+    return d
+
 # CONTROLLER FUNCTION  =============================
 def clean_doc(d):
     # d = lemmatizer(d)
@@ -79,6 +83,7 @@ def clean_doc(d):
     d = remove_special_chars(d)
     d = remove_whitespace(d)
     d = normalizer(d)
+    d = apply_custom_rules(d)
 
     return d
     # end function //
