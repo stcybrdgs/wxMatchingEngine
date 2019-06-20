@@ -91,24 +91,24 @@ def process_nlp_object(d):
     nlp = modify_stop_words(nlp)
 
     # create nlp obj
-    d = nlp(d)
+    nlpd = nlp(d)
 
     # ------------------------------------------------
     # TEST
     # ------------------------------------------------
     # PIPELINE
-    print('\n\nHere\'s the customized NLP pipeline:\n')
+    print('\n\nHere\'s the customized NLP pipeline:')
     print(nlp.pipe_names)  # test print
 
     # STOP WORDS
     # show which stop words can be filtered out
     i = 0
     stops = []
-    for tok in d:
+    for tok in nlpd:
         if tok.is_stop:
             i += 1
             stops.append(tok.text)
-    print('\nFiltered out these {} stop words: {} '.format(i, stops), '\n')
+    print('\nFiltered out these {} stop words: {} '.format(i, stops))
 
     # show the tokens that are not stop words
     #print('\nHere\'s tokens that are not stop words:')
@@ -116,8 +116,8 @@ def process_nlp_object(d):
     #print(tokens)
 
     # show entity labels
-    print('\nHere\'s the entities text and labels:\n')
-    ents = [(e.text, e.label_) for e in d.ents]
+    print('\nHere\'s the entities text and labels:')
+    ents = [(e.text, e.label_) for e in nlpd.ents]
     print(ents)
 
     # COLNAME TAGGER
