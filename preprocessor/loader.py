@@ -67,7 +67,6 @@ def import_txt(d):
                     if char == '|' and id_end == id_start:
                         id_end = j
                         row_heads.append(row[id_start:id_end])
-                        print('{}:{}'.format(id_start, id_end))
                     j += 1
             # populate txt obj
             doc = doc = doc + re.sub(r'^\s+$', '', line)
@@ -82,8 +81,8 @@ def import_csv(d):
         csv_reader = csv.reader(data, delimiter='|')
         i = 0
         for row in csv_reader:
+            # populate row_heads[]
             if i > 0:
-                # populate row_heads[]
                 row_head = row[0]
                 row_heads.append(row_head)
             # populate txt obj
