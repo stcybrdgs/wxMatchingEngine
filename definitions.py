@@ -63,7 +63,9 @@ processor/
             def commonkey_tagger(d)
             def sentence_segmenter(d)
         # helper functions
+            def create_nlp_pipeline(nlp)
             def modify_stop_words()
+            def pickle_an_nlpobj(nobj, pname)
         # controller function
             def process_nlp_object(d)
 
