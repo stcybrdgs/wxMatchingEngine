@@ -3,28 +3,27 @@
 Created on Tue Jun  4 14:49:44 2019
 @author: Stacy
 
-Phonetic Encoding Modules:
-    these scripts process strings per phonetic encoding algorithms as
-    implemented in the python jellyfish and metaphone libraries, including:
-        - soundex
-        - # metaphone
-        - double metaphone
-        - nysiis
-        - match rating approach codex
+these scripts process strings per the phonetic encoding algorithms
+included in the python jellyfish and doublemetaphone libraries.
 
-    rem:
-    a combo of Soundex and Metaphone typically results in an
-    initial high number of positive matches
+rem
+a combo of Soundex and Metaphone typically results in an
+initial high number of positive matches
 
 processor/
+    phonetic_encoder.py
+    # imports: [ sys, jellyfish, doublemetaphone ]
+        def soundex(s)
+        def metaphone(s)
+        def double_metaphone(s)
+        def nysiis(s)
+        def match_rating_codex(s)
 
 """
-
-# IMPORTS  =========================================
+# IMPORT LIBS  =====================================
 import sys
 import jellyfish
 from metaphone import doublemetaphone
-
 
 # FUNCTIONS  =======================================
 '''
@@ -34,7 +33,7 @@ the name and the digits represent similar sounds
 '''
 def soundex(s):
     return jellyfish.soundex(s)
-    # end function  -----------
+    # end function  //
 
 '''
 The Metaphone algorithm was designed as an improvement on Soundex.
@@ -43,7 +42,7 @@ where ‘0’ is pronounced ‘th’ and ‘X’ is a ‘[sc]h’ sound.
 '''
 def metaphone(s):
     return jellyfish.metaphone(s)
-    # end function  -----------
+    # end function  //
 
 '''
 The Double Metaphone algorithm phonetically codes English words (and foreign
@@ -52,25 +51,25 @@ words often heard in the United States) by reducing them to a combination of
 pronunciations, such as a foreign word. This reduces matching problems
 that may occur due to incorrect spelling.
 '''
-def doubleMetaphone(s):
+def double_metaphone(s):
     return doublemetaphone(s)
-    # end function  -----------
+    # end function  //
 
 '''
 The NYSIIS algorithm is an algorithm developed by the
 New York State Identification and Intelligence System. It transforms a word
-into a phonetic code. Like soundex and metaphone it is primarily intended
+into a phonetic code. Like soundex and metaphone, it is primarily intended
 for use on names (as they would be pronounced in English).
 '''
 def nysiis(s):
     return jellyfish.nysiis(s)
-    # end function  -----------
+    # end function  //
 
 '''
 The Match Rating Approach algorithm is an algorithm for determining whether or
 not two names are pronouncedsimilarly. The algorithm consists of an encoding
 function that is similar to soundex or nysiis.
 '''
-def matchRatingCodex(s):
+def match_rating_codex(s):
     return jellyfish.match_rating_codex(s)
-    # end function  -----------
+    # end function  //

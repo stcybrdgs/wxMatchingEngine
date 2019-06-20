@@ -6,13 +6,15 @@ Created on Thr Jun 13 14:49:44 2019
 preprocessor/
     loader.py
     # imports: [ xlrd, csv, os, sys, re ]
-        def get_path(d)
-        def import_json(d)
-        def import_pickle(d)
-        def import_xls(d)
-        def import_csv(d)
-        def import_txt(d)
-        def load_doc(d)
+        # helper functions
+            def get_path(d)
+            def import_json(d)
+            def import_pickle(d)
+            def import_xls(d)
+            def import_csv(d)
+            def import_txt(d)
+        # controller function
+            def load_doc(d)
 
 """
 # IMPORT LIBS  ======================================

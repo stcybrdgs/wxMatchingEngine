@@ -17,8 +17,7 @@ processor/
         def match_rating_comparison(s1, s2)
 
 """
-
-# IMPORTS  =========================================
+# IMPORT LIBS  =====================================
 import jellyfish
 
 # FUNCTIONS  =======================================
@@ -29,7 +28,7 @@ another.
 '''
 def levenshtein(s1, s2):
     return jellyfish.levenshtein_distance(s1, s2) # return one value
-    # end function  -----------
+    # end function  //
 
 '''
 A modification of Levenshtein distance, Damerau-Levenshtein
@@ -38,7 +37,7 @@ a single edit.
 '''
 def damerau_levenshtein(s1, s2):
     return jellyfish.damerau_levenshtein_distance(s1, s2) # return one value
-    # end function  -----------
+    # end function  //
 
 '''
 Jaro distance is a string-edit distance that gives a floating
@@ -47,7 +46,7 @@ dissimilar strings and 1 represents identical strings.
 '''
 def jaro(s1, s2):
     return jellyfish.jaro_distance(s1, s2) # return one value
-    # end function  -----------
+    # end function  //
 
 '''
 Jaro-Winkler is a modification/improvement to Jaro distance, like Jaro it
@@ -56,7 +55,7 @@ dissimilar strings and 1 represents identical strings.
 '''
 def jaro_winkler(s1, s2):
     return jellyfish.jaro_winkler(s1, s2) # return one value
-    # end function  -----------
+    # end function  //
 
 '''
 Hamming distance is the measure of the number of characters that
@@ -64,7 +63,7 @@ differ between two strings.
 '''
 def hamming(s1, s2):
     return jellyfish.hamming_distance(s1, s2) # return one value
-    # end function  -----------
+    # end function  //
 
 '''
 Compare s1 and s2 using the match rating approach algorithm, returns True if
@@ -79,4 +78,4 @@ MRA does not perform well with encoded names differing in length by more than 2.
 '''
 def match_rating_comparison(s1, s2):
     return jellyfish.match_rating_comparison(s1, s2) # return two values
-    # end function  -----------
+    # end function  //

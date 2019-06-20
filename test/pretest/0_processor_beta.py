@@ -15,24 +15,20 @@ import sys
 import os
 
 # PATHS ================================
-sys.path.append('../preprocessor/')
+sys.path.append('../../preprocessor/')
 
-# IMPORT FUNCTIONS  =====================
-import preprocessor
+# IMPORT FILES  ========================
+import string_cleaner
 
 # GLOBALS  ==============================
 global product_ids
 product_ids = []
 
 # CUSTOM PIPES  =========================
-def colname_tagger():
-    pass
-
-def commonkey_tagger(arg):
-    pass
-
-def sentence_segmenter():
-    pass
+def stop_wordser(): pass
+def colname_tagger(): pass
+def commonkey_tagger(arg): pass
+def sentence_segmenter(): pass
 
 # MAIN  =================================
 def main():
@@ -47,7 +43,8 @@ def main():
     nlp.add_pipe(sentence_segmenter, name="sentence_segmenter", before="parser")
     nlp.add_pipe(commonkey_tagger, name="commonkey_tagger", before="sentence_segmenter")
     nlp.add_pipe(colname_tagger, name="colname_tagger", before="commonkey_tagger")
-    
+    nlp.add_pipe(stop_wordser, name="stop_wordser", before="colname_tagger")
+
     print(nlp.pipe_names)  # test print
 
 

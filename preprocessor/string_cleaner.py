@@ -8,12 +8,14 @@ scripts to perform cleaning operations on a doc and return it to caller
 preprocessor/
     string_cleaner.py
     # imports: [ unicodedata2, re ]
-        # def lemmatizer(d)
-        def string_cleaner(d)
-        def remove_accents(d)
-        def remove_special_chars(d)
-        def remove_whitespace(d)
-        def normalizer(d)
+        # helper functions
+            # def lemmatizer(d)
+            def remove_accents(d)
+            def remove_special_chars(d)
+            def remove_whitespace(d)
+            def normalizer(d)
+        # controller function
+            def string_cleaner(d)
 
 """
 # IMPORT LIBS  =====================================
