@@ -16,13 +16,7 @@ The tokenizer consults the mapping table TOKENIZER_EXCEPTIONS to allow sequences
 Token Attributes - provide ability to make linguistic annotations
 
 .
-ent_type_
-ent_iob_
-ent_id_
-lemma_
-is_alpha
-is_digit
-is_punct
-is_space
-like_num
+see token attributes at:
+Attributes 
+https://spacy.io/api/token
 

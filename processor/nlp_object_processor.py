@@ -4,13 +4,14 @@ Created on Sat Jun 15
 @author: Stacy Bridges
 
 processor/
-    processor.py
+    nlp_object_processor.py
     # imports[ spacy, STOP_WORDS ]
         # custom pipes
             def colname_tagger(d)
             def commonkey_tagger(d)
             def sentence_segmenter(d)
         # helper functions
+            def modify_stop_words()
             def remove_stop_words(d)
         # controller function
             def process_nlp_object(d)
@@ -40,6 +41,12 @@ def sentence_segmenter(d):
     # end function //
 
 # HELPER FUNCTIONS  ================================
+def modify_stop_words():
+    #lex = nlp.vocab[u'id']
+    #lex.is_stop = False
+    #nlp.vocab[u' i'].is_stop = False
+    # end function //
+
 def remove_stop_words(d):
     tokens = [token.text for token in d if not token.is_stop]
     doc = ''
@@ -64,17 +71,39 @@ def process_nlp_object(d):
     nlp.add_pipe(commonkey_tagger, before="sentence_segmenter")
     nlp.add_pipe(colname_tagger, before="commonkey_tagger")
 
+    # modify stop_words
+    modify_stop_words()
+
     # create nlp obj
     d = nlp(d)
 
     # remove stop words
+    #nlp.vocab["the"].is_stop = False
     d = nlp(remove_stop_words(d))
 
     # TEST  ------------------------------------------
+    # PIPELINE
     print('\n\nHere\'s the customized NLP pipeline:\n')
     print(nlp.pipe_names)  # test print
 
+    # STOP WORDS
     print('\nHere\'s the input doc after stop words:\n')
     print(d.text)
+
+
+    print('\n\nstop_words:\n')
+    print(STOP_WORDS)
+
+    # COLNAME TAGGER
+    #for tok in d:
+    #    print(tok.text, tok.pos_, tok.tag_, tok.ent_type_)
+
+    # COMMONKEY TAGGER
+
+    # SENTENCE SEGMENTER
+    #print('\nHere\'s the sentence segmentation:\n')
+    #for sent in d.sents:
+    #    print(sent, '** end **')
+
     # TEST  ------------------------------------------
     # end function  //

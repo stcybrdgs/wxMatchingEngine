@@ -69,15 +69,16 @@ def remove_stop_words(d):
 # MAIN  ============================================
 def main():
     # define test input files
-    f_txt = 'io/input/test/tender.txt'
-    f_csv = 'io/input/test/tender.csv'
+    tender_txt = 'io/input/test/tender.txt'
+    tender_csv = 'io/input/test/tender.csv'
+    erp_csv = 'io/input/test/erp10_master.csv'
 
     # --------------------------------------
     # test loading and cleaning a document
     # function path: preprocessor > loader.py > load_doc(d)
 
     print('\nHere\'s the input doc after initial loading:\n')
-    d = loader.load_doc(f_csv)
+    d = loader.load_doc(erp_csv)
     print(d)
 
     print('\nHere\'s the input doc after string cleaning:\n')

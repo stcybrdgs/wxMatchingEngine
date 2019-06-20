@@ -35,7 +35,7 @@ import loader
 # rem keep '.' for numbers that need it
 special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(',
                 ')', '{', '}', '[', ']', '|', '\\', ';', '\"',
-                '\'', '<', '>', '?']
+                '\'', '<', '>', '?', '£']
 
 # HELPER FUNCTIONS  =================================
 def lemmatizer(d): pass
@@ -47,7 +47,7 @@ def remove_accents(d):
     except (TypeError, NameError):
         pass
 
-    d = unicodedata2.normalize('NFD', d)
+    d = unicodedata2.normalize('NFC', d)
     d = d.encode('ascii', 'ignore')
     d = d.decode("utf-8")
     return str(d)

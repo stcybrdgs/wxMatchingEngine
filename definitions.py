@@ -53,17 +53,18 @@ processor/
         def double_metaphone(s)
         def nysiis(s)
         def match_rating_codex(s)
-    processor.py
+    nlp_object_processor.py
     # imports[ spacy, STOP_WORDS ]
         # custom pipes
             def colname_tagger(d)
             def commonkey_tagger(d)
             def sentence_segmenter(d)
         # helper functions
+            def modify_stop_words()
             def remove_stop_words(d)
         # controller function
             def process_nlp_object(d)
-            
+
 ---------------------------------------
 stores/
     lookups/
