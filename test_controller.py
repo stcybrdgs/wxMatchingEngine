@@ -37,9 +37,10 @@ import loader
 import string_cleaner
 import processor
 import distance_encoder
+import nlp_object_processor
 
 # GLOBALS  =========================================
-
+'''
 # CUSTOM PIPES  ====================================
 def colname_tagger(d):
     return d
@@ -63,6 +64,7 @@ def remove_stop_words(d):
         i += 1
     return doc
     # end function //
+'''
 
 # MAIN  ============================================
 def main():
@@ -84,29 +86,10 @@ def main():
 
     # rem in matcher if distanceEncoder.levenshtein(d, d1) == 0 then 100% match
 
-    # --------------------------------------
-    # identify nlp language model and set up pipeline
-    nlp = spacy.load('en_core_web_sm')
+    # send object to the nlp object processor
+    nlp_object_processor.process_nlp_object(d)
 
-    # create custom nlp pipeline
-    nlp.add_pipe(sentence_segmenter, before="parser")
-    nlp.add_pipe(commonkey_tagger, before="sentence_segmenter")
-    nlp.add_pipe(colname_tagger, before="commonkey_tagger")
-
-    print('\n\nHere\'s the customized NLP pipeline:\n')
-    print(nlp.pipe_names)  # test print
-
-
-
-    # --------------------------------------
-    # test stop words
-    # function path: processor > nlp_object_processor.py > remove_stop_words(d)
-
-    print('\nHere\'s the input doc after stop words:\n')
-    nd = nlp(d)
-    nd = nlp(remove_stop_words(nd))
-    print(nd.text)
-
+    # end program
     print('Done')
 
 if __name__ == '__main__' : main()
