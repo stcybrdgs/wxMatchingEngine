@@ -19,6 +19,7 @@ preprocessor/
     # imports: [ xlrd, csv, os, sys, re ]
         # helper functions
             def get_path(d)
+            def get_row_heads()
             def import_json(d)
             def import_pickle(d)
             def import_xls(d)

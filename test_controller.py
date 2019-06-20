@@ -78,7 +78,7 @@ def main():
     # function path: preprocessor > loader.py > load_doc(d)
 
     print('\nHere\'s the input doc after initial loading:\n')
-    d = loader.load_doc(erp_csv)
+    d = loader.load_doc(tender_csv)
     print(d)
 
     print('\nHere\'s the input doc after string cleaning:\n')

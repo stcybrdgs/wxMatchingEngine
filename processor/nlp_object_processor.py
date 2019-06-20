@@ -23,6 +23,7 @@ processor/
 # IMPORT LIBS  =====================================
 import sys
 import os
+import csv
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
 from spacy.tokens import Token
@@ -30,8 +31,10 @@ from spacy.tokens import Token
 
 # IMPORT PATHS  ====================================
 #sys.path.append('../parameters/')
+sys.path.append('../preprocessor')
 
 # IMPORT FILES  ====================================
+import loader
 
 # GLOBALS  =========================================
 
@@ -49,6 +52,8 @@ def commonkey_tagger(doc):
     # end function //
 
 def sentence_segmenter(doc):
+    rh = loader.get_row_heads()
+    print('\nHere\'s the row_heads in the sentence segmenter: {}'.format(rh))
     return doc
     # end function //
 
@@ -59,7 +64,6 @@ def create_nlp_pipeline(nlp):
     nlp.add_pipe(commonkey_tagger, before="sentence_segmenter")
     nlp.add_pipe(apply_cleanup_rules, before="commonkey_tagger")
     nlp.add_pipe(colname_tagger, before="apply_cleanup_rules")
-
     return nlp
     # end function//
 
@@ -73,6 +77,7 @@ def modify_stop_words(model):
 # and arg pname is the name for the pickle file
 def pickle_an_nlpobj(nobj, pname):
     pass
+    # end function  //
 
 # CONTROLLER FUNCTION  =============================
 def process_nlp_object(d):
@@ -93,9 +98,13 @@ def process_nlp_object(d):
     # create nlp obj
     nlpd = nlp(d)
 
+
     # ------------------------------------------------
     # TEST
     # ------------------------------------------------
+    test(nlp, nlpd, d)
+
+def test(nlp, nlpd, d):
     # PIPELINE
     print('\n\nHere\'s the customized NLP pipeline:')
     print(nlp.pipe_names)  # test print
@@ -120,6 +129,9 @@ def process_nlp_object(d):
     ents = [(e.text, e.label_) for e in nlpd.ents]
     print(ents)
 
+    # print row heads
+    print('\nHere\'s the row heads: {}'.format(loader.get_row_heads()))
+
     # COLNAME TAGGER
     #for tok in d:
     #    print(tok.text, tok.pos_, tok.tag_, tok.ent_type_)
@@ -130,6 +142,5 @@ def process_nlp_object(d):
     #print('\nHere\'s the sentence segmentation:\n')
     #for sent in d.sents:
     #    print(sent, '** end **')
-
 
     # end function  //

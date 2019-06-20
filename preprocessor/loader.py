@@ -8,6 +8,7 @@ preprocessor/
     # imports: [ xlrd, csv, os, sys, re ]
         # helper functions
             def get_path(d)
+            def get_row_heads()
             def import_json(d)
             def import_pickle(d)
             def import_xls(d)
@@ -24,6 +25,10 @@ import os
 import sys
 import re
 
+# GLOBALS  ==========================================
+global row_heads
+row_heads = []  # index[0] of each row for the sentence segmenter
+
 # HELPER FUNCTIONS  =================================
 # receive arg == '../path/filename.ext' and return doc obj to caller
 def get_path(d):
@@ -37,25 +42,53 @@ def get_path(d):
     pass
     # end function //
 
+def get_row_heads():
+    global row_heads
+    return row_heads
+    # end function //
+
 def import_json(d): pass
 def import_pickle(d): pass
 def import_xls(d): pass
 
 def import_txt(d):
+    global row_heads
     doc = ''
     with open(d) as data:
-        for row in data:
-            # regex removes blank lines
-            doc = doc + re.sub(r'^\s+$', '', row)
+        i = 0
+        for line in data:
+            j = 0
+            row = line.rstrip()
+            # populate row_heads[]
+            id_start = j
+            id_end = id_start
+            for char in row:
+                if i > 0:
+                    if char == '|' and id_end == id_start:
+                        id_end = j
+                        row_heads.append(row[id_start:id_end])
+                        print('{}:{}'.format(id_start, id_end))
+                    j += 1
+            # populate txt obj
+            doc = doc = doc + re.sub(r'^\s+$', '', line)
+            i += 1
     return doc
     # end function //
 
 def import_csv(d):
+    global row_heads
     doc = ''
     with open(d) as data:
         csv_reader = csv.reader(data, delimiter='|')
+        i = 0
         for row in csv_reader:
+            if i > 0:
+                # populate row_heads[]
+                row_head = row[0]
+                row_heads.append(row_head)
+            # populate txt obj
             doc = doc + ('|'.join(row) + '\n')
+            i += 1
     return doc
     # end function //
 
