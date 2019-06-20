@@ -27,6 +27,7 @@ from spacy.lang.en.stop_words import STOP_WORDS
 # IMPORT PATHS  ====================================
 #sys.path.append('../parameters/')
 
+
 # IMPORT FILES  ====================================
 
 
@@ -34,18 +35,6 @@ from spacy.lang.en.stop_words import STOP_WORDS
 
 # CUSTOM PIPES  ====================================
 def colname_tagger(doc):
-    return doc
-    # end function //
-
-def remove_stop_words(doc):
-    i = 0
-    stops = []
-    for token in doc:
-        if token.is_stop:
-            stops.append(token)
-            i += 1
-    print('\n\nFound {} stop words: {}'.format(i, stops))
-    #tokens = [token.text for token in d if not token.is_stop]
     return doc
     # end function //
 
@@ -83,17 +72,10 @@ def process_nlp_object(d):
     nlp.add_pipe(sentence_segmenter, before="parser")
     nlp.add_pipe(commonkey_tagger, before="sentence_segmenter")
     nlp.add_pipe(apply_cleanup_rules, before="commonkey_tagger")
-    nlp.add_pipe(remove_stop_words, before="apply_cleanup_rules")
-    nlp.add_pipe(colname_tagger, before="remove_stop_words")
-
-
+    nlp.add_pipe(colname_tagger, before="apply_cleanup_rules")
 
     # create nlp obj
     d = nlp(d)
-
-    # remove stop words
-    #nlp.vocab["the"].is_stop = False
-    #d = nlp(remove_stop_words(d))
 
     # TEST  ------------------------------------------
     # PIPELINE
@@ -101,7 +83,14 @@ def process_nlp_object(d):
     print(nlp.pipe_names)  # test print
 
     # STOP WORDS
-    print('\nHere\'s the input doc after stop words:\n')
+    i = 0
+    stops = []
+    for tok in d:
+        if tok.is_stop:
+            i += 1
+            stops.append(tok.text)
+    print('\nFiltered out these {} stop words: {} '.format(i, stops), '\n')
+
     print(d.text)
 
     # show spacy stop_words
