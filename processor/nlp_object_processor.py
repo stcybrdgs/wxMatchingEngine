@@ -170,15 +170,31 @@ def test(nlp, nlpd, d):
             print(sent.text, end ='')
         i += 1
 
+
+    # use sentence control to print suppliers only
+    print('\n\nPOS tags for first record:\n')
+    i = 0
+    tokens = []
+    pos = []
+    for sent in nlpd.sents:
+        if i == 1:
+            tok = [token.text for token in sent  if not token.is_stop]
+            pos = [token.pos_ for token in sent if not token.is_stop]
+            tag = [token.tag_ for token in sent if not token.is_stop]
+            ent = [token.ent_type_ for token in sent if not token.is_stop]
+        i += 1
+
+    i = 0
+    for item in tok:
+        print(tok[i], pos[i], tag[i], ent[i])
+        i += 1
+
+
     # COLNAME TAGGER
     #for tok in d:
     #    print(tok.text, tok.pos_, tok.tag_, tok.ent_type_)
 
     # COMMONKEY TAGGER
 
-    # SENTENCE SEGMENTER
-    #print('\nHere\'s the sentence segmentation:\n')
-    #for sent in d.sents:
-    #    print(sent, '** end **')
 
     # end function  //
