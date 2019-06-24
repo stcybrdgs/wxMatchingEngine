@@ -1,0 +1,77 @@
+GROUP PAGE
+"https://uk.brammer.biz/"
+
+response.css('div.prod-box div.texts a::attr(href)').getall()
+
+yield: list of links to next page of links
+--------------------------------------------------
+CATEGORY PAGE
+"https://uk.brammer.biz/category/1/Rolling-and-Plain-Bearings-Accessories"
+
+response.css('div.prod-box div.texts a::attr(href)').getall()
+
+yield: list of links to next page of links
+--------------------------------------------------
+CATEGORY PAGE
+https://uk.brammer.biz/category/2/Radial-Ball-Bearings
+
+response.css('div.prod-box div.texts a::attr(href)').getall()
+
+yield: list of links to next page of links
+--------------------------------------------------
+PRODUCT PAGE
+"https://uk.brammer.biz/category/3/Deep-Groove-Ball-Bearings/products"
+
+response.css('div.itemNameBox a::attr(href)').getall()
+
+yield: list of links to next page of links
+
+-------------------------------------------------
+PRODUCT DETAIL PAGE
+# product path
+base = response.css('div.product-info')
+prod_key = 'product'
+prod_val = base.css('h2::attr(data-name)').get()
+
+# product id path
+base2 = base.css('table.cpn-synonims-table')
+itemno_key = 'product id'
+itemno_val = base2.css('tr td span::text').get()
+
+# brand path
+brand_key = 'brand'
+brand_val = base2.css('tr td a::text').get()
+
+# key path
+mpn_key ='mpn'
+mpn_val_base = base2.css('tr')[2]
+mpn_val = mpn_val_base.css('td::text')[1].get()
+
+# output
+yield {
+prod_key : prod_val,
+itemno_key: itemno_val,
+brand_key: brand_val,
+mpn_key: mpn_val,
+}
+
+# attr paths
+base3 = response.css('div.tabs-wrapper ul.tabs-content li div.product_data_detail_row_even')
+attr_key = base3.css('div.product_data_detail_row_label::text').getall()  # get list of attr keys
+attr_val = base3.css('div.product_data_detail_row_value::text').getall()  # get list of attr vals
+
+# output (loop)
+yield{
+attr_key : attr_val,
+}
+
+----------------------------------------------------
+if right(url, 15) == products?sbmt=1
+then switch to product page logic:
+for link on product_page:
+  follow link
+  get product details
+
+for link in group list:
+    follow link
+    if right(get(url), 15) == products?sbmt=1

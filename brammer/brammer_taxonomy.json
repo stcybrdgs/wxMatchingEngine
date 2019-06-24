@@ -1,0 +1,156 @@
+{
+  "categories" :
+  [
+    {
+      "01-00-00-00" :
+      {
+        "Rolling and Plain Bearings, Accessories" :
+        {
+          "01-01-00-00"	:
+          {
+            "Radial Ball Bearings" :
+            {
+              "01-01-01-00" : "Deep Groove Ball Bearings",
+              "01-01-02-00" : "Angular Contact Ball Bearings",
+              "01-01-03-00" : "Four Point Contact Ball Bearings",
+              "01-01-04-00" : "Self Aligning Ball Bearings",
+              "01-01-05-00" : "Insert Ball Bearings (Y-Bearings)"
+            }
+          },
+          "01-02-00-00"	:
+          {
+            "Radial Roller Bearings" :
+            {
+              "01-02-01-00" : "Cylindrical Roller Bearings + Angle Rings",
+              "01-02-02-00" : "Tapered Roller Bearings",
+              "01-02-03-00" : "Spherical Roller Bearings",
+              "01-02-04-00" : "Toroidal Roller Bearings (CARB®)",
+              "01-02-05-00" : "Other Radial Roller Bearings"
+            }
+          },
+          "01-03-00-00"	:
+          {
+            "Radial Needle Roller Bearings" :
+            {
+              "01-03-01-00" : "Needle Roller and Cage Assemblies",
+              "01-03-02-00" : "Drawn Cup Needle Roller Bearings with Open Ends",
+              "01-03-03-00" : "Needle Roller Bearings (Machined)",
+              "01-03-04-00" : "Inner Rings",
+              "01-03-05-00" : "Drawn Cup Needle Roller Bearings with Closed Ends",
+              "01-03-06-00" : "Aligning Needle Roller Bearings"
+            }
+          }
+        }
+      }Mm,
+      "02-00-00-00" :
+      {
+        "Seals and Vibration Technology":
+        {
+          "02-01-00-00" :
+          {
+            "Seals" :
+            {
+              "02-01-01-00" : "Rotation Seals",
+              "02-01-02-00" : "O-Rings and X-Rings"
+            }
+          }
+        },
+        {
+          "02-02-00-00" :
+          {
+            "Vibration Technology" :
+            {
+              "02-02-01-00" : "Buffers"
+            }
+          }
+        },
+        "03-00-00-00" :
+        {
+          "Mechanical Power Transmission":
+          {
+            "03-01-00-00" :
+            {
+              "Belts":
+              {
+                "03-01-01-00" : "V-Belts",
+	              "03-01-02-00" : "Others-Belts"
+              }
+            },
+            "03-02-00-00" :
+            {
+              "Chain" :
+              {
+                "03-02-01-00" : "Roller Chain",
+                "03-02-02-00" : "Chain Accessories & Spares"
+              }
+            },
+            "03-03-00-00" :
+            {
+              "Ironware" :
+              {
+                "3-03-01-00" : "Sprockets",
+                "03-03-02-00" : "Shaft Fittings",
+                "03-03-03-00" : "Others"
+              }
+            }
+          }
+        },
+        "04-00-00-00" :
+        {
+          "Gearboxes and Motors" :
+            {
+              "04-01-00-00" :
+              {
+                "Gearboxes" :
+                {
+                  "04-01-01-00" : "Parallel (Shaft) Gearboxes"
+                },
+              "04-02-00-00" :
+              {
+                "Motors":
+                {
+                  "04-02-01-00" : "AC Electric Motors"
+                }
+              },
+              "04-03-00-00" :
+              {
+                "Gearbox / Motor Accessories & Spares" :
+                {
+                  "04-03-01-00" : "Gearbox Accessories & Spares"
+                }
+              }
+            }
+          }
+        },
+        "05-00-00-00" :
+        {
+          "Electrical Power Transmission":
+          {
+            "05-01-00-00" :
+            {
+              "Industrial Automation" :
+              {
+                "05-01-01-00" : "Motor Control",
+                "05-01-02-00" : "Control & Switch Gear",
+                "05-01-03-00" : "Process Control",
+                "05-01-04-00" : "Motion Control"
+              }
+            },
+            "05-02-00-00" :
+            {
+              "Electrical" :
+              {
+                "05-02-01-00" : "Lighting",
+                "05-02-02-00" : "Cable",
+                "05-02-03-00" : "Cable Accessories",
+                "05-02-04-00" : "Electrical Accessories",
+                "05-02-05-00" : "Batteries",
+                "05-02-06-00" : "Transformers",
+                "05-02-07-00" : "Sensors"
+              }
+            }
+          }
+        }
+      }
+  ]
+}
