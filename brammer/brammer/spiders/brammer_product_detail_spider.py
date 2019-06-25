@@ -55,6 +55,7 @@ class BrammerProductDetail_Spider(scrapy.Spider):
         # get a product hash id
         hashid_base = response.css('div.product-info h2::attr(data-category)').get()
         hashid = hashid_base[hashid_base.rfind('(')+1:len(hashid_base)-1]
+        hashid = '\'' + str(hashid) + '\''
 
         # get product, sku, brand, and mpn
         product = response.css('div.product-info h2::text').get()
