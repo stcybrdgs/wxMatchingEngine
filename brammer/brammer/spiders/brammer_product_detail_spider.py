@@ -20,26 +20,14 @@ class BrammerProductDetail_Spider(scrapy.Spider):
     headerRowExists = False
 
     start_urls = [
-            "https://uk.brammer.biz/category/65/Metallic-Bearing-Seals/products",
-            "https://uk.brammer.biz/category/980/Circular-Buffers/products",
-            "https://uk.brammer.biz/category/980/Circular-Buffers/products",
-            "https://uk.brammer.biz/category/113/Polyurethane-V-Belts/products",
-            "https://uk.brammer.biz/category/1066/AC-Variable-Speed-Drives-Accessories/products",
-            "https://uk.brammer.biz/category/1075/Overload-Relays/products",
-            "https://uk.brammer.biz/category/1077/Limit-Switches/products",
-            "https://uk.brammer.biz/category/1050/Electronic-Timers-Counters/products",
-            "https://uk.brammer.biz/category/1117/Tubes/products",
-            "https://uk.brammer.biz/category/244/Valve-Islands/products",
-            "https://uk.brammer.biz/category/258/Logic-valves/products",
-            "https://uk.brammer.biz/category/368/Directional-Control-Valves-Standard-/products",
-            "https://uk.brammer.biz/category/74672/Positive-Displacement-Pumps/products",
-            "https://uk.brammer.biz/category/74676/Submersible-Pumps/products",
-            "https://uk.brammer.biz/category/74677/Drum-Barrel-Pumps/products",
-            "https://uk.brammer.biz/category/74680/Process-Pumps-Others/products",
-            "https://uk.brammer.biz/category/448/Brad-Point/products",
-            "https://uk.brammer.biz/category/473/Others-HoleSaws/products",
-            "https://uk.brammer.biz/category/643/Fans-and-Air-Cooling/products",
-            "https://uk.brammer.biz/category/730/Belts/products",
+            "https://uk.brammer.biz/category/3/Deep-Groove-Ball-Bearings/products",
+            "https://uk.brammer.biz/category/16/Cylindrical-Roller-Bearings-Angle-Rings/products",
+            "https://uk.brammer.biz/category/96/Needle-Roller-Thrust-Ball-Bearings/products",
+            "https://uk.brammer.biz/category/357/Blow-Guns/products",
+            "https://uk.brammer.biz/category/409/Hydraulic-Pump",
+            "https://uk.brammer.biz/category/74651/Pumps",
+            "https://uk.brammer.biz/category/563/Bandsaws/products",
+            "https://uk.brammer.biz/category/564/Milling-Machines/products",
     ]
 
     def parse(self, response):
