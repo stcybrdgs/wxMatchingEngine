@@ -25,12 +25,21 @@ matcher = Matcher(nlp.vocab)
 # call matcher.add with no callback and one custom pattern
 # (if you use a callback, it is invoked on a successful match)
 # rem each dictionary represents one token
-pattern = [{"LOWER": "hello"}, {"IS_PUNCT": True}, {"LOWER": "world"}]
-matcher.add("HelloWorld", None, pattern)
+pattern_1 = [{"LOWER": "hello"}, {"IS_PUNCT": True}, {"LOWER": "world"}]
+pattern_2 = [{"LOWER": "hello"}, {"LOWER": "world"}]
 
-doc = nlp(u"Hello, world! Hello world!")
+matcher.add("HelloWorld", None, pattern_1, pattern_2)
+
+doc = nlp(u"Hello, world! Hello! Hello world! Hello, there, world!")
 matches = matcher(doc)
 for match_id, start, end in matches:
     string_id = nlp.vocab.strings[match_id]  # Get string representation
     span = doc[start:end]  # The matched span
     print(match_id, string_id, start, end, span.text)
+
+
+# by default, the matcher only returns matches and nothing else.
+# if you want it to merge entities, assign labels, or something else,
+# then you can define such actions for each pattern by passing in a
+# callback function as the on_match argument on add(), ie:
+# matcher.add("StringID", myCallBack, pattern)
