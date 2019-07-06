@@ -22,13 +22,15 @@ import spacy
 def main():
     # load trained model
     #from spacy.language import Language
-    #nlp = Language().from_disk("model/")
-    nlp = spacy.load("model/")
+    from spacy.language import English
+    #nlp = spacy.load("model/")
+    nlp = English().from_disk("model/")
 
-    doc = nlp(u'FAG DEEP GROOVE BALL BEARING 6026-2RSRC3')
+    doc = nlp(u'FAG DEEP GROOVE BALL BEARING 6026-2RSRC3, I need another ball bearing, deep groove, by FAG')
 
-    for token in doc:
-        print(token.text, token.ent_type_)
+    #for token in doc:
+    #    print(token.text, token.ent_type_)
+    print([(ent.text, ent.label_) for ent in doc.ents])
 
     # end program
     print('Done.')
