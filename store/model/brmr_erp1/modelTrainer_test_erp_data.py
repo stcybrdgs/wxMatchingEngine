@@ -50,6 +50,7 @@ TRAIN_DATA = [
     ("SKF CYLINDRICAL ROLLER BEARING N215ECP/C3", {"entities": [(0, 3, "SUPPLIER"), (4, 30, "PRODUCT"), (31, 41, "MPN")]}),
     ("SKF NEEDLE ROLLER BEARING NKX20Z", {"entities": [(0, 3, "SUPPLIER"), (4, 25, "PRODUCT"), (26, 32, "MPN")]}),
     ("SMC 5 PORT SOLENOID VALVE SV2100-5FUD", {"entities": [(0, 3, "SUPPLIER"), (4, 25, "PRODUCT"), (26, 37, "MPN")]}),
+    ("I NEED A 5 PORT SOLENOID VALVE BY SMC SV2100-5FUD", {"entities": [(0, 3, "SUPPLIER"), (34, 37, "PRODUCT"), (38, 49, "MPN")]}),
 ]
 
 @plac.annotations(
