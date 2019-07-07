@@ -23,6 +23,9 @@ import sys
 import os
 import re
 import spacy
+from spacy.lang.en.stop_words import STOP_WORDS
+from spacy.tokens import Token
+
 # from spacy.lang.en.stop_words import STOP_WORDS
 
 # IMPORT PATHS  ====================================
@@ -39,14 +42,13 @@ import processor
 import distance_encoder
 import nlp_object_processor
 
-
 # GLOBALS  =========================================
 
 # MAIN  ============================================
 def main():
     # define test input files
-    tender_txt = 'io/input/test/tender.txt'
-    tender_csv = 'io/input/test/tender.csv'
+    tender_txt = 'io/input/marq/tender.txt'
+    tender_csv = 'io/input/marq/tender.csv'
     erp_csv = 'io/input/test/erp10_master.csv'
 
     # --------------------------------------
