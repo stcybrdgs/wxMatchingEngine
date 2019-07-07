@@ -27,6 +27,7 @@ def main():
     # rem fields are: HashID, Product, SKU, Brand, MPN, Attr
     hash_ids = []
     header_names = []
+    mpn_numbers = []
     supplier_patterns = []
     mpn_patterns = []
     sku_patterns = []
@@ -60,14 +61,11 @@ def main():
                         hash_ids.append(hash_id)
                     # end if //
 
-                    # populate product patterns
-                    if j == 1: pass
-
                     # populate sku patterns
                     if j == 2:
                         row[j] = row[j].strip()  # strip leading and trailing whitespace from supplier string
                         sku_pattern = ''
-                        sku_prefix = '{"label": "sku", "pattern": [{"lower":"'
+                        sku_prefix = '{"label":"sku","pattern":[{"lower":"'
                         sku_inner = ''
                         sku_suffix = '"}]}'
                         for char in row[j]:
@@ -75,7 +73,7 @@ def main():
                         sku_pattern = sku_prefix + sku_inner + sku_suffix
 
                         # detect duplicates and append only unique patterns
-                        # to the sku patterns list
+                        # to the patterns list
                         pattern_exists = False
                         for pattern in sku_patterns:
                             if sku_pattern == pattern:
@@ -86,10 +84,10 @@ def main():
                     # populate supplier patterns
                     if j == 3:
                         row[j] = row[j].strip()  # strip leading and trailing whitespace from supplier string
-                        supplier_prefix = '{"label":"SUPPLIER","pattern":[{"lower":"'
                         supplier_pattern = ''
-                        supplier_suffix = '"}]}'
+                        supplier_prefix = '{"label":"SUPPLIER","pattern":[{"lower":"'
                         supplier_inner = ''
+                        supplier_suffix = '"}]}'
                         for char in row[j]:
                             if char == ' ':
                                 supplier_inner = supplier_inner + '"},{"lower":"'
@@ -98,7 +96,7 @@ def main():
                         supplier_pattern = supplier_prefix + supplier_inner + supplier_suffix
 
                         # detect duplicates and append only unique patterns
-                        # to the supplier patterns list
+                        # to the patterns list
                         pattern_exists = False
                         for pattern in supplier_patterns:
                             if supplier_pattern == pattern:
@@ -110,7 +108,7 @@ def main():
                     if j == 4:
                         row[j] = row[j].strip()  # strip leading and trailing whitespace from supplier string
                         mpn_pattern = ''
-                        mpn_prefix = '{"label": "MPN", "pattern": [{"lower":"'
+                        mpn_prefix = '{"label":"MPN","pattern":[{"lower":"'
                         mpn_inner = ''
                         mpn_suffix = '"}]}'
                         for char in row[j]:
@@ -118,13 +116,58 @@ def main():
                         mpn_pattern = mpn_prefix + mpn_inner + mpn_suffix
 
                         # detect duplicates and append only unique patterns
-                        # to the mpn patterns list
+                        # to the patterns list
                         pattern_exists = False
                         for pattern in mpn_patterns:
                             if mpn_pattern == pattern:
                                 pattern_exists = True
                         if not pattern_exists:
                             mpn_patterns.append(mpn_pattern)
+
+# populate product patterns
+# rem this block is dependent on mpn_numbers, so it needs to
+# follow the block where 'if j == 4:'
+if j == 1:
+    row[j] = row[j].strip()  # strip leading and trailing whitespace from product string
+    product_pattern = ''
+    product_prefix = '{"label":"PRODUCT","pattern":[{"lower":"'
+    product_inner = ''
+    product_suffix = '"}]}'
+
+    # remove supplier from product detail
+    loc_first_space = row[j].find(' ')
+    length = len(row[j])
+    row[j] = row[j][loc_first_space:length].strip()
+
+    # remove trailing mpn from product detail
+    loc_last_space = row[j].rfind(' ')
+    row[j] = row[j][0:loc_last_space].strip()
+
+    # remove leading mpn from product detail
+    loc_first_space = row[j].find(' ')
+    # STOPPED HERE xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+    for char in row[j]:
+        # remove commas
+        if char == ',':
+            char = ' '
+
+        # determine string for product_inner
+        if char == ' ':
+            # replace whitespace with pattern string
+            product_inner = product_inner + '"},{"lower":"'
+        else:
+            product_inner = product_inner + char.lower()
+    product_pattern = product_prefix + product_inner + product_suffix
+
+    # detect duplicates and append only unique patterns
+    # to the patterns list
+    pattern_exists = False
+    for pattern in product_patterns:
+        if product_pattern == pattern:
+            pattern_exists = True
+    if not pattern_exists:
+        product_patterns.append(product_pattern)
 
                     j += 1
 
@@ -151,14 +194,14 @@ def main():
     print('--------------- Supplier Patterns: ---------------')
     for item in supplier_patterns:
         print(item)
-
-    print('--------------- MPN Patterns: ---------------')
+    '''
+    print('--------------- Product Patterns: ---------------')
     i = 0
-    for item in mpn_patterns:
+    for item in product_patterns:
         print(item)
         i += 1
-    print('mpn_patterns has {} rows'.format(i))
-    '''
+    print('product_patterns has {} rows'.format(i))
+
     #                                   //
     # test  ---------------------------//
 
