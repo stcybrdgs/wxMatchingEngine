@@ -21,7 +21,7 @@ def main():
                 {"label": "SUPPLIER", "pattern": [{"lower": "excel"}, {"lower":"machine"},{"lower":"tools"}]},
                 {"label": "PRODUCT", "pattern": [{"lower": "deep"}, {"lower": "groove"}, {"lower": "ball"}, {"lower": "bearing"}]},
                 {"label": "SKU", "pattern": [{"lower":"wxw01941297"}]},
-                {"label": "MPN", "pattern": "60262RSRC3"}
+                {"label": "MPN", "pattern": [{"lower":"60262rsrc3"}]}
                 #{"label": "PRODUCT", "pattern": [{"lower": "ball"}, {"lower": "bearing"}]},
                 #{"label": "PRODUCT", "pattern": [{"lower": "bearing"}]}
                 #{"label": "MPN", "pattern": [{"lower": "6026-2RSRC3"}]}
@@ -38,7 +38,7 @@ def main():
     print(nlp.pipe_names)
 
     s1 = u"Apple has an office in San Francisco."
-    s2 = u" I need a Deep Groove Ball Bearing by either FAG or skf with an mpn of 60262RSRC3."
+    s2 = u" I need a Deep Groove Ball Bearing by either FAG or skf with an mpn of 60262rsrc3."
     s3 = u" I also need a needle bearing by fag."
     s4 = u" A siemens brand needle ball bearing, sku is wxw01941297."
     sl = [s1, s2, s3, s4]

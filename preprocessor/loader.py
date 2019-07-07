@@ -95,8 +95,8 @@ def import_csv(d):
 # call correct import method and return doc to caller
 # d == '../path/filename.ext
 def load_doc(d):
-    ext = d[d.find('.'):len(d)]
-    doc =''
+    ext = d[d.rfind('.'):len(d)]
+    doc = ''
 
     if ext == '.csv': doc = import_csv(d)
     elif ext == '.json': doc = import_json(d)
