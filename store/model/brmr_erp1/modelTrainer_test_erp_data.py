@@ -135,6 +135,9 @@ def main(model=None, output_dir="model", n_iter=100):
             print("Entities", [(ent.text, ent.label_) for ent in doc.ents])
             print("Tokens", [(t.text, t.ent_type_, t.ent_iob) for t in doc])
 
+    # show pipeline components:
+    print(nlp.pipe_names)
+
     # end program
     print('Done.')
 
