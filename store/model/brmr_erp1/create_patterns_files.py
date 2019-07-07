@@ -67,7 +67,7 @@ def main():
                             if char == ' ':
                                 supplier_inner = supplier_inner + '"},{"lower":"'
                             else:
-                                supplier_inner = supplier_inner + char
+                                supplier_inner = supplier_inner + char.lower()
                         supplier_pattern = supplier_prefix + supplier_inner + supplier_suffix
 
                         # detect duplicates so as to only append unique patterns
@@ -84,15 +84,7 @@ def main():
             doc = doc + ('|'.join(row) + '\n')
             i += 1
 
-    # test print
-    #print(d)
-
-    # base nlp on blank Language class
-    nlp = spacy.blank("en")  # create blank Language class
-
-    # create nlp obj
-    b_doc = nlp(doc)
-
+    '''
     # test  ---------------------------\\
     #                                   \\
     i = 0
@@ -110,17 +102,19 @@ def main():
     print('--------------- Supplier Patterns: ---------------')
     for item in supplier_patterns:
         print(item)
-
+    #                                   //
+    # test  ---------------------------//
+    '''
     # print supplier patterns to jsonl file
     with open('ners_supplier_patterns.jsonl', 'w') as outfile:
         for line in supplier_patterns:
             outfile.write(line + '\n')
 
+    # base nlp on blank Language class
+    nlp = spacy.blank("en")  # create blank Language class
 
-
-
-    #                                   //
-    # test  ---------------------------//
+    # create nlp obj
+    b_doc = nlp(doc)
 
     # break out mpn
 
@@ -129,8 +123,6 @@ def main():
     # break out sku
 
     # break out
-
-
 
     # end program
     print('Done.')
