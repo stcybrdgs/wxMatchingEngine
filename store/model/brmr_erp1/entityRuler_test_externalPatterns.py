@@ -1,10 +1,31 @@
 #!/usr/bin/env python
 # coding: utf8
 # Compatible with: spaCy v2.0.0+
-import spacy
-#from spacy.lang.en import English
-from spacy.pipeline import EntityRuler
 
+# IMPORTS  =====================================
+import spacy
+from spacy.pipeline import EntityRuler
+#from spacy.lang.en import English
+
+# FUNCTIONS  ===================================
+def import_csv(d):
+    global row_heads
+    doc = ''
+    with open(d) as data:
+        csv_reader = csv.reader(data, delimiter='|')
+        i = 0
+        for row in csv_reader:
+            # populate row_heads[]
+            #if i > 0:  # skip header row
+            row_head = row[0]
+            row_heads.append(row_head)
+            # populate txt obj
+            doc = doc + ('|'.join(row) + '\n')
+            i += 1
+    return doc
+    # end function //
+
+# MAIN  ========================================
 def main():
     # load a language and invoke the entity ruler
     nlp = spacy.load('en_core_web_sm', disable=['parser']) #English()
@@ -43,6 +64,8 @@ def main():
 
     # show pipeline components:
     print(nlp.pipe_names)
+
+    with open('brammer_tender_temp.txt', 'r') as tender:
 
     s1 = u"Apple has an office in San Francisco."
     s2 = u" I need a (deep groove ball bearing) by either FAG or skf with an mpn of 60262rsrc3."

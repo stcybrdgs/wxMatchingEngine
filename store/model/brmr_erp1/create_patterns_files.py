@@ -10,6 +10,10 @@ Stacy Bridges
 import spacy
 import csv
 
+# GLOBALS  ==========================================
+global row_heads
+row_heads = []  # index[0] of each row for the sentence segmenter
+
 # MAIN  ========================================
 def main():
     # declare containers
