@@ -52,9 +52,12 @@ TRAIN_DATA = [
     ("SKF NEEDLE ROLLER BEARING NKX20Z", {"entities": [(0, 3, "SUPPLIER"), (4, 25, "PRODUCT"), (26, 32, "MPN")]}),
     ("SMC 5 PORT SOLENOID VALVE SV2100-5FUD", {"entities": [(0, 3, "SUPPLIER"), (4, 25, "PRODUCT"), (26, 37, "MPN")]}),
     ("I NEED A 5 PORT SOLENOID VALVE BY SMC SV2100-5FUD", {"entities": [(0, 3, "SUPPLIER"), (34, 37, "PRODUCT"), (38, 49, "MPN")]}),
-    ("19724 SIP submersible dirty water pump 6819 12/15/2018 11 ft 342.43"),
-    ("42788 8 piece holesaw set by Diston 4/19/2019 13 Ea 362.96"),
-    ("60646 Hi-tech 3 inch dirty water pump with 8 mm lift 12/25/2018 11 Ea 949.74")
+    # train model on new suppliers: SIP, DISSTON as DISTON
+    # train model on new products:  Holesaw set, Holesaw, pump, water pump, dirty water pump, submersible dirty water pump
+    ("19724 SIP submersible dirty water pump 6819 12/15/2018 11 ft 342.43", {"entities": [(6,9, "SUPPLIER"), (22, 38, "PRODUCT")]}),
+    ("Submersible dirty water pump 6819 12/15/2018 11 ft 342.43", {"entities": [(0, 28, "PRODUCT"), (18, 28, "PRODUCT"), (24, 28, "PRODUCT")]}),
+    ("42788 8 piece holesaw set by Diston 4/19/2019 13 Ea 362.96", {"entities": [(29, 35, "SUPPLIER"), (6, 25, "PRODUCT"), (14, 25, "PRODUCT"), (14, 21, "PRODUCT")]}),
+    ("60646 Hi-tech 3 inch dirty water pump with 8 mm lift 12/25/2018 11 Ea 949.74", {"entities": [(21, 37, "PRODUCT")]})
 ]
 
 @plac.annotations(

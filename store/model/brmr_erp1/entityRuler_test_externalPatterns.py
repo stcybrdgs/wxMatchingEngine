@@ -41,14 +41,20 @@ def import_csv(d):
 
 # MAIN  ========================================
 def main():
-    # load a language and invoke the entity ruler
-    nlp = spacy.load('en_core_web_sm', disable=['parser']) #English()
+    model = 'post'  # pre -> use non-trained En model
+                    # post -> use the trained model
 
-    # load patterns from external file
-    nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
+    if model == 'pre':
+        # load a language and invoke the entity ruler
+        nlp = spacy.load('en_core_web_sm', disable=['parser']) #English()
 
-    # putting the ruler before ner will override ner decisions in favor of ruler patterns
-    nlp.add_pipe(nu_ruler, before='ner')
+        # load patterns from external file
+        nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
+
+        # putting the ruler before ner will override ner decisions in favor of ruler patterns
+        nlp.add_pipe(nu_ruler, before='ner')
+    elif model == 'post':
+        nlp = spacy.load('model', disable=['parser']) #English()
 
     # show pipeline components:
     print(nlp.pipe_names)
