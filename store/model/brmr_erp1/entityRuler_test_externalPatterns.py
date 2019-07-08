@@ -41,34 +41,37 @@ def import_csv(d):
 
 # MAIN  ========================================
 def main():
-    model = 'post'  # pre -> use non-trained En model
-                    # post -> use the trained model
+    model = 'post'   # pre -> use non-trained model / post -> use trained model
+    ruler = 'on'
+    cleaner = 'on'
 
     if model == 'pre':
         # load a language and invoke the entity ruler
         nlp = spacy.load('en_core_web_sm', disable=['parser']) #English()
-
-        # load patterns from external file
-        nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
-
-        # putting the ruler before ner will override ner decisions in favor of ruler patterns
-        nlp.add_pipe(nu_ruler, before='ner')
     elif model == 'post':
         nlp = spacy.load('model', disable=['parser']) #English()
+
+    if ruler == 'on':
+        if model == 'pre':
+            # load patterns from external file
+            nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
+            # putting the ruler before ner will override ner decisions in favor of ruler patterns
+            nlp.add_pipe(nu_ruler, before='ner')
 
     # show pipeline components:
     print(nlp.pipe_names)
 
     # import test tender and clean it up
     tender = import_csv('brmr_tender.csv')  # import
-    tender = string_cleaner.clean_doc(tender)  #  clean
+    if cleaner == 'on':
+        tender = string_cleaner.clean_doc(tender)  #  clean
 
     doc = nlp(tender)
 
     print('\n')
     labels = ['SUPPLIER', 'PRODUCT', 'MPN', 'SKU']
     for label in labels:
-        print('{} --------------'.format(label))
+        print('Results for {} --------------'.format(label))
         tot_num = 0
         unique_num = 0
         unique = []
