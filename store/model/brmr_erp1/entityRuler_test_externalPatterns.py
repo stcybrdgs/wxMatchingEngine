@@ -8,40 +8,48 @@ from spacy.pipeline import EntityRuler
 def main():
     # load a language and invoke the entity ruler
     nlp = spacy.load('en_core_web_sm', disable=['parser']) #English()
-    ruler = EntityRuler(nlp, overwrite_ents=True)
 
-    # establish patterns for entity recognition
-    # load from external file
-    patterns = [{"label": "ORG", "pattern": "Apple"},
-                {"label": "GPE", "pattern": [{"lower": "san"}, {"lower": "francisco"}]},
-                {"label": "SUPPLIER", "pattern": [{"lower": "fag"}]},
-                {"label": "SUPPLIER", "pattern": [{"lower": "siemens"}]},
-                {"label": "SUPPLIER", "pattern": [{"lower": "skf"}]},
-                {"label": "SUPPLIER", "pattern": [{"lower": "hill"}, {"lower":"pumps"}]},
-                {"label": "SUPPLIER", "pattern": [{"lower": "excel"}, {"lower":"machine"},{"lower":"tools"}]},
-                {"label": "PRODUCT", "pattern": [{"lower": "deep"}, {"lower": "groove"}, {"lower": "ball"}, {"lower": "bearing"}]},
-                {"label": "SKU", "pattern": [{"lower":"wxw01941297"}]},
-                {"label": "MPN", "pattern": [{"lower":"60262rsrc3"}]}
-                #{"label": "PRODUCT", "pattern": [{"lower": "ball"}, {"lower": "bearing"}]},
-                #{"label": "PRODUCT", "pattern": [{"lower": "bearing"}]}
-                #{"label": "MPN", "pattern": [{"lower": "6026-2RSRC3"}]}
-                #{"label": "MPN", "pattern": [{"NUM":"6026"}, {"SYM":"-"}, {"NUM":"2RSRC3"}]}
-               ]
-    ruler.add_patterns(patterns)
+    # load patterns from external file
+    # first, combine external files into a single file
+    mpn = open('ners_patterns_mpn.jsonl', 'rt')
+    sku = open('ners_patterns_sku.jsonl', 'rt')
+    sup = open('ners_patterns_supplier.jsonl', 'rt')
+    prod = open('ners_patterns_product.jsonl', 'rt')
+    all = open('ners_patterns_all.jsonl', 'wt')
+    for line in mpn:
+        all.writelines(line)
+        print('', end='', flush=True) # rem flush the output buffer
+    for line in sku:
+        all.writelines(line)
+        print('', end='', flush=True) # rem flush the output buffer
+    for line in sup:
+        all.writelines(line)
+        print('', end='', flush=True) # rem flush the output buffer
+    for line in prod:
+        all.writelines(line)
+        print('', end='', flush=True) # rem flush the output buffer
+    mpn.close()
+    sku.close()
+    sup.close()
+    prod.close()
+    all.close()
 
-    ruler.to_disk('patterns2.jsonl')
-    nu_ruler = EntityRuler(nlp).from_disk('patterns2.jsonl')
+    nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
+    #nu_ruler2 = EntityRuler(nlp).from_disk('ners_patterns_supplier.jsonl')
+
     # putting the ruler before ner will override ner decisions in favor of ruler patterns
     nlp.add_pipe(nu_ruler, before='ner')
+    #nlp.add_pipe(nu_ruler2, before='ner')
 
     # show pipeline components:
     print(nlp.pipe_names)
 
     s1 = u"Apple has an office in San Francisco."
-    s2 = u" I need a Deep Groove Ball Bearing by either FAG or skf with an mpn of 60262rsrc3."
-    s3 = u" I also need a needle bearing by fag."
-    s4 = u" A siemens brand needle ball bearing, sku is wxw01941297."
-    sl = [s1, s2, s3, s4]
+    s2 = u" I need a (deep groove ball bearing) by either FAG or skf with an mpn of 60262rsrc3."
+    s3 = u" I also need a needle bearing by fag, a spare tube,  and a plastic blow gun."
+    s4 = u" I need a dirty water pump, a ball bearing, and a siemens brand needle roller bearing, sku is wxw01941297."
+    s5 = u" tool apron, stanley Tools."
+    sl = [s1, s2, s3, s4, s5]
     sn = ""
     for item in sl:
         #for token
