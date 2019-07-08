@@ -190,11 +190,29 @@ def main():
         for line in product_patterns:
             outfile.write(line + '\n')
 
-    # base nlp on blank Language class
-    nlp = spacy.blank("en")  # create blank Language class
-
-    # create nlp obj
-    b_doc = nlp(doc)
+    # combine all pattern files into a single pattern file
+    mpn = open('ners_patterns_mpn.jsonl', 'rt')
+    sku = open('ners_patterns_sku.jsonl', 'rt')
+    sup = open('ners_patterns_supplier.jsonl', 'rt')
+    prod = open('ners_patterns_product.jsonl', 'rt')
+    all = open('ners_patterns_all.jsonl', 'wt')
+    for line in mpn:
+        all.writelines(line)
+        print('', end='', flush=True) # rem flush the output buffer
+    for line in sku:
+        all.writelines(line)
+        print('', end='', flush=True) # rem flush the output buffer
+    for line in sup:
+        all.writelines(line)
+        print('', end='', flush=True) # rem flush the output buffer
+    for line in prod:
+        all.writelines(line)
+        print('', end='', flush=True) # rem flush the output buffer
+    mpn.close()
+    sku.close()
+    sup.close()
+    prod.close()
+    all.close()
 
     # end program
     print('Done.')

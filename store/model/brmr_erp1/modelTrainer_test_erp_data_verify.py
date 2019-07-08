@@ -14,6 +14,7 @@ Stacy Bridges
 #import random
 #from pathlib import Path
 import spacy
+#from spacy.language import English
 #from spacy.util import minibatch, compounding
 #from spacy.tokens import Token
 #import sys
@@ -22,12 +23,17 @@ import spacy
 def main():
     # load trained model
     #from spacy.language import Language
-    from spacy.language import English
+
     #nlp = spacy.load("model/")
-    nlp = English().from_disk("model/")
+    #nlp = English().from_disk("model/")
+    #nlp = spacy.blank("en").from_disk("model/")
+    nlp = spacy.load("model/")
 
     doc = nlp(u'FAG DEEP GROOVE BALL BEARING 6026-2RSRC3, I need another ball bearing, deep groove, by FAG')
 
+    # show pipeline components:
+    print(nlp.pipe_names)
+    
     #for token in doc:
     #    print(token.text, token.ent_type_)
     print([(ent.text, ent.label_) for ent in doc.ents])
