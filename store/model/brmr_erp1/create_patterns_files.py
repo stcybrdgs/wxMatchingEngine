@@ -4,22 +4,11 @@
 '''
 Sunday, July 7, 2019
 Stacy Bridges
+
 '''
 # IMPORT LIBS  =================================
 import spacy
 import csv
-import sys
-import os
-
-# SYS PATH  ====================================
-#sys.path.append('../../../preprocessor/')
-
-# IMPORT PY FILES  =============================
-#import loader
-
-# GLOBALS  =====================================
-
-# FUNCTIONS  ===================================
 
 # MAIN  ========================================
 def main():
@@ -27,7 +16,6 @@ def main():
     # rem fields are: HashID, Product, SKU, Brand, MPN, Attr
     hash_ids = []
     header_names = []
-    mpn_numbers = []
     supplier_patterns = []
     mpn_patterns = []
     sku_patterns = []
@@ -106,6 +94,7 @@ def main():
 
                     # populate mpn patterns
                     if j == 4:
+                        # prepare patterns
                         row[j] = row[j].strip()  # strip leading and trailing whitespace from supplier string
                         mpn_pattern = ''
                         mpn_prefix = '{"label":"MPN","pattern":[{"lower":"'
@@ -124,50 +113,51 @@ def main():
                         if not pattern_exists:
                             mpn_patterns.append(mpn_pattern)
 
-# populate product patterns
-# rem this block is dependent on mpn_numbers, so it needs to
-# follow the block where 'if j == 4:'
-if j == 1:
-    row[j] = row[j].strip()  # strip leading and trailing whitespace from product string
-    product_pattern = ''
-    product_prefix = '{"label":"PRODUCT","pattern":[{"lower":"'
-    product_inner = ''
-    product_suffix = '"}]}'
+                    # populate product patterns
+                    # rem this block is dependent on mpn_numbers, so it needs to
+                    # follow the block where 'if j == 4:'
+                    if j == 1:
+                        row[j] = row[j].strip()  # strip leading and trailing whitespace from product string
+                        product_pattern = ''
+                        product_prefix = '{"label":"PRODUCT","pattern":[{"lower":"'
+                        product_inner = ''
+                        product_suffix = '"}]}'
 
-    # remove supplier from product detail
-    loc_first_space = row[j].find(' ')
-    length = len(row[j])
-    row[j] = row[j][loc_first_space:length].strip()
+                        # remove supplier from product detail
+                        loc_first_space = row[j].find(' ')
+                        length = len(row[j])
+                        row[j] = row[j][loc_first_space:length].strip()
 
-    # remove trailing mpn from product detail
-    loc_last_space = row[j].rfind(' ')
-    row[j] = row[j][0:loc_last_space].strip()
+                        # remove trailing mpn from product detail
+                        loc_last_space = row[j].rfind(' ')
+                        row[j] = row[j][0:loc_last_space].strip()
 
-    # remove leading mpn from product detail
-    loc_first_space = row[j].find(' ')
-    # STOPPED HERE xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                        # remove leading mpn from product detail
+                        loc_first_space = row[j].find(' ')
+                        if row[j][0:loc_first_space] == row[4]:
+                            row[j] = row[j][loc_first_space:len(row[j])].strip()
 
-    for char in row[j]:
-        # remove commas
-        if char == ',':
-            char = ' '
+                        for char in row[j]:
+                            # remove commas
+                            if char == ',':
+                                char = ' '
 
-        # determine string for product_inner
-        if char == ' ':
-            # replace whitespace with pattern string
-            product_inner = product_inner + '"},{"lower":"'
-        else:
-            product_inner = product_inner + char.lower()
-    product_pattern = product_prefix + product_inner + product_suffix
+                            # determine string for product_inner
+                            if char == ' ':
+                                # replace whitespace with pattern string
+                                product_inner = product_inner + '"},{"lower":"'
+                            else:
+                                product_inner = product_inner + char.lower()
+                        product_pattern = product_prefix + product_inner + product_suffix
 
-    # detect duplicates and append only unique patterns
-    # to the patterns list
-    pattern_exists = False
-    for pattern in product_patterns:
-        if product_pattern == pattern:
-            pattern_exists = True
-    if not pattern_exists:
-        product_patterns.append(product_pattern)
+                        # detect duplicates and append only unique patterns
+                        # to the patterns list
+                        pattern_exists = False
+                        for pattern in product_patterns:
+                            if product_pattern == pattern:
+                                pattern_exists = True
+                        if not pattern_exists:
+                            product_patterns.append(product_pattern)
 
                     j += 1
 
@@ -175,60 +165,32 @@ if j == 1:
             doc = doc + ('|'.join(row) + '\n')
             i += 1
 
-
-    # test  ---------------------------\\
-    #                                   \\
-    '''
-    i = 0
-    for tok in b_doc:
-        if i > 50: break
-        print([tok.text])
-        i += 1
-
-    print(hash_ids)
-    print(header_names)
-    print('supplier_prefix: ', supplier_prefix)
-    print('supplier_inner: ', supplier_inner)
-    print('supplier_suffix: ', supplier_suffix)
-    print('supplier_pattern: ' , supplier_pattern)
-    print('--------------- Supplier Patterns: ---------------')
-    for item in supplier_patterns:
-        print(item)
-    '''
-    print('--------------- Product Patterns: ---------------')
-    i = 0
-    for item in product_patterns:
-        print(item)
-        i += 1
-    print('product_patterns has {} rows'.format(i))
-
-    #                                   //
-    # test  ---------------------------//
-
     # create pattern files using jsonl
     # supplier patterns:
-    with open('ners_supplier_patterns.jsonl', 'w') as outfile:
+    with open('ners_patterns_supplier.jsonl', 'w') as outfile:
         for line in supplier_patterns:
             outfile.write(line + '\n')
 
     # mpn patterns:
-    with open('ners_mpn_patterns.jsonl', 'w') as outfile:
+    with open('ners_patterns_mpn.jsonl', 'w') as outfile:
         for line in mpn_patterns:
             outfile.write(line + '\n')
 
     # sku patterns
-    with open('ners_sku_patterns.jsonl', 'w') as outfile:
+    with open('ners_patterns_sku.jsonl', 'w') as outfile:
         for line in sku_patterns:
             outfile.write(line + '\n')
 
     # product patterns
+    with open('ners_patterns_product.jsonl', 'w') as outfile:
+        for line in product_patterns:
+            outfile.write(line + '\n')
 
     # base nlp on blank Language class
     nlp = spacy.blank("en")  # create blank Language class
 
     # create nlp obj
     b_doc = nlp(doc)
-
 
     # end program
     print('Done.')
