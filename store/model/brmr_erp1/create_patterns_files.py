@@ -26,10 +26,9 @@ def main():
     product_patterns = []
 
     # store\model\brmr_erp1\brmr_erp1.csv
-    brmr_csv = '../../../store/model/brmr_erp1/brmr_erp1.csv'
+    brmr_csv = '../../../store/model/brmr_erp1/iesa_erp.csv'
 
-    # import brammer csv
-    #d = import_csv(brmr_csv)
+    # import erp csv
     doc = ''
     with open(brmr_csv) as data:
         csv_reader = csv.reader(data, delimiter='|')

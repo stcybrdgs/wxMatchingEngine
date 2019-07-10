@@ -76,17 +76,18 @@ def import_txt(d):
 
 def import_csv(d):
     global row_heads
+    row_heads.clear()
     doc = ''
     with open(d) as data:
         csv_reader = csv.reader(data, delimiter='|')
         i = 0
         for row in csv_reader:
             # populate row_heads[]
-            #if i > 0:  # skip header row
-            row_head = row[0]
-            row_heads.append(row_head)
-            # populate txt obj
-            doc = doc + ('|'.join(row) + '\n')
+            if i > 0:  # skip header row
+                row_head = row[0]
+                row_heads.append(row_head)
+                # populate txt obj
+                doc = doc + ('|'.join(row) + '\n')
             i += 1
     return doc
     # end function //

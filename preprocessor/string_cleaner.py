@@ -15,6 +15,7 @@ preprocessor/
             def remove_whitespace(d)
             def normalizer(d)
             def apply_custom_rules(d)
+            def porter_stemmer(d)
         # controller function
             def string_cleaner(d)
 
@@ -22,6 +23,7 @@ preprocessor/
 # IMPORT LIBS  =====================================
 import unicodedata2
 import re
+import jellyfish
 
 # IMPORT PATHS  ====================================
 
@@ -40,6 +42,20 @@ special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(',
 
 # HELPER FUNCTIONS  =================================
 def lemmatizer(d): pass
+
+# Reduce the string s to its stem using the common Porter stemmer.
+def porter_stemmer(d):
+    start = 0
+    end = 0
+    nu_d = ''
+    for char in d:
+        if char == ' ':
+            #print('Stemming ', s[start:end])
+            nu_d = nu_d + jellyfish.porter_stem(d[start:end]) + ' '
+            start = end
+        end += 1
+    d = nu_d
+    return d
 
 def remove_accents(d):
     # rem unicode is default on python3
@@ -84,6 +100,7 @@ def clean_doc(d):
     d = remove_whitespace(d)
     d = normalizer(d)
     d = apply_custom_rules(d)
+    #d = porter_stemmer(d)
 
     return d
     # end function //

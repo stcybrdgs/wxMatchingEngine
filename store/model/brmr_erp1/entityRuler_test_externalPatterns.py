@@ -41,7 +41,7 @@ def import_csv(d):
 
 # MAIN  ========================================
 def main():
-    model = 'post'   # pre -> use non-trained model / post -> use trained model
+    model = 'pre'   # pre -> use non-trained model / post -> use trained model
     ruler = 'on'
     cleaner = 'on'
 
@@ -53,7 +53,7 @@ def main():
 
     if ruler == 'on':
         if model == 'pre':
-            # load patterns from external file
+            # load patterns from external file only if model is not already trained
             nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
             # putting the ruler before ner will override ner decisions in favor of ruler patterns
             nlp.add_pipe(nu_ruler, before='ner')
@@ -62,7 +62,7 @@ def main():
     print(nlp.pipe_names)
 
     # import test tender and clean it up
-    tender = import_csv('brmr_tender.csv')  # import
+    tender = import_csv('iesa_tender.csv')  # import
     if cleaner == 'on':
         tender = string_cleaner.clean_doc(tender)  #  clean
 
@@ -85,13 +85,43 @@ def main():
         print('\nFound {} total, {} unique\n'.format(tot_num, unique_num))
 
     # save model with entity pattern updates made by the entity ruler
-    '''
-    output_dir = Path('model_entRuler')
-    if not output_dir.exists():
-        output_dir.mkdir()
-    nlp.to_disk(output_dir)
-    print("Saved model to", output_dir)
-    '''
+
+    if ruler == "on":
+        output_dir = Path('model_entRuler')
+        if not output_dir.exists():
+            output_dir.mkdir()
+        nlp.to_disk(output_dir)
+        print("Saved model to", output_dir)
+
+    # TEST  -----------------------------
+    suppliers = []
+    products = []
+    skus = []
+    mpns = []
+    # print(doc)
+    for ent in doc.ents:
+        if ent.label_ in labels:
+            if ent.label_ == 'SUPPLIER':
+                suppliers.append([ent.label_, ent.text])
+            elif ent.label_ == 'PRODUCT':
+                products.append([ent.label_, ent.text])
+            elif ent.label_ == 'SKU':
+                skus.append([ent.label_, ent.text])
+            elif ent.label_ == 'MPN':
+                mpns.append([ent.label_, ent.text])
+
+    print('--------------------------')
+    for i in suppliers: print(i)
+    print('--------------------------')
+    for i in products: print(i)
+    print('--------------------------')
+    for i in skus: print(i)
+    print('--------------------------')
+    for i in mpns: print(i)
+
+
+
+    # TEST  -----------------------------
 
     # end program
     print('Done.')

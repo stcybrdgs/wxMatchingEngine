@@ -22,6 +22,21 @@ For more details, see the documentation:
 -   Training: https://spacy.io/usage/training
 -   NER: https://spacy.io/usage/linguistic-features#named-entities
 
+
+# brmr training data:
+#("FAG DEEP GROOVE BALL BEARING 6026-2RSRC3", {"entities": [(0, 3, "SUPPLIER"), (4, 28, "PRODUCT"), (29, 40, "MPN")]}),
+#("FAG RADIAL BALL BEARING 6321-C3", {"entities": [(0, 3, "SUPPLIER"), (4, 23, "PRODUCT"), (24, 31, "MPN")]}),
+#("SKF CYLINDRICAL ROLLER BEARING N215ECP/C3", {"entities": [(0, 3, "SUPPLIER"), (4, 30, "PRODUCT"), (31, 41, "MPN")]}),
+#("SKF NEEDLE ROLLER BEARING NKX20Z", {"entities": [(0, 3, "SUPPLIER"), (4, 25, "PRODUCT"), (26, 32, "MPN")]}),
+#("SMC 5 PORT SOLENOID VALVE SV2100-5FUD", {"entities": [(0, 3, "SUPPLIER"), (4, 25, "PRODUCT"), (26, 37, "MPN")]}),
+#("I NEED A 5 PORT SOLENOID VALVE BY SMC SV2100-5FUD", {"entities": [(0, 3, "SUPPLIER"), (34, 37, "PRODUCT"), (38, 49, "MPN")]}),
+# train model on new suppliers: SIP, DISSTON as DISTON
+# train model on new products:  Holesaw set, Holesaw, pump, water pump, dirty water pump, submersible dirty water pump
+#("19724 SIP submersible dirty water pump 6819 12/15/2018 11 ft 342.43", {"entities": [(6,9, "SUPPLIER"), (22, 38, "PRODUCT")]}),
+#("Submersible dirty water pump 6819 12/15/2018 11 ft 342.43", {"entities": [(0, 28, "PRODUCT"), (18, 28, "PRODUCT"), (24, 28, "PRODUCT")]}),
+#("42788 8 piece holesaw set by Diston 4/19/2019 13 Ea 362.96", {"entities": [(29, 35, "SUPPLIER"), (6, 25, "PRODUCT"), (14, 25, "PRODUCT"), (14, 21, "PRODUCT")]}),
+#("60646 Hi-tech 3 inch dirty water pump with 8 mm lift 12/25/2018 11 Ea 949.74", {"entities": [(21, 37, "PRODUCT")]})
+
 '''
 
 # LIB IMPORTS =================================
@@ -46,18 +61,33 @@ import string_cleaner
 # GLOBALS  ====================================
 # training data
 TRAIN_DATA = [
-    ("FAG DEEP GROOVE BALL BEARING 6026-2RSRC3", {"entities": [(0, 3, "SUPPLIER"), (4, 28, "PRODUCT"), (29, 40, "MPN")]}),
-    ("FAG RADIAL BALL BEARING 6321-C3", {"entities": [(0, 3, "SUPPLIER"), (4, 23, "PRODUCT"), (24, 31, "MPN")]}),
-    ("SKF CYLINDRICAL ROLLER BEARING N215ECP/C3", {"entities": [(0, 3, "SUPPLIER"), (4, 30, "PRODUCT"), (31, 41, "MPN")]}),
-    ("SKF NEEDLE ROLLER BEARING NKX20Z", {"entities": [(0, 3, "SUPPLIER"), (4, 25, "PRODUCT"), (26, 32, "MPN")]}),
-    ("SMC 5 PORT SOLENOID VALVE SV2100-5FUD", {"entities": [(0, 3, "SUPPLIER"), (4, 25, "PRODUCT"), (26, 37, "MPN")]}),
-    ("I NEED A 5 PORT SOLENOID VALVE BY SMC SV2100-5FUD", {"entities": [(0, 3, "SUPPLIER"), (34, 37, "PRODUCT"), (38, 49, "MPN")]}),
-    # train model on new suppliers: SIP, DISSTON as DISTON
-    # train model on new products:  Holesaw set, Holesaw, pump, water pump, dirty water pump, submersible dirty water pump
-    ("19724 SIP submersible dirty water pump 6819 12/15/2018 11 ft 342.43", {"entities": [(6,9, "SUPPLIER"), (22, 38, "PRODUCT")]}),
-    ("Submersible dirty water pump 6819 12/15/2018 11 ft 342.43", {"entities": [(0, 28, "PRODUCT"), (18, 28, "PRODUCT"), (24, 28, "PRODUCT")]}),
-    ("42788 8 piece holesaw set by Diston 4/19/2019 13 Ea 362.96", {"entities": [(29, 35, "SUPPLIER"), (6, 25, "PRODUCT"), (14, 25, "PRODUCT"), (14, 21, "PRODUCT")]}),
-    ("60646 Hi-tech 3 inch dirty water pump with 8 mm lift 12/25/2018 11 Ea 949.74", {"entities": [(21, 37, "PRODUCT")]})
+    # train for sku:
+    ("93345|FESTO cylinder 63-80-PPVA-N3 sku: PKU-10003511|9/23/18|6|ea|181.02",{"entities": [(47-7, 59-7, "SKU")]}),
+    '''
+    # re-train for product only
+    ("19724|meyn lamp vision grading pll 55w/84 89.4140.904.0282|12/15/18|11|ft|342.43",{"entities": [(18-7, 22-7, "PRODUCT")]}),
+    ("22652|AFC large size o-ring|1/2/19|11|Ea|316.58",{"entities": [(28-7, 34-7, "PRODUCT")]}),
+    ("25027|schneider relay ca2 dn31 f7 telemec cad32f7|1/21/19|16|Pack|1515.84",{"entities": [(23-7, 28-7, "PRODUCT")]}),
+    ("80442|OMRON RELAY 24VAC DPCO MK|3/22/19|18|Ea|4.48",{"entities": [(19-7, 24-7, "PRODUCT")]}),
+    ("36199|HARTING SAFE EDGE CONNECTOR MALE R033|R033|8/8/18|1|Ea|341.8",{"entities": [(21-7, 45-7, "PRODUCT")]}),
+    ("25027|skf bearing 6216-2rs 6216-2rs1:skf|1/21/19|16|Pack|1515.84",{"entities": [(17-7, 24-7, "PRODUCT")]}),
+    ("55952|Push button greeng arrow by Reiser (Rieser ?)|11/18/18|16|Ea|1274.24",{"entities": [(13-7, 24-7, "PRODUCT")]}),
+    ("19720|Siemens brand auxilary contactor |12/15/18|11|ft|342.43",{"entities": [(27-7, 45-7, "PRODUCT")]}),
+    ("19724|Another Bussman fuse, 2amp w/antisurge feature|12/15/18|11|ft|342.43",{"entities": [(29-7, 33-7, "PRODUCT")]}),
+    ("93345|FESTO cylinder 63-80-PPVA-N3 |9/23/18|6|ea|181.02",{"entities": [(19-7, 27-7, "PRODUCT")]}),
+    ("70863|I need one Gas Strut engineering gas Strut,  . 3075aa-200n|3075AA-200N|8/31/18|1|each|31.75",{"entities": [(34-7, 55-7, "PRODUCT")]}),
+    ("88325|stanley wrench adjustable 150mm lg roebuck|3/1/19|14|ft|745.78",{"entities": [(21-7, 27-7, "PRODUCT")]}),
+    ("22652|A lmi repair kit for a dosing pump in eff plant (sp-u6)|1/2/19|11|Ea|316.58",{"entities": [(19-7, 29-7, "PRODUCT")]}),
+    # train for mpn and sku
+    ("00-1-E-A|SCHNEIDER RELAY CA2 DN31 F7 TELEMEC CAD32F7|CCA-1546984|SCHNEIDER|CAD32F7",{"entities": [(60-7, 71-7,"SKU"),(82-7, 89-7, "MPN")]}),
+    ("ALL-7-4-6|MEYN Lamp Vision Grading PLL 55W/84 89.4140.904.0282|PH6-ENG-NO-100130|MEYN|89.4140.904.0282",{"entities": [(70-7, 87-7,"SKU"),(93-7, 109-7, "MPN")]}),
+    ("00-3-A-F|SEW GEARBOX 60/1400RPM SEW SA57/T AD2 SA57/T AD2|P74-MOT-02186|SEW|SA57/T AD2",{"entities": [(65-7, 78-7,"SKU"),(83-7, 93-7, "MPN")]}),
+    ("00-C-1-B|SMC FILTER SCMAF400004D AF4000-04|CCA-1527075|SMC|AF4000-04",{"entities": [(50-7, 61-7,"SKU"),(66-7, 75-7, "MPN")]}),
+    ("00-6-8-A|PHILIPS LAMP 16W 4 PIN PL-Q16W/835/4P|PKS-001444|PHILIPS|PL-Q16W/835/4P",{"entities": [(54-7, 64-7,"SKU"),(73-7, 87-7, "MPN")]}),
+    ("00-6-E-F|AIMS PIN: PIN LOCATION 20MM AIMS 98506 P1062 98506 P1062|PGM-31141368|AIMS|98506 P1062",{"entities": [(73-7, 85-7,"SKU"),(91-7, 102-7, "MPN")]}),
+    ("ALL-4-E-C|KUKA PIN X260_GR061_140_21_TR_U102T_002|CJL-77272941|KUKA|X260_GR061_140_21_TR_U102T_002",{"entities": [(57-7, 69-7,"SKU"),(75-7, 105-7, "MPN")]}),
+    ("ELECTRICAL-1-A-C|Mersen FUSE 50 A 22 X 58MM R214122J|5680-200.04.139|Mersen|R214122J",{"entities": [(60-7, 75-7,"SKU"),(83-7, 91-7, "MPN")]})
+    '''
 ]
 
 @plac.annotations(
@@ -69,7 +99,7 @@ TRAIN_DATA = [
 # FUNCTIONS  ==================================
 
 # MAIN  =======================================
-def main(model=None, output_dir="model", n_iter=100):
+def main(model=None, output_dir="model", n_iter=70):
     # setup pipeline
     # load the model you want to use
     # use nlp.disable_pipes to disable all pipes but NER
@@ -78,7 +108,7 @@ def main(model=None, output_dir="model", n_iter=100):
     Load the model, set up the pipeline and train the entity recognizer.
     """
     if model is not None:
-        nlp = spacy.load(model)  # load existing spaCy model
+        nlp = spacy.load('model')  # load existing spaCy model
         print("Loaded model '%s'" % model)
     else:
         nlp = spacy.blank("en")  # create blank Language class
@@ -114,6 +144,7 @@ def main(model=None, output_dir="model", n_iter=100):
     with nlp.disable_pipes(*other_pipes):  # only train NER
         # reset and initialize the weights randomly – but only if we're
         # training a new model
+
         if model is None:
             nlp.begin_training()
         for itn in range(n_iter):
