@@ -6,6 +6,7 @@
 import os
 import sys
 import spacy
+from spacy import displacy
 import csv
 from spacy.pipeline import EntityRuler
 from pathlib import Path
@@ -24,7 +25,7 @@ row_heads = []
 # FUNCTIONS  ===================================
 def import_csv(d):
     global row_heads
-    doc = ''
+    doc = 'IESA Named Entities\n'
     with open(d) as data:
         csv_reader = csv.reader(data, delimiter='|')
         i = 0
@@ -120,6 +121,15 @@ def main():
     for i in mpns: print(i)
 
 
+    '''nlp = spacy.load("en_core_web_sm")
+    #doc = nlp(text)
+    displacy.serve([doc], style="ent", page = True, port = 80)'''
+
+    #nlp = spacy.load("custom_ner_model")
+    #doc = 'IESA ENTITY DATA' + doc
+    displacy.serve(doc, style="ent", port = 400)
+
+    print('Done.')
 
     # TEST  -----------------------------
 

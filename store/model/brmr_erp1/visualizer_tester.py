@@ -7,21 +7,26 @@ Stacy Bridges
 
 Visualizer Tester
 
-nlp = spacy.load("custom_ner_model")
-doc = nlp(text)
-displacy.serve(doc, style="ent")
 '''
 import spacy
+import sys
+import os
 from spacy import displacy
+import os
+sys.path.append('../../../preprocessor/')
+import loader
 
-text = """But Google is starting from behind. The company made a late push
-into hardware, and Apple’s Siri, available on iPhones, and Amazon’s Alexa
-software, which runs on its Echo and Dot devices, have clear leads in
-consumer adoption."""
-
+infile = 'iesa_tender.csv'
 nlp = spacy.load("en_core_web_sm")
-doc = nlp(text)
-displacy.serve([doc], style="ent", page = True, port = 800)
+doc = nlp(loader.load_doc(infile))
+
+
+html = displacy.render(doc, style="ent", page=True)
+
+with open('C:/xampp/htdocs/mySites/wrWx_NERS/index.html', 'w') as data:
+    data.write(html)
+
+print(html)
 
 
 print('Done.')
