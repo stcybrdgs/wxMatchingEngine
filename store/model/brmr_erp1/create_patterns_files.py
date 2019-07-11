@@ -5,6 +5,10 @@
 Sunday, July 7, 2019
 Stacy Bridges
 
+Pick up ERP data
+Use rules to generate data patterns.
+Feed the patterns back into the tool to build a custom vocabulary.
+
 '''
 # IMPORT LIBS  =================================
 import spacy
@@ -27,6 +31,7 @@ def main():
 
     # store\model\brmr_erp1\brmr_erp1.csv
     brmr_csv = '../../../store/model/brmr_erp1/iesa_erp.csv'
+    #brmr_csv = '../../../store/model/brmr_erp1/nu_iesa_erp/iesa_erp_nu.csv'
 
     # import erp csv
     doc = ''

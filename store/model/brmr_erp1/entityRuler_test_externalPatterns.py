@@ -41,7 +41,7 @@ def import_csv(d):
 
 # MAIN  ========================================
 def main():
-    model = 'pre'   # pre -> use non-trained model / post -> use trained model
+    model = 'post'   # pre -> use non-trained model / post -> use trained model
     ruler = 'on'
     cleaner = 'on'
 
