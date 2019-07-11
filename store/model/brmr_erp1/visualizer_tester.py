@@ -21,7 +21,7 @@ consumer adoption."""
 
 nlp = spacy.load("en_core_web_sm")
 doc = nlp(text)
-displacy.serve([doc], style="ent", page = True, port = 80)
+displacy.serve([doc], style="ent", page = True, port = 800)
 
 
 print('Done.')
