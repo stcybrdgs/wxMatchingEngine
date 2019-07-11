@@ -5,7 +5,7 @@
 Thursday, July 11, 2019
 Stacy Bridges
 
-Lemmatizer Tester
+Matcher Tester
 
 '''
 # IMPORTS  -----------------------------
@@ -30,7 +30,7 @@ def main():
         if tok.is_stop == False:
             print(lemmatizer(tok.text, tok.pos_), tok.pos_, tok.tag_, end='')
 
-    
+
     # end program
     print('\nDone.')
 
