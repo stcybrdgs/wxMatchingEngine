@@ -104,6 +104,7 @@ def main(model=None, output_dir="model", n_iter=50):
         print("Loaded model '%s'" % model)
     else:
         nlp = spacy.blank("en")  # create blank Language class
+        #nlp = spacy.load('en_core_web_sm', disable=['tagger', 'parser'])
         print("Created blank 'en' model")
 
     # create the built-in pipeline components and add them to the pipeline
@@ -115,7 +116,7 @@ def main(model=None, output_dir="model", n_iter=50):
     else:
         ner = nlp.get_pipe("ner")
 
-    # ADD EXISTIN/TRAINED ENTITY RULER  ----------------
+    # ADD EXISTING/TRAINED ENTITY RULER  ----------------
     # load patterns from external file
     nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
 
