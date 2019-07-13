@@ -15,6 +15,7 @@ from pathlib import Path
 from spacy.lemmatizer import Lemmatizer
 from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
 from spacy.lang.en.stop_words import STOP_WORDS
+import json
 #from spacy.lang.en import English
 
 # PATHS  =======================================
@@ -51,6 +52,29 @@ def stemmer(d):
 def entRuler_tagger(doc):
    # do something to the doc here
    pass
+
+def update_meta_pipeline():
+    '''
+    json_content = []
+    old_pipeline = []
+    nu_pipeline = ['tagger', 'entity_ruler', 'ner']
+
+    # read in meta.json
+    with open('model_entRuler/meta.json','r') as jsonfile:
+        json_content = json.load(jsonfile)
+        old_pipeline = json_content['pipeline']
+
+    if nu_pipeline == old_pipeline:
+        pass
+    else:
+        # update json_content to reflect new pipeline
+        json_content['pipeline'] = nu_pipeline
+
+        # write the new pipeline to the json file
+        with open('model_entRuler/meta.json','w') as jsonfile:
+            json.dump(json_content, jsonfile)
+    '''
+    pass
 
 # MAIN  ========================================
 def main():
@@ -98,9 +122,13 @@ def main():
         # remember to swap precedence between ruler and ner after model training
         if model == 'post':
             # load patterns from external file only if model is not already trained
-            nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
-            # putting the ner before ruler will override favor ner decisions
-            nlp.add_pipe(nu_ruler, after='ner')
+            if "entity_ruler" not in nlp.pipe_names:
+                nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
+                # putting the ner before ruler will override favor ner decisions
+                nlp.add_pipe(nu_ruler, after='ner')
+
+            # write tagger into pipeline in the meta json file
+            # STOPPED HERE ------------------------
 
     # show pipeline components:
     print(nlp.pipe_names)
@@ -130,7 +158,7 @@ def main():
                     unique_num += 1
                 print([ent.text, ent.label_], end='')
                 tot_num += 1
-        print('\nFound {} total, {} unique\n'.format(tot_num, unique_num))
+        print('\nFound {} total, {} unique.\n'.format(tot_num, unique_num))
         total_found.append(tot_num)
         total_unique_found.append(unique_num)
 
@@ -179,7 +207,7 @@ def main():
     results = ''
     i = 0
     for item in alt_labels:
-        results = results + '{}: {} total.  {} unique.\n'.format(item, total_found[i], total_unique_found[i])
+        results = results + '{}: {} tot  {} unq\n'.format(item, total_found[i], total_unique_found[i])
         i += 1
     # store nlp object as string in html var
     spacer = '---------------------------------------------------------\n'
