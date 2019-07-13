@@ -22,7 +22,10 @@ sys.path.append('../../../preprocessor/')
 # IMPORT FUNCTIONS  ================================
 import string_cleaner
 
-# MAIN  --------------------------------
+# GLOBALS  =========================================
+nlp = spacy.load('en_core_web_sm')
+
+# MAIN  ============================================
 def main():
     # example
     lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
@@ -30,24 +33,35 @@ def main():
     #print(lemmas)
 
     # create nlp doc
-    nlp = spacy.load('en_core_web_sm')
     print(nlp.pipe_names)
     doc = nlp(u'50123, 50 FAG ball bearings with a SKU of 523421 and a MPN of 1234:1')
 
-    print('\ntoks:')
-    str_doc =''
+    # stop words
+    str_doc = ''
     for tok in doc:
         if tok.is_stop == False:
-            # rem a lemmatized string is returned as a list
-            # so it must be indexed to be 'unpacked' for string comparison
-            if tok.text != lemmatizer(tok.text, tok.pos_)[0]:  # and tok.pos_ == 'NOUN':
-                print(tok.text, lemmatizer(tok.text, tok.pos_), tok.pos_, tok.tag_, '\n')
-                str_doc = str_doc + str(lemmatizer(tok.text, tok.pos_)[0]) + ' '
-            else:
-                str_doc = str_doc + tok.text + ' '
+            str_doc = str_doc + tok.text + ' '
 
+    print('stop_words: ')
     print('\n{}'.format(doc))
     print('{}'.format(str_doc))
+
+    doc2 = nlp(str_doc)
+
+    # lemmatizer
+    str_doc2 = ''
+    print('\nlemmatized toks:')
+    for tok in doc2:
+        # rem a lemmatized string is returned as a list
+        # so it must be indexed to be 'unpacked' for string comparison
+        if tok.text != lemmatizer(tok.text, tok.pos_)[0]:  # and tok.pos_ == 'NOUN':
+            print(tok.text, lemmatizer(tok.text, tok.pos_), tok.pos_, tok.tag_, '\n')
+            str_doc2 = str_doc2 + str(lemmatizer(tok.text, tok.pos_)[0]) + ' '
+        else:
+            str_doc2 = str_doc2 + tok.text + ' '
+
+    print('\n{}'.format(doc2))
+    print('{}'.format(str_doc2))
 
     print('\ntoks:')
     for tok in doc:

@@ -44,38 +44,9 @@ special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(',
                 ')', '{', '}', '[', ']', '|', '\\', ';', '\"',
                 '\'', '<', '>', '?', '£']
 
+nlp = spacy.load('en_core_web_sm')
+
 # HELPER FUNCTIONS  =================================
-def lemmatizer(d):
-    lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
-    lemmas = lemmatizer(u'fuses', u'NOUN')
-    nlp = spacy.load('en_core_web_sm')
-    doc = nlp(d)
-    str_doc =''
-    for tok in doc:
-        if tok.is_stop == False:
-            # rem a lemmatized string is returned as a list
-            # so it must be indexed to be 'unpacked' for string comparison
-            if tok.text != lemmatizer(tok.text, tok.pos_)[0]:  # and tok.pos_ == 'NOUN':
-                print(tok.text, lemmatizer(tok.text, tok.pos_), tok.pos_, tok.tag_, '\n')
-                str_doc = str_doc + str(lemmatizer(tok.text, tok.pos_)[0]) + ' '
-            else:
-                str_doc = str_doc + tok.text + ' '
-    return str_doc
-
-# Reduce the string s to its stem using the common Porter stemmer.
-def porter_stemmer(d):
-    start = 0
-    end = 0
-    nu_d = ''
-    for char in d:
-        if char == ' ':
-            #print('Stemming ', s[start:end])
-            nu_d = nu_d + jellyfish.porter_stem(d[start:end]) + ' '
-            start = end
-        end += 1
-    d = nu_d
-    return d
-
 def remove_accents(d):
     # rem unicode is default on python3
     try:
@@ -103,31 +74,72 @@ def remove_whitespace(d):
     # end function //
 
 # change all strings to lowercase
-def normalizer(d):
+def convert_to_lowercase(d):
     d = d.lower()
     return d
+    # end function //
+
+def enforce_stop_words(d):
+    doc = nlp(d)
+    str_doc = ''
+    for tok in doc:
+        if tok.is_stop == False:
+            str_doc = str_doc + tok.text + ' '
+    return string_doc
     # end function //
 
 def apply_custom_rules(d):
     # hyphens to colons ----------------------------
 
     # replace 12-123 pattern with 12:123
-    # rem pos_ of 12-123 returns NUM SYM NUM
-    # rem pos_ of 12:123 returns NUM
+    # rem   pos_ of 12-123 returns NUM SYM NUM but
+    #       pos_ of 12:123 returns NUM
     #   stuff goes here
 
     # commas to whitespace if not numerical --------
     # rem replace '1,000, token' with '1,000 token'
+    #   stuff goes here
+    pass
+    # end function //
 
+def lemmatizer(d):
+    lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
+    lemmas = lemmatizer(u'fuses', u'NOUN')
+    doc = nlp(d)
+    str_doc = ''
+    for tok in doc:
+        # rem a lemmatized string is returned as a list
+        # so it must be indexed to be 'unpacked' for string comparison
+        if tok.text != lemmatizer(tok.text, tok.pos_)[0]:  # and tok.pos_ == 'NOUN':
+            print(tok.text, lemmatizer(tok.text, tok.pos_), tok.pos_, tok.tag_, '\n')
+            str_doc = str_doc + str(lemmatizer(tok.text, tok.pos_)[0]) + ' '
+        else:
+            str_doc = str_doc + tok.text + ' '
+    return str_doc
+    # end function //
+
+# Reduce the string s to its stem using the common Porter stemmer.
+def porter_stemmer(d):
+    start = 0
+    end = 0
+    nu_d = ''
+    for char in d:
+        if char == ' ':
+            #print('Stemming ', s[start:end])
+            nu_d = nu_d + jellyfish.porter_stem(d[start:end]) + ' '
+            start = end
+        end += 1
+    d = nu_d
     return d
+    # end function //
 
 # CONTROLLER FUNCTION  =============================
 def clean_doc(d):
     d = remove_accents(d)
     d = remove_special_chars(d)
     d = remove_whitespace(d)
-    d = normalizer(d)
-    d = stop_words(d)
+    d = convert_to_lowercase(d)
+    d = enforce_stop_words(d)
     d = apply_custom_rules(d)
     d = lemmatizer(d)
     #d = porter_stemmer(d)
