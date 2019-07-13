@@ -91,7 +91,7 @@ TRAIN_DATA = [
 # FUNCTIONS  ==================================
 
 # MAIN  =======================================
-def main(model=None, output_dir="model", n_iter=50):
+def main(model=None, output_dir="model_entRuler", n_iter=50):
     # setup pipeline
     # load the model you want to use
     # use nlp.disable_pipes to disable all pipes but NER
@@ -118,10 +118,10 @@ def main(model=None, output_dir="model", n_iter=50):
 
     # ADD EXISTING/TRAINED ENTITY RULER  ----------------
     # load patterns from external file
-    nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
+    #nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
 
     # putting the ruler before ner will override ner decisions in favor of ruler patterns
-    nlp.add_pipe(nu_ruler, before='ner')
+    #nlp.add_pipe(nu_ruler, before='ner')
 
     # show pipeline components:
     print(nlp.pipe_names)
