@@ -89,7 +89,7 @@ def remove_accents(d):
     return str(d)
     # end function //
 
-def remove_special_chars(d
+def remove_special_chars(d):
     for char in special_chars:
         if d.find(char) >= 0:
             d = d.replace(char, ' ')
@@ -109,6 +109,16 @@ def normalizer(d):
     # end function //
 
 def apply_custom_rules(d):
+    # hyphens to colons ----------------------------
+
+    # replace 12-123 pattern with 12:123
+    # rem pos_ of 12-123 returns NUM SYM NUM
+    # rem pos_ of 12:123 returns NUM
+    #   stuff goes here
+
+    # commas to whitespace if not numerical --------
+    # rem replace '1,000, token' with '1,000 token'
+
     return d
 
 # CONTROLLER FUNCTION  =============================
@@ -117,8 +127,8 @@ def clean_doc(d):
     d = remove_special_chars(d)
     d = remove_whitespace(d)
     d = normalizer(d)
-    d = apply_custom_rules(d)
     d = stop_words(d)
+    d = apply_custom_rules(d)
     d = lemmatizer(d)
     #d = porter_stemmer(d)
 
