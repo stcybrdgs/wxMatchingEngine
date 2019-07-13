@@ -24,6 +24,10 @@ preprocessor/
 import unicodedata2
 import re
 import jellyfish
+import spacy
+from spacy.lemmatizer import Lemmatizer
+from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
+from spacy.lang.en.stop_words import STOP_WORDS
 
 # IMPORT PATHS  ====================================
 
@@ -41,7 +45,22 @@ special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(',
                 '\'', '<', '>', '?', '£']
 
 # HELPER FUNCTIONS  =================================
-def lemmatizer(d): pass
+def lemmatizer(d):
+    lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
+    lemmas = lemmatizer(u'fuses', u'NOUN')
+    nlp = spacy.load('en_core_web_sm')
+    doc = nlp(d)
+    str_doc =''
+    for tok in doc:
+        if tok.is_stop == False:
+            # rem a lemmatized string is returned as a list
+            # so it must be indexed to be 'unpacked' for string comparison
+            if tok.text != lemmatizer(tok.text, tok.pos_)[0]:  # and tok.pos_ == 'NOUN':
+                print(tok.text, lemmatizer(tok.text, tok.pos_), tok.pos_, tok.tag_, '\n')
+                str_doc = str_doc + str(lemmatizer(tok.text, tok.pos_)[0]) + ' '
+            else:
+                str_doc = str_doc + tok.text + ' '
+    return str_doc
 
 # Reduce the string s to its stem using the common Porter stemmer.
 def porter_stemmer(d):
@@ -70,7 +89,7 @@ def remove_accents(d):
     return str(d)
     # end function //
 
-def remove_special_chars(d):
+def remove_special_chars(d
     for char in special_chars:
         if d.find(char) >= 0:
             d = d.replace(char, ' ')
@@ -94,12 +113,13 @@ def apply_custom_rules(d):
 
 # CONTROLLER FUNCTION  =============================
 def clean_doc(d):
-    # d = lemmatizer(d)
     d = remove_accents(d)
     d = remove_special_chars(d)
     d = remove_whitespace(d)
     d = normalizer(d)
     d = apply_custom_rules(d)
+    d = stop_words(d)
+    d = lemmatizer(d)
     #d = porter_stemmer(d)
 
     return d
