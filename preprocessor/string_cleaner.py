@@ -85,7 +85,7 @@ def enforce_stop_words(d):
     for tok in doc:
         if tok.is_stop == False:
             str_doc = str_doc + tok.text + ' '
-    return string_doc
+    return str_doc
     # end function //
 
 def apply_custom_rules(d):
@@ -99,19 +99,18 @@ def apply_custom_rules(d):
     # commas to whitespace if not numerical --------
     # rem replace '1,000, token' with '1,000 token'
     #   stuff goes here
-    pass
+    return d
     # end function //
 
 def lemmatizer(d):
     lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
-    lemmas = lemmatizer(u'fuses', u'NOUN')
     doc = nlp(d)
     str_doc = ''
     for tok in doc:
         # rem a lemmatized string is returned as a list
         # so it must be indexed to be 'unpacked' for string comparison
         if tok.text != lemmatizer(tok.text, tok.pos_)[0]:  # and tok.pos_ == 'NOUN':
-            print(tok.text, lemmatizer(tok.text, tok.pos_), tok.pos_, tok.tag_, '\n')
+            #print(tok.text, lemmatizer(tok.text, tok.pos_), tok.pos_, tok.tag_, '\n')
             str_doc = str_doc + str(lemmatizer(tok.text, tok.pos_)[0]) + ' '
         else:
             str_doc = str_doc + tok.text + ' '

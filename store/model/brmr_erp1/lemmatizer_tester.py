@@ -34,7 +34,8 @@ def main():
 
     # create nlp doc
     print(nlp.pipe_names)
-    doc = nlp(u'50123, 50 FAG ball bearings with a SKU of 523421 and a MPN of 1234:1')
+    start_string = '50123, 50 FAG ball bearings with a SKU of [523-421] and a MPN of 1234:1'
+    doc = nlp(start_string)
 
     # stop words
     str_doc = ''
@@ -74,6 +75,12 @@ def main():
             #    print(ent.label_, ent.text)
     #for ent in doc.ents:
     #    print(ent.text, ent.label_)
+
+
+    # test string cleaner in preprocessor
+    fin_str_doc = string_cleaner.clean_doc(start_string)
+    print('\n{}'.format(start_string))
+    print (fin_str_doc)
 
     # end program
     print('\nDone.')
