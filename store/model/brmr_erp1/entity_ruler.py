@@ -23,6 +23,7 @@ sys.path.append('../../../preprocessor/')
 
 # IMPORT PY FILES  =============================
 import string_cleaner
+import update_meta_json
 
 # GLOBALS  =====================================
 global row_heads
@@ -84,14 +85,10 @@ def main():
     '''
     # CONFIG  ------------------------
 
-    model = 'pre'   # pre -> use non-trained model / post -> use trained model
-    ruler = 'off'
-    cleaner = 'off'
+    model = 'post'   # pre -> use non-trained model / post -> use trained model
+    ruler = 'on'
+    cleaner = 'on'
     number_tagger = 'off'
-    # if stemmer is turned on after model does P2 training, then
-    # you will need to use POS tag to detect nouns in products
-    # then create new generator patterns for all.json
-    # then run entity ruler again
     stemmer = 'off'
 
     # --------------------------------
@@ -100,41 +97,24 @@ def main():
         # load a language and invoke the entity ruler
         nlp = spacy.load('en_core_web_sm', disable=['parser']) #('en_core_web_sm', disable=['parser'])
     elif model == 'post':
-        nlp = spacy.load('model_entRuler')
-        #nu_pipe = nlp.create_pipe('my_pipe')
-        #tagger = Tagger(nlp.vocab)
-        #tagger = tagger.from_disk('model_entRuler')
-        #nlp.add_pipe(nlp.create_pipe(tagger))
-        #Language.factories['entRuler_tagger'] = lambda nlp, **cfg: EntityMatcher(nlp, **cfg)
-        #entRuler_tagger = Tagger(nlp.vocab)
-        #entRuler_tagger = entRuler_tagger.from_disk('model_entRuler/tagger')
-        #nlp.add_pipe(entRuler_tagger, first = True)
-        #tagger = nlp.create_pipe('tagger')
+        update_meta_json.update_meta()
+        nlp = spacy.load('model')
 
     # add pipes
     if ruler == 'on':
-        # rem if model is post then the entity ruler is already in the model
-        if model == 'pre':
-            # load patterns from external file only if model is not already trained
+        if "entity_ruler" not in nlp.pipe_names:
             nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
-            # putting the ruler before ner will override ner decisions in favor of ruler patterns
-            nlp.add_pipe(nu_ruler, before='ner')
-        # remember to swap precedence between ruler and ner after model training
-        if model == 'post':
-            # load patterns from external file only if model is not already trained
-            if "entity_ruler" not in nlp.pipe_names:
-                nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
-                # putting the ner before ruler will override favor ner decisions
+            # putting the ner before ruler will override favor ner decisions
+            if model == 'pre':
+                nlp.add_pipe(nu_ruler, before='ner')
+            else:
                 nlp.add_pipe(nu_ruler, after='ner')
-
-            # write tagger into pipeline in the meta json file
-            # STOPPED HERE ------------------------
 
     # show pipeline components:
     print(nlp.pipe_names)
 
     # import test tender and clean it up
-    tender = import_csv('iesa_tender.csv')  # import
+    tender = import_csv('iesa_tender_2.csv')  # import
     if cleaner == 'on':
         tender = string_cleaner.clean_doc(tender)  #  clean
 
@@ -165,12 +145,11 @@ def main():
     # save model with entity pattern updates made by the entity ruler
 
     if ruler == "on":
-        output_dir = Path('model_entRuler')
+        output_dir = Path('model')
         if not output_dir.exists():
             output_dir.mkdir()
         nlp.to_disk(output_dir)
         print("Saved model to", output_dir)
-
 
     # TEST  -----------------------------
     suppliers = []

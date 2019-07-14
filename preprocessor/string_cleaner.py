@@ -67,12 +67,6 @@ def remove_special_chars(d):
     return d
     # end function //
 
-def remove_whitespace(d):
-    d = d.strip()  # remove leading and trailing whitespace
-    d = re.sub(' +', ' ', d)  # remove duplicative whitespace
-    return d
-    # end function //
-
 # change all strings to lowercase
 def convert_to_lowercase(d):
     d = d.lower()
@@ -102,6 +96,12 @@ def apply_custom_rules(d):
     return d
     # end function //
 
+def remove_whitespace(d):
+    d = d.strip()  # remove leading and trailing whitespace
+    d = re.sub(' +', ' ', d)  # remove duplicative whitespace
+    return d
+    # end function //
+
 def lemmatizer(d):
     lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
     doc = nlp(d)
@@ -109,7 +109,7 @@ def lemmatizer(d):
     for tok in doc:
         # rem a lemmatized string is returned as a list
         # so it must be indexed to be 'unpacked' for string comparison
-        if tok.text != lemmatizer(tok.text, tok.pos_)[0]:  # and tok.pos_ == 'NOUN':
+        if tok.text != lemmatizer(tok.text, tok.pos_)[0] and tok.pos_ == 'NOUN':
             #print(tok.text, lemmatizer(tok.text, tok.pos_), tok.pos_, tok.tag_, '\n')
             str_doc = str_doc + str(lemmatizer(tok.text, tok.pos_)[0]) + ' '
         else:
@@ -136,11 +136,11 @@ def porter_stemmer(d):
 def clean_doc(d):
     d = remove_accents(d)
     d = remove_special_chars(d)
-    d = remove_whitespace(d)
     d = convert_to_lowercase(d)
-    d = enforce_stop_words(d)
+    #d = enforce_stop_words(d)
     d = apply_custom_rules(d)
-    d = lemmatizer(d)
+    d = remove_whitespace(d)
+    #d = lemmatizer(d)
     #d = porter_stemmer(d)
 
     return d

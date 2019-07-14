@@ -88,7 +88,7 @@ TRAIN_DATA = [
 # FUNCTIONS  ==================================
 
 # MAIN  =======================================
-def main(model=None, output_dir="model_entRuler", n_iter=50):
+def main(model=None, output_dir="model", n_iter=50):
     # setup pipeline
     # load the model you want to use
     # use nlp.disable_pipes to disable all pipes but NER
