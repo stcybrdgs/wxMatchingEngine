@@ -10,26 +10,32 @@ Matcher Tester
 '''
 # IMPORTS  -----------------------------
 import spacy
+import pickle
+
+'''
 from spacy.lemmatizer import Lemmatizer
 from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
 from spacy.lang.en.stop_words import STOP_WORDS
+'''
+
+# FUNCTIONS  ===========================
+def open_pickle(f):
+    pickle_off = open(f,"rb")
+    return pickle.load(pickle_off)
+    # print('In open_pickle(): ', emp)
 
 # MAIN  --------------------------------
 def main():
-    # example
-    lemmatizer = Lemmatizer(LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES)
-    lemmas = lemmatizer(u'bearings', u'NOUN')
-    print(lemmas)
+    # get tender from pickle
+    # rem   in final tool the tender would have been
+    #       processed by the nlp obj processor and pickled
+    # rem   the unpickled tender is already an nlp obj based on the
+    #       target model
+    nlp_tender = open_pickle('tender.pickle')
 
-    # create nlp doc
-    nlp = spacy.load('en_core_web_sm')
-    print(nlp.pipe_names)
-    doc = nlp(u'50123 is a I need 50 FAG ball bearings and a pump with a SKU of 523421 and a MPN of 1234-12')
-
-    for tok in doc:
-        if tok.is_stop == False:
-            print(lemmatizer(tok.text, tok.pos_), tok.pos_, tok.tag_, end='')
-
+    print('\nTender Sentences:')
+    for sent in nlp_tender.sents:
+        print(sent.text, end='')
 
     # end program
     print('\nDone.')
