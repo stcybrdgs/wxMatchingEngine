@@ -4,49 +4,95 @@ Wenesday July 17, 2019
 Stacy Bridges
 
 bearing decoder
-- this script makes GET request from SKF API using
+- this script makes GET request from SKF API using mMatIDs
+
+mMat  |  shortDescription  |  longDescription  |  Attributes[]
 
 '''
 # IMPORTS  ---------------------------------------------------------
+import csv
 import requests
+
+# GLOBALS  ---------------------------------------------------------
+row_heads = []
+mMats = []
+
+# FUNCTIONS  -------------------------------------------------------
+def import_csv(d):
+	global row_heads
+	row_heads.clear()
+	doc = ''
+	code = ''
+	with open(d) as data:
+		csv_reader = csv.reader(data, delimiter='|')
+		i = 0
+		for row in csv_reader:
+			if i == 0:
+				row_head = row[0]
+				row_heads.append(row_head)
+			elif i > 0:
+				# populate txt obj
+				doc = doc + ('|'.join(row) + '\n')
+				code = row
+				mMats.append(code)
+			i += 1
+	return doc
+    # end function //
 
 # MAIN  ------------------------------------------------------------
 def main():
-	# api-endpoint
+	descriptions = []
+	attributes = []
+	input_file = 'bearing_decoder_input.csv'
+
+	# get codes as doc obj from external file
+	codes = import_csv(input_file)
+
+	# set api-endpoint for SKF
 	URL = "https://search.skf.com/prod/search-skfcom/rest/apps/site_search/searchers/products"
 
-	# defining a params dict for the parameters to be sent to the API
-	mMat = 'NNF5005'
-	PARAMS = {'q':mMat}
+	with open('bearing_decoder_output.csv', 'w') as writeFile:
+		writer = csv.writer(writeFile)
 
-	# sending get request and saving the response as response object
-	r = requests.get(url = URL, params = PARAMS)
+		i = 0
+		for code in mMats:
+			# sending get request and saving the response as response object
+			PARAMS = {'q':code}
+			r = requests.get(url = URL, params = PARAMS)
 
-	# extracting data in json format
-	data = r.json()
+			# extracting data in json format
+			data = r.json()
 
-	# get description
-	description = []
-	designation = data['documentList']['documents'][0]['designation']
-	category = data['documentList']['documents'][0]['category']
-	description.append([designation, category])
+			# get description (ie, designation and category)
+			designation = data['documentList']['documents'][0]['designation']
+			category = data['documentList']['documents'][0]['category']
+			descriptions.append([designation, category])
 
-	# get attributes
-	attributes = []
-	search_result = data['documentList']['documents'][0]['search_result_nested']
-	i = 0
-	for item in search_result:
-		attributes.append([
-			search_result[i]['name'],
-			search_result[i]['value'],
-			search_result[i]['unit']
-			])
-		i += 1
+			print(designation, '|', end='')
+			print(category, '|', end='')
 
-	# printing the output
-	print('search_results --------------------')
-	print(description)
-	print(attributes)
+			# get attributes
+			search_result = data['documentList']['documents'][0]['search_result_nested']
+			j = 0
+			for item in search_result:
+				attributes.append({
+					search_result[j]['name'],
+					search_result[j]['value'],
+					search_result[j]['unit']
+				})
+				print({
+					search_result[j]['name'],
+					search_result[j]['value'],
+					search_result[j]['unit']
+				}, end='')
+				j += 1
+			print('')
+
+		'''
+		with open('bearing_decoder_output.csv', 'w') as writeFile:
+			writer = csv.writer(writeFile)
+			writer.writerows()
+		'''
 
 	# end program
 	print('Done.')

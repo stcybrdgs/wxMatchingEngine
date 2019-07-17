@@ -4,7 +4,8 @@ Wenesday July 17, 2019
 Stacy Bridges
 
 bearing decoder
-- this script makes GET request from SKF API using
+- this script makes GET request from SKF API using mMatIDs
+mMat  |  Description  |  Attributes[]
 
 '''
 # IMPORTS  ---------------------------------------------------------
@@ -40,7 +41,7 @@ def main():
 			search_result[i]['name'],
 			search_result[i]['value'],
 			search_result[i]['unit']
-			])
+		])
 		i += 1
 
 	# printing the output
