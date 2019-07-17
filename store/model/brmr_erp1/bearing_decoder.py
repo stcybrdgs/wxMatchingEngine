@@ -3,15 +3,13 @@
 Wenesday July 17, 2019
 Stacy Bridges
 
-a bearing decoder
+bearing decoder
 - this script uses Manufacturer and ManufacturerID to decode ball bearing type
 - first run uses only 4- and 5- digit SKF codes
 '''
-
 # GLOBALS  ---------------------------------------------------------
-bearing_codes = [
-	'0', '1', '2', '3', '4', '5', '6', '7', '8', 'C', 'N', 'QJ', 'T'
-]
+bearing_codes = ['0', '1', '2', '3', '4', '5', '6', '7', '8', 'C', 'N', 'QJ', 'T']
+
 bearing_types = [
 	'Double row angular contact ball bearing',
 	'Self-aligning ball bearing',
@@ -32,8 +30,9 @@ bearing_types = [
 def main():
 	# 6207 FAF light deep groove ball bearing 85 mm
 	# 6006 SKF extra light deep groove ball bearing 75mm
-	manufs = ['FAF', 'SKF']
-	mMats = ['3207', '3206']
+	manufs = ['FAF', 'SKF', 'NSK', 'SKF', 'SKF', 'SKF']
+	mMats = ['3207', '3206', '303', '61704', 'NNF5005', 'QJ209' ]
+	results = []
 
 	i = 0
 	for item in manufs:
@@ -52,8 +51,18 @@ def main():
 			mMat = mMats[i]
 
 			# get bearing code
+			# Code 0
 			if mMats[i][0] == '3' and len(item) == 4:
 				bearing_code = '0'
+			elif mMats[i][0] == '3' and len(item) == 5:
+				bearing_code = '3'
+			elif mMats[i][0] == 'N' and mMats[i][1] == 'N':
+				bearing_code = 'NN'
+			elif mMats[i][0] == 'Q' and mMats[i][1] == 'J':
+				bearing_code = 'QJ'
+			else:
+				# if mMats starts with char in range 01 - 08, then code = char
+				bearing_code = str(mMats[i][0])
 
 			j = 0
 			index = 0
@@ -75,12 +84,15 @@ def main():
 			elif lastTwo == '03': d = '17'
 			else: d = int(lastTwo) * 5
 
-			bearing_attr = str(d) + ' mm'
+			bearing_attr = 'd: ' + str(d) + ' mm'
+			results.append([mMat, manuf, bearing_type, bearing_attr])
 
 		i += 1
 
 	# output to console
-	print('{} | {} | {} | {}'.format(mMat, manuf, bearing_type, bearing_attr))
+	print('OUTPUT FROM CODE RULES:  --------------------')
+	for info in results:
+		print(info)
 
 	# end program
 	print('Done.')
