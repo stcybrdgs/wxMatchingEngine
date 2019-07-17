@@ -61,22 +61,22 @@ import string_cleaner
 # GLOBALS  ====================================
 # training data
 TRAIN_DATA = [
-("93345|FESTO cylinder 63-80-PPVA-N3 sku: PKU-10003511|9/23/18|6|ea|181.02",{"entities": [(47-7, 59-7, "SKU")]}),
-("00-3-A-F|SEW GEARBOX 60/1400RPM SEW SA57/T AD2 SA57/T AD2|P74-MOT-02186|SEW|SA57/T AD2",{"entities": [(65-7, 78-7,"SKU"),(83-7, 93-7, "MPN")]}),
-("FAG DEEP GROOVE BALL BEARING 6026-2RSRC3", {"entities": [(0, 3, "SUPPLIER"), (4, 28, "PRODUCT"), (29, 40, "MPN")]}),
-("19724|meyn lamp vision grading pll 55w/84 89.4140.904.0282|12/15/18|11|ft|342.43",{"entities": [(18-7, 22-7, "PRODUCT")]}),
-("22652|AFC large size o-ring|1/2/19|11|Ea|316.58",{"entities": [(28-7, 34-7, "PRODUCT")]}),
-("25027|schneider relay ca2 dn31 f7 telemec cad32f7|1/21/19|16|Pack|1515.84",{"entities": [(23-7, 28-7, "PRODUCT")]}),
-("80442|OMRON RELAY 24VAC DPCO MK|3/22/19|18|Ea|4.48",{"entities": [(19-7, 24-7, "PRODUCT")]}),
-("36199|HARTING SAFE EDGE CONNECTOR MALE R033|R033|8/8/18|1|Ea|341.8",{"entities": [(21-7, 45-7, "PRODUCT")]}),
-("25027|skf bearing 6216-2rs 6216-2rs1:skf|1/21/19|16|Pack|1515.84",{"entities": [(17-7, 24-7, "PRODUCT")]}),
-("55952|Push button greeng arrow by Reiser (Rieser ?)|11/18/18|16|Ea|1274.24",{"entities": [(13-7, 24-7, "PRODUCT")]}),
-("19720|Siemens brand auxilary contactor |12/15/18|11|ft|342.43",{"entities": [(27-7, 45-7, "PRODUCT")]}),
-("19724|Another Bussman fuse, 2amp w/antisurge feature|12/15/18|11|ft|342.43",{"entities": [(29-7, 33-7, "PRODUCT")]}),
-("93345|FESTO cylinder 63-80-PPVA-N3 |9/23/18|6|ea|181.02",{"entities": [(19-7, 27-7, "PRODUCT")]}),
-("70863|I need one Gas Strut engineering gas Strut,  . 3075aa-200n|3075AA-200N|8/31/18|1|each|31.75",{"entities": [(34-7, 55-7, "PRODUCT")]}),
-("88325|stanley wrench adjustable 150mm lg roebuck|3/1/19|14|ft|745.78",{"entities": [(21-7, 27-7, "PRODUCT")]}),
-("22652|A lmi repair kit for a dosing pump in eff plant (sp-u6)|1/2/19|11|Ea|316.58",{"entities": [(19-7, 29-7, "PRODUCT")]})
+    ("93345|FESTO cylinder 63-80-PPVA-N3 sku: PKU-10003511|9/23/18|6|ea|181.02",{"entities": [(47-7, 59-7, "SKU")]}),
+    ("00-3-A-F|SEW GEARBOX 60/1400RPM SEW SA57/T AD2 SA57/T AD2|P74-MOT-02186|SEW|SA57/T AD2",{"entities": [(65-7, 78-7,"SKU"),(83-7, 93-7, "MPN")]}),
+    ("FAG DEEP GROOVE BALL BEARING 6026-2RSRC3", {"entities": [(0, 3, "SUPPLIER"), (4, 28, "PRODUCT"), (29, 40, "MPN")]}),
+    ("19724|meyn lamp vision grading pll 55w/84 89.4140.904.0282|12/15/18|11|ft|342.43",{"entities": [(18-7, 22-7, "PRODUCT")]}),
+    ("22652|AFC large size o-ring|1/2/19|11|Ea|316.58",{"entities": [(28-7, 34-7, "PRODUCT")]}),
+    ("25027|schneider relay ca2 dn31 f7 telemec cad32f7|1/21/19|16|Pack|1515.84",{"entities": [(23-7, 28-7, "PRODUCT")]}),
+    ("80442|OMRON RELAY 24VAC DPCO MK|3/22/19|18|Ea|4.48",{"entities": [(19-7, 24-7, "PRODUCT")]}),
+    ("36199|HARTING SAFE EDGE CONNECTOR MALE R033|R033|8/8/18|1|Ea|341.8",{"entities": [(21-7, 45-7, "PRODUCT")]}),
+    ("25027|skf bearing 6216-2rs 6216-2rs1:skf|1/21/19|16|Pack|1515.84",{"entities": [(17-7, 24-7, "PRODUCT")]}),
+    ("55952|Push button greeng arrow by Reiser (Rieser ?)|11/18/18|16|Ea|1274.24",{"entities": [(13-7, 24-7, "PRODUCT")]}),
+    ("19720|Siemens brand auxilary contactor |12/15/18|11|ft|342.43",{"entities": [(27-7, 45-7, "PRODUCT")]}),
+    ("19724|Another Bussman fuse, 2amp w/antisurge feature|12/15/18|11|ft|342.43",{"entities": [(29-7, 33-7, "PRODUCT")]}),
+    ("93345|FESTO cylinder 63-80-PPVA-N3 |9/23/18|6|ea|181.02",{"entities": [(19-7, 27-7, "PRODUCT")]}),
+    ("70863|I need one Gas Strut engineering gas Strut,  . 3075aa-200n|3075AA-200N|8/31/18|1|each|31.75",{"entities": [(20-7, 51-7, "PRODUCT")]}),
+    ("88325|stanley wrench adjustable 150mm lg roebuck|3/1/19|14|ft|745.78",{"entities": [(21-7, 27-7, "PRODUCT")]}),
+    ("22652|A lmi repair kit for a dosing pump in eff plant (sp-u6)|1/2/19|11|Ea|316.58",{"entities": [(19-7, 29-7, "PRODUCT")]})
 ]
 
 @plac.annotations(
