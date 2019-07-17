@@ -32,21 +32,27 @@ bearing_types = [
 def main():
 	# 6207 FAF light deep groove ball bearing 85 mm
 	# 6006 SKF extra light deep groove ball bearing 75mm
-	manuf = ['FAF', 'SKF']
-	mMat = ['3207', '3206']
+	manufs = ['FAF', 'SKF']
+	mMats = ['3207', '3206']
 
 	i = 0
-	for item in manuf:
-		lastTwo = ''
+	for item in manufs:
+		# local vars
+		manuf = ''
+		mMat = ''
 		bearing_attr = ''
-		bearing_code = ''
 		bearing_type = ''
+		bearing_code = ''
+		lastTwo = ''
 		d = ''  # diameter
 
 		if item == 'SKF':
-			# get bearing type
-			if mMat[i][0] == '3' and len(item) == 4:
-				# get the bearing code
+			# get manuf and mMat
+			manuf = manufs[i]
+			mMat = mMats[i]
+
+			# get bearing code
+			if mMats[i][0] == '3' and len(item) == 4:
 				bearing_code = '0'
 
 			j = 0
@@ -62,19 +68,19 @@ def main():
 
 			# get the bearing attribute
 			#lastTwo = item[len(item)-2:len(item)]
-			lastTwo = mMat[i]
+			lastTwo = mMats[i][len(mMats[i])-2:len(mMats[i])]
 			if lastTwo == '00': d = '10'
 			elif lastTwo == '01': d = '12'
 			elif lastTwo == '02': d = '15'
 			elif lastTwo == '03': d = '17'
-			else:
-				d = lastTwo
-				print(d)
-				d = int(d)
-				d = d * 5
+			else: d = int(lastTwo) * 5
 
 			bearing_attr = str(d) + ' mm'
-	i += 1
+
+		i += 1
+
+	# output to console
+	print('{} | {} | {} | {}'.format(mMat, manuf, bearing_type, bearing_attr))
 
 	# end program
 	print('Done.')
