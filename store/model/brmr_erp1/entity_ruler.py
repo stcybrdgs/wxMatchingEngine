@@ -16,20 +16,54 @@ from spacy.lemmatizer import Lemmatizer
 from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
 from spacy.lang.en.stop_words import STOP_WORDS
 import json
+import pickle
 #from spacy.lang.en import English
 
 # PATHS  =======================================
 sys.path.append('../../../preprocessor/')
+sys.path.append('../../../processor/')
 
 # IMPORT PY FILES  =============================
 import string_cleaner
 import update_meta_json
+# import nlp_object_processor
 
 # GLOBALS  =====================================
 global row_heads
 row_heads = []
 
 # FUNCTIONS  ===================================
+def sentence_segmenter(doc):
+    # get the list of row heads
+    # row_heads = loader.get_row_heads()
+    global row_heads
+
+    j = 0
+    # normalize row heads so that they can be compared to text in nlp obj
+    '''
+    for rh in row_heads:
+        row_heads[j] = string_cleaner.normalizer(rh)
+        j += 1
+    '''
+
+    # set each row head as a sentence start
+    j = 0
+    for rh in row_heads:
+        for token in doc:
+            if token.text == rh:
+                doc[token.i].is_sent_start = True
+        j += 1
+
+    return doc
+    # end function //
+
+def make_pickle(d):
+    f = "tender.pickle"
+    pickling_on = open(f,"wb")
+    pickle.dump(d, pickling_on)
+    pickling_on.close()
+    #return f
+
 def import_csv(d):
     global row_heads
     doc = ''
@@ -85,9 +119,9 @@ def main():
     '''
     # CONFIG  ------------------------
 
-    model = 'post'   # pre -> use non-trained model / post -> use trained model
-    ruler = 'on'
-    cleaner = 'on'
+    model = 'pre'   # pre -> use non-trained model / post -> use trained model
+    ruler = 'off'
+    cleaner = 'off'
     number_tagger = 'off'
     stemmer = 'off'
 
@@ -110,15 +144,21 @@ def main():
             else:
                 nlp.add_pipe(nu_ruler, after='ner')
 
+    nlp.add_pipe(sentence_segmenter, before='ner')
+
     # show pipeline components:
     print(nlp.pipe_names)
 
     # import test tender and clean it up
-    tender = import_csv('iesa_tender_2.csv')  # import
+    tender = import_csv('iesa_tender.csv')  # import
     if cleaner == 'on':
         tender = string_cleaner.clean_doc(tender)  #  clean
 
     doc = nlp(tender)
+
+    # this nlp tender obj is cleaned -- pickle it
+    make_pickle(doc)
+
 
     # CONSOLE OUTPUT
     print('\n')

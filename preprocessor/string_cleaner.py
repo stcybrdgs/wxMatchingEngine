@@ -137,10 +137,10 @@ def clean_doc(d):
     d = remove_accents(d)
     d = remove_special_chars(d)
     d = convert_to_lowercase(d)
-    #d = enforce_stop_words(d)
+    d = enforce_stop_words(d)
     d = apply_custom_rules(d)
     d = remove_whitespace(d)
-    #d = lemmatizer(d)
+    d = lemmatizer(d)
     #d = porter_stemmer(d)
 
     return d
