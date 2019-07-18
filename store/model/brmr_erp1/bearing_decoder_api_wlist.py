@@ -14,23 +14,18 @@ import csv
 import requests
 
 # GLOBALS  ---------------------------------------------------------
-row_heads = []
+row_heads = ['SBT_Code', 'Bearing Type', 'Bearing Attributes']
 mMats = []
 
 # FUNCTIONS  -------------------------------------------------------
 def import_csv(d):
-	global row_heads
-	row_heads.clear()
 	doc = ''
 	code = ''
 	with open(d) as data:
 		csv_reader = csv.reader(data, delimiter='|')
 		i = 0
 		for row in csv_reader:
-			if i == 0:
-				row_head = row[0]
-				row_heads.append(row_head)
-			elif i > 0:
+			if i > 0:
 				# populate txt obj
 				doc = doc + ('|'.join(row) + '\n')
 				code = row
@@ -42,20 +37,29 @@ def import_csv(d):
 # MAIN  ------------------------------------------------------------
 def main():
 	#descriptions = []
-	attributes = []  # each index contains a product attribute
 	rows_for_csv = []  # each index contains a row that will be written to the csv
-	attr_str =''
+	attr_str =''  # use to collect api text that will be inserted into attributes[]
+	row_str = ''  # use to collect api text that will be inserted into rows_for_csv[]
+
+	# populate headers for csv file
+	global row_heads
+	i = 0
+	for row in row_heads:
+		if i == 0:
+			row_str = row_str + row_heads[i]
+		else:
+			row_str = row_str + '|' + row_heads[i]
+		i += 1
+	rows_for_csv.append([row_str])
+	print(row_str, '---------')
 	row_str = ''
-	input_file = 'bearing_decoder_input.csv'
 
 	# get codes as doc obj from external file
+	input_file = 'bearing_decoder_input.csv'
 	codes = import_csv(input_file)
 
 	# set api-endpoint for SKF
 	URL = "https://search.skf.com/prod/search-skfcom/rest/apps/site_search/searchers/products"
-
-	#with open('bearing_decoder_output.csv', 'w') as writeFile:
-	#	writer = csv.writer(writeFile)
 
 	i = 0
 	for code in mMats:
@@ -69,56 +73,38 @@ def main():
 		# get description (ie, designation and category)
 		designation = data['documentList']['documents'][0]['designation']
 		category = data['documentList']['documents'][0]['category']
-		row_str = row_str + designation + '|' + category + '|'
-		#descriptions.append([designation, category])
-		#rows_for_csv.append([designation])
-		#rows_for_csv.append('|')
-		#rows_for_csv.append([category])
 
-		# get attributes
+		# add them to the csv string
+		row_str = row_str + designation + '|' + category + '|'
+
+		# get bearing attributes
 		search_result = data['documentList']['documents'][0]['search_result_nested']
 		j = 0
 		for item in search_result:
 			name = search_result[j]['name']
 			value = search_result[j]['value']
 			unit = search_result[j]['unit']
-			#attributes.append([name, value, unit])
 			if j > 0:
 				attr_str = attr_str + ', '
 			attr_str = attr_str + name + ': ' + str(value) + ' ' + unit
-
-			# write the attributes to rows_for_csv[]
-			#rows_for_csv.append([attributes])
-			#writer.writerows(rows_for_csv)
-
-			#print(rows_for_csv)
-			#print(attributes)
-
-			#attributes.clear()  # clear attributes array for next pass
-			#rows_for_csv.clear()
-
 			j += 1
 
+		# add the attributes to the csv string
 		row_str = row_str + attr_str
 		print(row_str)
+
+		# store the string in a list so that it can be added to the csv
+		rows_for_csv.append([row_str])
+
+		# reset strings
 		row_str = ''
 		attr_str = ''
 		i+= 1
 
-	#writer.writerows(row_str)
-
-
-	#with open('bearing_decoder_output.txt', 'w') as of:
-	#	print(row_str, file=of)
-
-
-
-	'''
+	# write data to csv file
 	with open('bearing_decoder_output.csv', 'w') as writeFile:
 		writer = csv.writer(writeFile)
-		writer.writerows()
-	'''
-
+		writer.writerows(rows_for_csv)
 
 	# end program
 	print('Done.')
