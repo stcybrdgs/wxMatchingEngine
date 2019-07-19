@@ -42,7 +42,7 @@ import loader
 # rem keep '.' for numbers that need it
 special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(',
                 ')', '{', '}', '[', ']', '|', '\\', ';', '\"',
-                '\'', '<', '>', '?', '£']
+                '\'', '<', '>', '?', '£', '.', ':', ',', '-', '=']
 
 nlp = spacy.load('en_core_web_sm')
 
