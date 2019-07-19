@@ -19,7 +19,7 @@ import json
 #from spacy.lang.en import English
 
 # PATHS  =======================================
-sys.path.append('../../../preprocessor/')
+sys.path.append('../../../preprocessor')
 
 # IMPORT PY FILES  =============================
 import string_cleaner
@@ -85,14 +85,17 @@ def main():
     # CONFIG  ------------------------
 
     model = 'pre'   # pre -> use non-trained model / post -> use trained model
-    ruler = 'off'
-    cleaner = 'off'
+    ruler = 'on'
+    cleaner = 'on'
     number_tagger = 'off'
     # if stemmer is turned on after model does P2 training, then
     # you will need to use POS tag to detect nouns in products
     # then create new generator patterns for all.json
     # then run entity ruler again
     stemmer = 'off'
+
+    patterns_file = 'iesa_ners_patterns_supplier.jsonl'
+    tender_file = 'iesa_short_descriptions.csv'
 
     # --------------------------------
     # load model
@@ -116,14 +119,14 @@ def main():
         # rem if model is post then the entity ruler is already in the model
         if model == 'pre':
             # load patterns from external file only if model is not already trained
-            nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
+            nu_ruler = EntityRuler(nlp).from_disk(patterns_file)
             # putting the ruler before ner will override ner decisions in favor of ruler patterns
             nlp.add_pipe(nu_ruler, before='ner')
         # remember to swap precedence between ruler and ner after model training
         if model == 'post':
             # load patterns from external file only if model is not already trained
             if "entity_ruler" not in nlp.pipe_names:
-                nu_ruler = EntityRuler(nlp).from_disk('ners_patterns_all.jsonl')
+                nu_ruler = EntityRuler(nlp).from_disk(patterns_file)
                 # putting the ner before ruler will override favor ner decisions
                 nlp.add_pipe(nu_ruler, after='ner')
 
@@ -134,7 +137,7 @@ def main():
     print(nlp.pipe_names)
 
     # import test tender and clean it up
-    tender = import_csv('iesa_tender.csv')  # import
+    tender = import_csv(tender_file)  # import
     if cleaner == 'on':
         tender = string_cleaner.clean_doc(tender)  #  clean
 
