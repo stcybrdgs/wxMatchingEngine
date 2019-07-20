@@ -35,6 +35,13 @@ global row_heads
 row_heads = []
 
 # FUNCTIONS  ===================================
+def sentence_segmenter(doc):
+    for token in doc:
+        if token.text == 'root':
+            doc[token.i].is_sent_start = True
+    return doc
+    # end function //
+
 def import_csv(d):
     global row_heads
     doc = ''
@@ -100,8 +107,10 @@ def main():
     # then run entity ruler again
     stemmer = 'off'
 
-    patterns_file = 'iesa_ners_patterns_supplier_test.jsonl'
+    patterns_file = 'iesa_ners_patterns_supplier.jsonl'
     tender_file = 'iesa_short_descriptions_39468_test.csv'
+    output_file = 'iesa_w_manuf_test.txt'
+    write_type = 'w'
 
     # --------------------------------
     # load model
@@ -178,22 +187,36 @@ def main():
     #skus = []
     #mpns = []
     # print(doc)
-    for ent in doc.ents:
-        if ent.label_ in labels:
-            if ent.label_ == 'SUPPLIER':
-                suppliers.append([ent.label_, ent.text])
-            '''
-            elif ent.label_ == 'PRODUCT':
-                products.append([ent.label_, ent.text])
-            elif ent.label_ == 'SKU':
-                skus.append([ent.label_, ent.text])
-            elif ent.label_ == 'MPN':
-                mpns.append([ent.label_, ent.text])
-            '''
+    print('--------------------------')
+    with open(output_file, write_type) as outfile:
+        i = 0
+        s = ''
+        for ent in doc.ents:
+            if ent.label_ in labels:
+                if ent.label_ == 'SUPPLIER':
+                    suppliers.append([ent.text])
+                    s = ent.text
+                    print(s.upper())
+                    outfile.write(s.upper())
+                    outfile.write('\n')
+            else:
+                print('.')
+                outfile.write('.\n')
+            i += 1
 
+    '''
+    elif ent.label_ == 'PRODUCT':
+        products.append([ent.label_, ent.text])
+    elif ent.label_ == 'SKU':
+        skus.append([ent.label_, ent.text])
+    elif ent.label_ == 'MPN':
+        mpns.append([ent.label_, ent.text])
+    '''
+    '''
     print('--------------------------')
     for i in suppliers:
         print(i)
+    '''
     '''
     print('--------------------------')
     for i in products:
