@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 # coding: utf8
 # Compatible with: spaCy v2.0.0+
-
+'''
+rem stop:
+roller
+pt
+bushing
+block
+'''
 # IMPORTS  =====================================
 import os
 import sys
@@ -94,8 +100,8 @@ def main():
     # then run entity ruler again
     stemmer = 'off'
 
-    patterns_file = 'iesa_ners_patterns_supplier.jsonl'
-    tender_file = 'iesa_short_descriptions_39468.csv'
+    patterns_file = 'iesa_ners_patterns_supplier_test.jsonl'
+    tender_file = 'iesa_short_descriptions_39468_test.csv'
 
     # --------------------------------
     # load model
@@ -104,15 +110,6 @@ def main():
         nlp = spacy.load('en_core_web_sm', disable=['parser']) #('en_core_web_sm', disable=['parser'])
     elif model == 'post':
         nlp = spacy.load('model_entRuler')
-        #nu_pipe = nlp.create_pipe('my_pipe')
-        #tagger = Tagger(nlp.vocab)
-        #tagger = tagger.from_disk('model_entRuler')
-        #nlp.add_pipe(nlp.create_pipe(tagger))
-        #Language.factories['entRuler_tagger'] = lambda nlp, **cfg: EntityMatcher(nlp, **cfg)
-        #entRuler_tagger = Tagger(nlp.vocab)
-        #entRuler_tagger = entRuler_tagger.from_disk('model_entRuler/tagger')
-        #nlp.add_pipe(entRuler_tagger, first = True)
-        #tagger = nlp.create_pipe('tagger')
 
     # add pipes
     if ruler == 'on':
@@ -145,8 +142,8 @@ def main():
 
     # CONSOLE OUTPUT
     print('\n')
-    labels = ['SUPPLIER', 'PRODUCT', 'MPN', 'SKU']
-    alt_labels = ['Supplier', 'Product', 'MfrPartNo', 'SkuID']
+    labels = ['SUPPLIER']  # , 'PRODUCT', 'MPN', 'SKU']
+    alt_labels = ['Supplier']  # , 'Product', 'MfrPartNo', 'SkuID']
     total_found = []
     total_unique_found = []
     for label in labels:
@@ -177,24 +174,27 @@ def main():
 
     # TEST  -----------------------------
     suppliers = []
-    products = []
-    skus = []
-    mpns = []
+    #products = []
+    #skus = []
+    #mpns = []
     # print(doc)
     for ent in doc.ents:
         if ent.label_ in labels:
             if ent.label_ == 'SUPPLIER':
                 suppliers.append([ent.label_, ent.text])
+            '''
             elif ent.label_ == 'PRODUCT':
                 products.append([ent.label_, ent.text])
             elif ent.label_ == 'SKU':
                 skus.append([ent.label_, ent.text])
             elif ent.label_ == 'MPN':
                 mpns.append([ent.label_, ent.text])
+            '''
 
     print('--------------------------')
     for i in suppliers:
         print(i)
+    '''
     print('--------------------------')
     for i in products:
         print(i)
@@ -204,6 +204,7 @@ def main():
     print('--------------------------')
     for i in skus:
         print(i)
+    '''
 
     # DISPLACY VISUALIZER
     # get results for html doc

@@ -59,7 +59,7 @@ def main():
 		row_str = ''
 
 		# get codes as doc obj from external file
-		input_file = 'bearing_decoder_input_test.csv'
+		input_file = 'bearing_decoder_input.csv'  # 'bearing_decoder_input.csv'
 		codes = import_csv(input_file)
 
 		# set api-endpoint for SKF
@@ -133,7 +133,7 @@ def main():
 			#exception = False
 
 			counter += 1
-			if counter == 20:
+			if counter == 500:
 				# write data to csv file
 				writer.writerows(rows_for_csv)
 				counter = 0
