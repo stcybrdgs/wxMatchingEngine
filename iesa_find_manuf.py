@@ -9,13 +9,13 @@ looking for mMat ids within product data
 # IMPORTS  ---------------------------------------------------------
 import spacy
 from spacy.lang.en.stop_words import STOP_WORDS
-import sys
 import os
+import sys
 import re
 
 # IMPORT PATHS  ====================================
 #sys.path.append('../parameters/')
-sys.path.append('../../preprocessor')
+sys.path.append('../../../preprocessor')
 
 # IMPORT FILES  ====================================
 import string_cleaner

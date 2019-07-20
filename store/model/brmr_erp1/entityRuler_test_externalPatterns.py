@@ -94,8 +94,8 @@ def main():
     # then run entity ruler again
     stemmer = 'off'
 
-    patterns_file = 'iesa_ners_patterns_supplier.jsonl'
-    tender_file = 'iesa_short_descriptions.csv'
+    patterns_file = 'ners_patterns_supplier.jsonl'
+    tender_file = 'iesa_short_descriptions_1.csv'
 
     # --------------------------------
     # load model

@@ -16,7 +16,7 @@ def main():
     supplier_patterns = []
 
     # store\model\brmr_erp1\brmr_erp1.csv
-    iesa_txt = '../../../store/model/brmr_erp1/iesa_suppliers.txt'
+    iesa_txt = '../../../store/model/brmr_erp1/iesa_suppliers.csv'
     #brmr_csv = '../../../store/model/brmr_erp1/nu_iesa_erp/iesa_erp_nu.csv'
 
     # import erp csv
@@ -27,7 +27,7 @@ def main():
         for line in csv_reader:
             if i > 0:  # skip header row
                 # populate supplier patterns
-                line[0].strip()  # strip leading and trailing whitespace from supplier string
+                #line[0].strip()  # strip leading and trailing whitespace from supplier string
                 supplier_pattern = ''
                 supplier_prefix = '{"label":"SUPPLIER","pattern":[{"lower":"'
                 supplier_inner = ''
@@ -37,7 +37,8 @@ def main():
                         supplier_inner = supplier_inner + '"},{"lower":"'
                     else:
                         supplier_inner = supplier_inner + char.lower()
-                supplier_pattern = supplier_prefix + supplier_inner + supplier_suffix
+                supplier_pattern = supplier_prefix + supplier_inner + supplier_suffix + '\n'
+                #print(supplier_pattern)
 
                 # detect duplicates and append only unique patterns
                 # to the patterns list
@@ -47,7 +48,7 @@ def main():
                         pattern_exists = True
                 if not pattern_exists:
                     supplier_patterns.append(supplier_pattern)
-                    print(supplier_pattern)
+                    #print(supplier_pattern)
             i += 1
 
         '''
@@ -59,9 +60,9 @@ def main():
     # create pattern files using jsonl
     # supplier patterns:
     with open('iesa_ners_patterns_supplier.jsonl', 'w') as outfile:
-        for item in supplier_patterns:
-            outfile.write(item + '\n')
-            #print(item)
+        for line in supplier_patterns:
+            outfile.write(line)
+            print(line)
 
     # end program
     print('Done.')
