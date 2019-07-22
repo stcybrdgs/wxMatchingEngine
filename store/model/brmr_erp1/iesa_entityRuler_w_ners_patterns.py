@@ -37,7 +37,7 @@ row_heads = []
 # FUNCTIONS  ===================================
 def sentence_segmenter(doc):
     for token in doc:
-        if token.text == 'root':
+        if token.text == 'AJAX':
             doc[token.i].is_sent_start = True
     return doc
     # end function //
@@ -54,7 +54,7 @@ def import_csv(d):
             row_head = row[0]
             row_heads.append(row_head)
             # populate txt obj
-            doc = doc + ('|'.join(row) + '\n')
+            doc = doc + 'ajax ' + ('|'.join(row) + '\n')
             i += 1
     return doc
     # end function //
@@ -97,7 +97,7 @@ def main():
     '''
     # CONFIG  ------------------------
 
-    model = 'pre'   # pre -> use non-trained model / post -> use trained model
+    model = 'post'   # pre -> use non-trained model / post -> use trained model
     ruler = 'on'
     cleaner = 'on'
     number_tagger = 'off'
@@ -107,9 +107,9 @@ def main():
     # then run entity ruler again
     stemmer = 'off'
 
-    patterns_file = 'iesa_ners_patterns_supplier.jsonl'
-    tender_file = 'iesa_short_descriptions_39468_test.csv'
-    output_file = 'iesa_w_manuf_test.txt'
+    patterns_file = 'iesa_ners_patterns_mmat.jsonl'
+    tender_file = 'iesa_short_descriptions_for_fag_mmat_test.txt'  # 'iesa_long_descriptions_39468.csv'
+    output_file = 'iesa_w_fag_mmat_output_test.txt'
     write_type = 'w'
 
     # --------------------------------
@@ -119,6 +119,8 @@ def main():
         nlp = spacy.load('en_core_web_sm', disable=['parser']) #('en_core_web_sm', disable=['parser'])
     elif model == 'post':
         nlp = spacy.load('model_entRuler')
+
+    nlp.add_pipe(sentence_segmenter, before='ner')
 
     # add pipes
     if ruler == 'on':
@@ -134,7 +136,7 @@ def main():
             if "entity_ruler" not in nlp.pipe_names:
                 nu_ruler = EntityRuler(nlp).from_disk(patterns_file)
                 # putting the ner before ruler will override favor ner decisions
-                nlp.add_pipe(nu_ruler, after='ner')
+                nlp.add_pipe(nu_ruler, before='ner')
 
             # write tagger into pipeline in the meta json file
             # STOPPED HERE ------------------------
@@ -147,12 +149,14 @@ def main():
     if cleaner == 'on':
         tender = string_cleaner.clean_doc(tender)  #  clean
 
+    #print(tender)
+
     doc = nlp(tender)
 
     # CONSOLE OUTPUT
     print('\n')
-    labels = ['SUPPLIER']  # , 'PRODUCT', 'MPN', 'SKU']
-    alt_labels = ['Supplier']  # , 'Product', 'MfrPartNo', 'SkuID']
+    labels = ['MMAT']  # , 'PRODUCT', 'MPN', 'SKU']
+    alt_labels = ['mMat']  # , 'Product', 'MfrPartNo', 'SkuID']
     total_found = []
     total_unique_found = []
     for label in labels:
@@ -188,36 +192,82 @@ def main():
     #mpns = []
     # print(doc)
     print('--------------------------')
+    #for sent in doc.sents: print(sent)
+
+    print('nu----------------')
     with open(output_file, write_type) as outfile:
-        i = 0
         s = ''
+        prev_label = 'AJAX'
         for ent in doc.ents:
-            if ent.label_ in labels:
-                if ent.label_ == 'SUPPLIER':
+            if ent.label_ in ['MMAT', 'AJAX']:
+                if ent.label_ == 'AJAX':
+                    if prev_label == 'AJAX':
+                        print('.')
+                        outfile.write('.\n')
+                    else:  # ie prev_label == 'SUPPLIER'
+                        #print('\n')
+                        outfile.write('\n')
+                        prev_label = 'AJAX'
+                if ent.label_ == 'MMAT':
+                    # write to suppliers[]
                     suppliers.append([ent.text])
                     s = ent.text
-                    print(s.upper())
-                    outfile.write(s.upper())
-                    outfile.write('\n')
-            else:
-                print('.')
-                outfile.write('.\n')
-            i += 1
-
+                    if prev_label == 'AJAX':
+                        # write to console
+                        print(s.upper())
+                        # write to outfile
+                        outfile.write(s.upper())
+                        prev_label = 'MMAT'
+                    elif prev_label == 'MMAT':
+                        # write to console
+                        print('\t|', s.upper())
+                        # write to outfile
+                        s = '\t|' + s
+                        outfile.write(s.upper())
+                        prev_label = 'MMAT'
     '''
+    with open(output_file, write_type) as outfile:
+        s = ''
+        prev_label = 'AJAX'
+        for ent in doc.ents:
+            if ent.label_ in ['SUPPLIER', 'AJAX']:
+                if ent.label_ == 'AJAX':
+                    if prev_label == 'AJAX':
+                        print('.')
+                        outfile.write('.\n')
+                    else:  # ie prev_label == 'SUPPLIER'
+                        #print('\n')
+                        outfile.write('\n')
+                        prev_label = 'AJAX'
+                if ent.label_ == 'SUPPLIER':
+                    # write to suppliers[]
+                    suppliers.append([ent.text])
+                    s = ent.text
+                    if prev_label == 'AJAX':
+                        # write to console
+                        print(s.upper())
+                        # write to outfile
+                        outfile.write(s.upper())
+                        prev_label = 'SUPPLIER'
+                    elif prev_label == 'SUPPLIER':
+                        # write to console
+                        print('\t|', s.upper())
+                        # write to outfile
+                        s = '\t|' + s
+                        outfile.write(s.upper())
+                        prev_label = 'SUPPLIER'
+
     elif ent.label_ == 'PRODUCT':
         products.append([ent.label_, ent.text])
     elif ent.label_ == 'SKU':
         skus.append([ent.label_, ent.text])
     elif ent.label_ == 'MPN':
         mpns.append([ent.label_, ent.text])
-    '''
-    '''
+
     print('--------------------------')
     for i in suppliers:
         print(i)
-    '''
-    '''
+
     print('--------------------------')
     for i in products:
         print(i)

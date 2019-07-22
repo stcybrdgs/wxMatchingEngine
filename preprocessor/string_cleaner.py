@@ -140,7 +140,7 @@ def clean_doc(d):
     d = enforce_stop_words(d)
     d = apply_custom_rules(d)
     d = remove_whitespace(d)
-    d = lemmatizer(d)
+    #d = lemmatizer(d)
     #d = porter_stemmer(d)
 
     return d
