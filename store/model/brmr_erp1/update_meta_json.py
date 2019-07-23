@@ -14,7 +14,7 @@ def update_meta():
     nu_pipeline = ['tagger', 'ner', 'entity_ruler']
 
     # read in meta.json
-    with open('model/meta.json','r') as jsonfile:
+    with open('model_entRuler/meta.json','r') as jsonfile:
         json_content = json.load(jsonfile)
         old_pipeline = json_content['pipeline']
 
@@ -22,7 +22,7 @@ def update_meta():
     json_content['pipeline'] = nu_pipeline
 
     # write the new pipeline to the json file
-    with open('model/meta.json','w') as jsonfile:
+    with open('model_entRuler/meta.json','w') as jsonfile:
         json.dump(json_content, jsonfile)
 
     # end function //
