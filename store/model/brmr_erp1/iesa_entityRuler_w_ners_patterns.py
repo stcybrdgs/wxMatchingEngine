@@ -37,7 +37,7 @@ row_heads = []
 # FUNCTIONS  ===================================
 def sentence_segmenter(doc):
     for token in doc:
-        if token.text == 'AJAX':
+        if token.text == 'ajax':
             doc[token.i].is_sent_start = True
     return doc
     # end function //
@@ -186,7 +186,7 @@ def main():
 
 
     # TEST  -----------------------------
-    suppliers = []
+    mmats = []
     #products = []
     #skus = []
     #mpns = []
@@ -195,6 +195,9 @@ def main():
     #for sent in doc.sents: print(sent)
 
     print('nu----------------')
+    #for sent in doc.sents:
+    #    print(sent)
+
     with open(output_file, write_type) as outfile:
         s = ''
         prev_label = 'AJAX'
@@ -204,13 +207,13 @@ def main():
                     if prev_label == 'AJAX':
                         print('.')
                         outfile.write('.\n')
-                    else:  # ie prev_label == 'SUPPLIER'
+                    else:  # ie prev_label == 'MMAT'
                         #print('\n')
                         outfile.write('\n')
                         prev_label = 'AJAX'
                 if ent.label_ == 'MMAT':
-                    # write to suppliers[]
-                    suppliers.append([ent.text])
+                    # write to mmats[]
+                    mmats.append([ent.text])
                     s = ent.text
                     if prev_label == 'AJAX':
                         # write to console
@@ -219,13 +222,15 @@ def main():
                         outfile.write(s.upper())
                         prev_label = 'MMAT'
                     elif prev_label == 'MMAT':
+                        # don't write again
+                        '''
                         # write to console
                         print('\t|', s.upper())
                         # write to outfile
                         s = '\t|' + s
                         outfile.write(s.upper())
                         prev_label = 'MMAT'
-    '''
+
     with open(output_file, write_type) as outfile:
         s = ''
         prev_label = 'AJAX'
