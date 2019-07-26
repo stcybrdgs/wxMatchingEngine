@@ -97,7 +97,7 @@ def main():
     '''
     # CONFIG  ------------------------
 
-    model = 'post'   # pre -> use non-trained model / post -> use trained model
+    model = 'pre'   # pre -> use non-trained model / post -> use trained model
     ruler = 'on'
     cleaner = 'on'
     number_tagger = 'off'
@@ -108,8 +108,8 @@ def main():
     stemmer = 'off'
 
     patterns_file = 'demo_ners_patterns_mmat.jsonl'
-    tender_file = 'demo_short_descriptions_for_fag_mmat_test.txt'  # 'iesa_long_descriptions_39468.csv'
-    output_file = 'demo_w_fag_mmat_output_test.txt'
+    tender_file = 'demo_short_descriptions_mmat.txt'  # 'iesa_long_descriptions_39468.csv'
+    output_file = 'demo_shortd_mmat_output.txt'
     write_type = 'w'
 
     # --------------------------------
@@ -186,17 +186,23 @@ def main():
 
 
     # TEST  -----------------------------
-    mmats = []
-    #products = []
-    #skus = []
-    #mpns = []
-    # print(doc)
-    print('--------------------------')
-    #for sent in doc.sents: print(sent)
+    # This technique allows you to isolate entities on
+    # a sentence-by-sentence basis, which will allow
+    # for matching entities on a record-by-record basis
+    ent_exists = False
+    for sent in doc.sents:
+        for ent in sent.ents:
+            if ent.label_ == 'MMAT':
+                print(ent.label_, ': ', ent.text)
+                ent_exists = True
+        if ent_exists == False:
+            print('None')
+        print(sent)
+        ent_exists = False
+    print('\n')
+    # -------------------------------------
 
-    print('nu----------------')
-    #for sent in doc.sents:
-    #    print(sent)
+    mmats = []
 
     with open(output_file, write_type) as outfile:
         s = ''
@@ -293,7 +299,7 @@ def main():
         i += 1
     # store nlp object as string in html var
     spacer = '---------------------------------------------------------\n'
-    header = 'IESA Named Entities Found in Tender\n'
+    header = 'Named Entities Resolution for Tender Data\n'
     doc = nlp(header + spacer + results + spacer + tender)
 
     html = displacy.render(doc, style="ent", page=True)  # use the entity visualizer
