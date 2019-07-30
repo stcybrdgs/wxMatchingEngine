@@ -37,7 +37,7 @@ row_heads = []
 # FUNCTIONS  ===================================
 def sentence_segmenter(doc):
     for token in doc:
-        if token.text == 'ajax':
+        if token.text == 'wrwx':
             doc[token.i].is_sent_start = True
     return doc
     # end function //
@@ -54,7 +54,7 @@ def import_csv(d):
             row_head = row[0]
             row_heads.append(row_head)
             # populate txt obj
-            doc = doc + 'ajax ' + ('|'.join(row) + '\n')
+            doc = doc + 'wrwx ' + ('|'.join(row) + '\n')
             i += 1
     return doc
     # end function //
@@ -97,7 +97,7 @@ def main():
     '''
     # CONFIG  ------------------------
 
-    model = 'post'   # pre -> use non-trained model / post -> use trained model
+    model = 'pre'   # pre -> use non-trained model / post -> use trained model
     ruler = 'on'
     cleaner = 'on'
     number_tagger = 'off'
@@ -107,20 +107,20 @@ def main():
     # then run entity ruler again
     stemmer = 'off'
 
-    patterns_file = 'demo_ners_patterns_mmat.jsonl'
-    tender_file = 'demo_short_descriptions_for_fag_mmat_test.txt'  # 'iesa_long_descriptions_39468.csv'
-    output_file = 'demo_w_fag_mmat_output_test.txt'
+    patterns_file = 'demo_ners_patterns_manuf.jsonl'
+    tender_file = 'demo_ners_descriptions_nonstock.csv'  # iesa descriptions
+    output_file = 'demo_ners_output_nonstock.txt'
     write_type = 'w'
 
     # --------------------------------
     # load model
     if model == 'pre':
         # load a language and invoke the entity ruler
-        nlp = spacy.load('en_core_web_sm', disable=['parser']) #('en_core_web_sm', disable=['parser'])
+        nlp = spacy.load('en_core_web_sm', disable=['parser','ner']) #('en_core_web_sm', disable=['parser'])
     elif model == 'post':
         nlp = spacy.load('model_entRuler')
 
-    nlp.add_pipe(sentence_segmenter, before='ner')
+    nlp.add_pipe(sentence_segmenter, after='tagger')
 
     # add pipes
     if ruler == 'on':
@@ -129,14 +129,14 @@ def main():
             # load patterns from external file only if model is not already trained
             nu_ruler = EntityRuler(nlp).from_disk(patterns_file)
             # putting the ruler before ner will override ner decisions in favor of ruler patterns
-            nlp.add_pipe(nu_ruler, before='ner')
+            nlp.add_pipe(nu_ruler)#, before='ner')
         # remember to swap precedence between ruler and ner after model training
         if model == 'post':
             # load patterns from external file only if model is not already trained
             if "entity_ruler" not in nlp.pipe_names:
                 nu_ruler = EntityRuler(nlp).from_disk(patterns_file)
                 # putting the ner before ruler will override favor ner decisions
-                nlp.add_pipe(nu_ruler, before='ner')
+                nlp.add_pipe(nu_ruler)#, before='ner')
 
             # write tagger into pipeline in the meta json file
             # STOPPED HERE ------------------------
@@ -155,8 +155,8 @@ def main():
 
     # CONSOLE OUTPUT
     print('\n')
-    labels = ['MMAT']  # , 'PRODUCT', 'MPN', 'SKU']
-    alt_labels = ['mMat']  # , 'Product', 'MfrPartNo', 'SkuID']
+    labels = ['MANUF']  # , 'PRODUCT', 'MPN', 'SKU']
+    alt_labels = ['Manuf']  # , 'Product', 'MfrPartNo', 'SkuID']
     total_found = []
     total_unique_found = []
     for label in labels:
@@ -186,7 +186,7 @@ def main():
 
 
     # TEST  -----------------------------
-    mmats = []
+    manufs = []
     #products = []
     #skus = []
     #mpns = []
@@ -200,28 +200,28 @@ def main():
 
     with open(output_file, write_type) as outfile:
         s = ''
-        prev_label = 'AJAX'
+        prev_label = 'WRWX'
         for ent in doc.ents:
-            if ent.label_ in ['MMAT', 'AJAX']:
-                if ent.label_ == 'AJAX':
-                    if prev_label == 'AJAX':
+            if ent.label_ in ['MANUF', 'WRWX']:
+                if ent.label_ == 'WRWX':
+                    if prev_label == 'WRWX':
                         print('.')
                         outfile.write('.\n')
-                    else:  # ie prev_label == 'MMAT'
+                    else:  # ie prev_label == 'MANUF'
                         #print('\n')
                         outfile.write('\n')
-                        prev_label = 'AJAX'
-                if ent.label_ == 'MMAT':
-                    # write to mmats[]
-                    mmats.append([ent.text])
+                        prev_label = 'WRWX'
+                if ent.label_ == 'MANUF':
+                    # write to manufs[]
+                    manufs.append([ent.text])
                     s = ent.text
-                    if prev_label == 'AJAX':
+                    if prev_label == 'WRWX':
                         # write to console
                         print(s.upper())
                         # write to outfile
                         outfile.write(s.upper())
-                        prev_label = 'MMAT'
-                    elif prev_label == 'MMAT':
+                        prev_label = 'MANUF'
+                    elif prev_label == 'MANUF':
                         # don't write again
                         '''
                         # write to console
@@ -229,26 +229,26 @@ def main():
                         # write to outfile
                         s = '\t|' + s
                         outfile.write(s.upper())
-                        prev_label = 'MMAT'
+                        prev_label = 'MANUF'
 
     with open(output_file, write_type) as outfile:
         s = ''
-        prev_label = 'AJAX'
+        prev_label = 'WRWX'
         for ent in doc.ents:
-            if ent.label_ in ['SUPPLIER', 'AJAX']:
-                if ent.label_ == 'AJAX':
-                    if prev_label == 'AJAX':
+            if ent.label_ in ['SUPPLIER', 'WRWX']:
+                if ent.label_ == 'WRWX':
+                    if prev_label == 'WRWX':
                         print('.')
                         outfile.write('.\n')
                     else:  # ie prev_label == 'SUPPLIER'
                         #print('\n')
                         outfile.write('\n')
-                        prev_label = 'AJAX'
+                        prev_label = 'WRWX'
                 if ent.label_ == 'SUPPLIER':
                     # write to suppliers[]
                     suppliers.append([ent.text])
                     s = ent.text
-                    if prev_label == 'AJAX':
+                    if prev_label == 'WRWX':
                         # write to console
                         print(s.upper())
                         # write to outfile
@@ -298,7 +298,7 @@ def main():
 
     html = displacy.render(doc, style="ent", page=True)  # use the entity visualizer
     # write the html string to the xampp folder and launch in browser through localhost port
-    with open('C:/xampp/htdocs/mySites/wrWx_NERS/index.html', 'w') as data:
+    with open('C:/Users/stacy/My Localhost/index.html', 'w') as data:
         data.write(html)
 
     print('\n' + results)
