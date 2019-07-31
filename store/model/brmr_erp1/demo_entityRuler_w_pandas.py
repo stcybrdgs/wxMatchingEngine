@@ -22,6 +22,9 @@ from spacy.lemmatizer import Lemmatizer
 from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
 from spacy.lang.en.stop_words import STOP_WORDS
 import json
+import pandas as pd
+from pandas import ExcelWriter
+import numpy as np
 #from spacy.lang.en import English
 
 # PATHS  =======================================
@@ -80,8 +83,9 @@ def main():
 
     # IO  ----------------------------
     patterns_file = 'demo_ners_patterns_manuf.jsonl'
-    tender_file = 'demo_ners_descriptions_nonstock.csv'  # iesa descriptions
-    output_file = 'demo_ners_output_nonstock.txt'
+    tender_file = 'demo_ners_descriptions_nonstock_short.csv'  # iesa descriptions
+    pandas_file = 'demo_ners_output_nonstock_pandas.xlsx'
+    # output_file = 'demo_ners_output_nonstock.txt'
     write_type = 'w'
 
     # --------------------------------
@@ -123,7 +127,7 @@ def main():
 
     doc = nlp(tender)
 
-    # CONSOLE OUTPUT
+    # GENERATE CONSOLE OUTPUT
     print('\n')
     labels = ['MANUF']  # , 'PRODUCT', 'MPN', 'SKU']
     alt_labels = ['Manuf']  # , 'Product', 'MfrPartNo', 'SkuID']
@@ -145,7 +149,7 @@ def main():
         total_found.append(tot_num)
         total_unique_found.append(unique_num)
 
-    # save model with entity pattern updates made by the entity ruler
+    # GENERATE MODEL
     if ruler == "on":
         output_dir = Path('model_entRuler')
         if not output_dir.exists():
@@ -153,21 +157,71 @@ def main():
         nlp.to_disk(output_dir)
         print("Saved model to", output_dir)
 
-
     # TEST  -----------------------------
-    manufs = []
-    #products = []
-    #skus = []
-    #mpns = []
-    # print(doc)
-    print('--------------------------')
+    #for sent in doc.sents:
+    #    print(sent)
+
+    # This technique allows you to isolate entities on
+    # a sentence-by-sentence basis, which will allow
+    # for matching entities on a record-by-record basis
+    w_Manufs = []
+    w_Manuf_Alts = []
+    unique = []
+    manuf = ''
+    alts = ''
+    #ent_exists = False
+    j = 0
+    for sent in doc.sents:
+        i = 0
+        for ent in sent.ents:
+            # ignore header record
+            if j > 0:
+                if ent.label_ == 'MANUF':
+                    if i == 0:
+                        # if it's the firs manuf in the record, put it in w_Manufs
+                        manuf = ent.text
+                        unique.append(ent.text)
+                        i += 1
+                    else:
+                        # if it's not the first manuf in the sentence, put it in alts
+                        # (if it is already in alts, don't put it in)
+                        if ent.text not in unique:
+                            unique.append(ent.text)
+                            if alts == '':
+                                alts = ent.text
+                            else:
+                                alts = alts + ', ' + ent.text
+                    #print(ent.label_, ': ', ent.text)
+
+        # store ent results for each record, ignoring the headers
+        if j > 0:
+            w_Manufs.append(manuf.upper())
+            w_Manuf_Alts.append(alts.upper())
+
+            # test ---------------
+            print('str ', j, 'w_Manufs: ', w_Manufs)
+            print('str ', j, 'w_Manuf_Alts: ', w_Manuf_Alts)
+            # test ---------------
+
+        # reset vars for next record
+        unique.clear()
+        manuf = ''
+        alts = ''
+        j += 1
+
+    df = pd.DataFrame({ 'w_Manuf':w_Manufs,
+                        'w_Manuf_Alt':w_Manuf_Alts})
+
+    writer = pd.ExcelWriter(pandas_file)
+    df.to_excel(writer,'NERS_Manufs', index=False)
+    writer.save()
     #for sent in doc.sents: print(sent)
 
     print('nu----------------')
     #for sent in doc.sents:
     #    print(sent)
 
-    # DISPLACY VISUALIZER
+    # GENERATE DISPLACY VISUALIZER
     # get results for html doc
     results = ''
     i = 0
