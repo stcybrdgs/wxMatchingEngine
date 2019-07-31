@@ -16,7 +16,7 @@ def main():
     supplier_patterns = []
 
     # store\model\brmr_erp1\brmr_erp1.csv
-    demo_txt = '../../../store/model/brmr_erp1/demo_ners_manuf.csv'
+    demo_txt = '../../../store/model/brmr_erp1/demo_ners_manuf_lookup.csv'
     #brmr_csv = '../../../store/model/brmr_erp1/nu_iesa_erp/iesa_erp_nu.csv'
 
     # import erp csv
