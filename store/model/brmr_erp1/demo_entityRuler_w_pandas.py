@@ -67,47 +67,18 @@ def entRuler_tagger(doc):
    pass
 
 def update_meta_pipeline():
-    '''
-    json_content = []
-    old_pipeline = []
-    nu_pipeline = ['tagger', 'entity_ruler', 'ner']
-
-    # read in meta.json
-    with open('model_entRuler/meta.json','r') as jsonfile:
-        json_content = json.load(jsonfile)
-        old_pipeline = json_content['pipeline']
-
-    if nu_pipeline == old_pipeline:
-        pass
-    else:
-        # update json_content to reflect new pipeline
-        json_content['pipeline'] = nu_pipeline
-
-        # write the new pipeline to the json file
-        with open('model_entRuler/meta.json','w') as jsonfile:
-            json.dump(json_content, jsonfile)
-    '''
     pass
 
 # MAIN  ========================================
 def main():
-    '''
-    NERS Demo
-    with pandas output
-    suppliers
-    '''
     # CONFIG  ------------------------
-
     model = 'pre'   # pre -> use non-trained model / post -> use trained model
     ruler = 'on'
     cleaner = 'on'
     number_tagger = 'off'
-    # if stemmer is turned on after model does P2 training, then
-    # you will need to use POS tag to detect nouns in products
-    # then create new generator patterns for all.json
-    # then run entity ruler again
     stemmer = 'off'
 
+    # IO  ----------------------------
     patterns_file = 'demo_ners_patterns_manuf.jsonl'
     tender_file = 'demo_ners_descriptions_nonstock.csv'  # iesa descriptions
     output_file = 'demo_ners_output_nonstock.txt'
@@ -150,8 +121,6 @@ def main():
     if cleaner == 'on':
         tender = string_cleaner.clean_doc(tender)  #  clean
 
-    #print(tender)
-
     doc = nlp(tender)
 
     # CONSOLE OUTPUT
@@ -177,7 +146,6 @@ def main():
         total_unique_found.append(unique_num)
 
     # save model with entity pattern updates made by the entity ruler
-
     if ruler == "on":
         output_dir = Path('model_entRuler')
         if not output_dir.exists():
@@ -198,92 +166,6 @@ def main():
     print('nu----------------')
     #for sent in doc.sents:
     #    print(sent)
-
-    with open(output_file, write_type) as outfile:
-        s = ''
-        prev_label = 'WRWX'
-        for ent in doc.ents:
-            if ent.label_ in ['MANUF', 'WRWX']:
-                if ent.label_ == 'WRWX':
-                    if prev_label == 'WRWX':
-                        print('.')
-                        outfile.write('.\n')
-                    else:  # ie prev_label == 'MANUF'
-                        #print('\n')
-                        outfile.write('\n')
-                        prev_label = 'WRWX'
-                if ent.label_ == 'MANUF':
-                    # write to manufs[]
-                    manufs.append([ent.text])
-                    s = ent.text
-                    if prev_label == 'WRWX':
-                        # write to console
-                        print(s.upper())
-                        # write to outfile
-                        outfile.write(s.upper())
-                        prev_label = 'MANUF'
-                    elif prev_label == 'MANUF':
-                        # don't write again
-                        '''
-                        # write to console
-                        print('\t|', s.upper())
-                        # write to outfile
-                        s = '\t|' + s
-                        outfile.write(s.upper())
-                        prev_label = 'MANUF'
-
-    with open(output_file, write_type) as outfile:
-        s = ''
-        prev_label = 'WRWX'
-        for ent in doc.ents:
-            if ent.label_ in ['SUPPLIER', 'WRWX']:
-                if ent.label_ == 'WRWX':
-                    if prev_label == 'WRWX':
-                        print('.')
-                        outfile.write('.\n')
-                    else:  # ie prev_label == 'SUPPLIER'
-                        #print('\n')
-                        outfile.write('\n')
-                        prev_label = 'WRWX'
-                if ent.label_ == 'SUPPLIER':
-                    # write to suppliers[]
-                    suppliers.append([ent.text])
-                    s = ent.text
-                    if prev_label == 'WRWX':
-                        # write to console
-                        print(s.upper())
-                        # write to outfile
-                        outfile.write(s.upper())
-                        prev_label = 'SUPPLIER'
-                    elif prev_label == 'SUPPLIER':
-                        # write to console
-                        print('\t|', s.upper())
-                        # write to outfile
-                        s = '\t|' + s
-                        outfile.write(s.upper())
-                        prev_label = 'SUPPLIER'
-
-    elif ent.label_ == 'PRODUCT':
-        products.append([ent.label_, ent.text])
-    elif ent.label_ == 'SKU':
-        skus.append([ent.label_, ent.text])
-    elif ent.label_ == 'MPN':
-        mpns.append([ent.label_, ent.text])
-
-    print('--------------------------')
-    for i in suppliers:
-        print(i)
-
-    print('--------------------------')
-    for i in products:
-        print(i)
-    print('--------------------------')
-    for i in mpns:
-        print(i)
-    print('--------------------------')
-    for i in skus:
-        print(i)
-    '''
 
     # DISPLACY VISUALIZER
     # get results for html doc
