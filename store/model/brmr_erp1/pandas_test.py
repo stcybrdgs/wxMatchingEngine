@@ -28,6 +28,7 @@ s4 = '1004:fi2r11ncqz3ldgo2gfryducd67104,FYTWK30YTH-* SKF cancelled po RHP, NSK 
 s5 = '1005:0M80-8KDJ93,7216 bep Bearing   N/A N/A or maybe TIMKEN'
 s6 = '1005:0M80-8KDJ93,7216 bert Bearing   N/A N/A or maybe TUMKEN'
 s7 = 'Gimme some of that SKF !'
+
 strings = [s1, s2, s3, s4, s5, s6, s7]
 manuf_list = ['Rexroth','SKF', 'NSK', 'RHP', 'TIMKEN', 'FAG', 'Sheen Spark', 'bep']
 w_Manufs = []
