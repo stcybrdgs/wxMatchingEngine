@@ -42,7 +42,7 @@ def main():
 	row_str = ''  # use to collect api text that will be inserted into rows_for_csv[]
 	counter = 0   # control counter for intermittent writes to external file
 
-	with open('bearing_decoder_output.csv', 'a') as writeFile:
+	with open('demo_bearing_decoder_output.csv', 'a') as writeFile:
 		writer = csv.writer(writeFile)
 
 		# populate headers for csv file
@@ -59,11 +59,12 @@ def main():
 		row_str = ''
 
 		# get codes as doc obj from external file
-		input_file = 'bearing_decoder_input.csv'  # 'bearing_decoder_input.csv'
+		input_file = 'demo_bearing_decoder_input.csv'  # 'bearing_decoder_input.csv'
 		codes = import_csv(input_file)
 
 		# set api-endpoint for SKF
 		URL = "https://search.skf.com/prod/search-skfcom/rest/apps/site_search/searchers/products"
+		#https://search.skf.com/prod/search-skfcom/rest/apps/site_search/searchers/products?q=6003
 
 		i = 0
 		for code in mMats:
