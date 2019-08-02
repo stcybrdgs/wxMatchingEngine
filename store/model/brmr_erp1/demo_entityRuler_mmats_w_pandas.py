@@ -82,9 +82,9 @@ def main():
     stemmer = 'off'
 
     # IO  ----------------------------
-    patterns_file = 'demo_ners_patterns_manuf.jsonl'
-    tender_file = 'demo_ners_descriptions_nonstock.csv'  # iesa descriptions
-    pandas_file = 'demo_ners_output_nonstock_pandas.xlsx'
+    patterns_file = 'demo_ners_patterns_mmat_test.jsonl'
+    tender_file = 'demo_ners_descriptions_nonstock_test.csv'  # iesa descriptions
+    pandas_file = 'demo_ners_output_nonstock_mmat_pandas.xlsx'
     # output_file = 'demo_ners_output_nonstock.txt'
     write_type = 'w'
 
@@ -129,8 +129,8 @@ def main():
 
     # GENERATE CONSOLE OUTPUT
     print('\n')
-    labels = ['MANUF']  # , 'PRODUCT', 'MPN', 'SKU']
-    alt_labels = ['Manuf']  # , 'Product', 'MfrPartNo', 'SkuID']
+    labels = ['MMAT']  # , 'PRODUCT', 'MPN', 'SKU']
+    alt_labels = ['MMat']  # , 'Product', 'MfrPartNo', 'SkuID']
     total_found = []
     total_unique_found = []
     for label in labels:
@@ -164,10 +164,10 @@ def main():
     # This technique allows you to isolate entities on
     # a sentence-by-sentence basis, which will allow
     # for matching entities on a record-by-record basis
-    w_Manufs = []
-    w_Manuf_Alts = []
+    w_ManfCodes = []
+    w_ManfCode_Alts = []
     unique = []
-    manuf = ''
+    mmat = ''
     alts = ''
     #ent_exists = False
     j = 0
@@ -176,7 +176,7 @@ def main():
         for ent in sent.ents:
             # ignore header record
             if j > 0:
-                if ent.label_ == 'MANUF':
+                if ent.label_ == 'MMAT':
                     if i == 0:
                         # if it's the firs manuf in the record, put it in w_Manufs
                         manuf = ent.text
@@ -195,22 +195,22 @@ def main():
 
         # store ent results for each record, ignoring the headers
         if j > 0:
-            w_Manufs.append(manuf.upper())
-            w_Manuf_Alts.append(alts.upper())
+            w_ManfCodes.append(mmat.upper())
+            w_ManfCode_Alts.append(alts.upper())
 
             # test ---------------
-            print('str ', j, 'w_Manufs: ', w_Manufs)
-            print('str ', j, 'w_Manuf_Alts: ', w_Manuf_Alts)
+            print('str ', j, 'w_ManfCodes: ', w_ManfCodes)
+            print('str ', j, 'w_ManfCode_Alts: ', w_ManfCode_Alts)
             # test ---------------
 
         # reset vars for next record
         unique.clear()
-        manuf = ''
+        mmat = ''
         alts = ''
         j += 1
 
-    df = pd.DataFrame({ 'w_Manuf':w_Manufs,
-                        'w_Manuf_Alt':w_Manuf_Alts})
+    df = pd.DataFrame({ 'w_ManfCodes':w_ManfCodes,
+                        'w_ManfCode_Alts':w_ManfCode_Alts})
 
     writer = pd.ExcelWriter(pandas_file)
     df.to_excel(writer,'NERS_Manufs', index=False)
