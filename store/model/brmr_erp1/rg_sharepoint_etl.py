@@ -90,6 +90,7 @@ def main():
     # pandas output
     pandas_file = 'C:/Users/stacy/My WrWx/00_projects/reservoirGroup/Adam/pandas_test.xlsx'
     pandas_file_2 = 'C:/Users/stacy/My WrWx/00_projects/reservoirGroup/Adam/pandas_test_apples.xlsx'
+    pandas_file_3 = 'C:/Users/stacy/My WrWx/00_projects/reservoirGroup/Adam/historical_pin_hse.xlsx'
 
     writer = pd.ExcelWriter(pandas_file)
     df.to_excel(writer,'PIN_Data', index=False)
@@ -97,7 +98,7 @@ def main():
 
     df2 = pd.DataFrame({ 'Region':nu_region, 'Company':nu_company, 'RaisedBy':nu_raisedBy})
     writer2 = pd.ExcelWriter(pandas_file_2)
-    df2.to_excel(writer2, 'Altered_with_Fruits', index=False)
+    df2.to_excel(writer2, 'Historical PIN and HSE', index=False)
     writer2.save()
 
 
