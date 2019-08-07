@@ -16,7 +16,7 @@ def main():
     supplier_patterns = []
 
     # store\model\brmr_erp1\brmr_erp1.csv
-    iesa_txt = '../../../store/model/brmr_erp1/iesa_mmat.csv'
+    iesa_txt = '../../../store/model/brmr_erp1/nu_demo_mmat.csv'
     #brmr_csv = '../../../store/model/brmr_erp1/nu_iesa_erp/iesa_erp_nu.csv'
 
     # import erp csv
@@ -59,7 +59,7 @@ def main():
 
     # create pattern files using jsonl
     # supplier patterns:
-    with open('iesa_ners_patterns_mmat.jsonl', 'w') as outfile:
+    with open('nu_demo_mmat.jsonl', 'w') as outfile:
         for line in supplier_patterns:
             outfile.write(line)
             print(line)
