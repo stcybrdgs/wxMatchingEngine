@@ -16,9 +16,7 @@ import numpy as np
 
 # MAIN  ========================================
 def main():
-
     # import xls
-
 
     # case logic
     '''
@@ -49,6 +47,7 @@ def main():
     25	Job Number
     26	Item Type
     27	Path
+
     '''
 
     # import xls file
