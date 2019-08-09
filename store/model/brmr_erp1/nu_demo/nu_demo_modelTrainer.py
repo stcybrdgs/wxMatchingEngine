@@ -46,13 +46,34 @@ import string_cleaner
 # GLOBALS  ====================================
 # training data
 TRAIN_DATA = [
-    ("SPHERICAL ROLLER BEARING 21314 E COATING CELL RHC COATING CELL",{"entities": [(32-7, 37-7, "MMAT")]}),
-    ("Pallet circulation roller bearing NP60 RHP NP60 EC",{"entities": [(41-7, 45-7, "MMAT")]}),
-    ("Bearing 6306-*SKF Bearing N/A N/A",{"entities": [(15-7, 19-7, "MMAT")]}),
-    ("bearing HK35162RS NA NA",{"entities": [(15-7, 24-7, "MMAT")]}),
-    ("6404.c3 bearing  NSK 6020 DDU",{"entities": [(7-7, 14-7, "MMAT")]}),
-    ("6404.c3 02B90MMGR TBA TBA",{"entities": [(7-7, 14-7, "MMAT")]}),
-    ("needle roller bearing 24136CCK30 /C3W33:SKF BRAMMER 24136CCK30/C3W33:SKF",{"entities": [(29-7, 39-7, "MMAT")]}),
+    ("wrwx ball bearing 6226 9101 fag",{"entities": [(25-7, 29-7, "MMAT")]}),
+    ("wrwx ball bearing 1040 x 112in fag",{"entities": [(25-7, 29-7, "MMAT")]}),
+    ("wrwx ball bearing fag ls13ac 5337 ki",{"entities": [(29-7, 35-7, "MMAT")]}),
+    ("wrwx ball bearing 6213 9573 fag",{"entities": [(25-7, 29-7, "MMAT")]}),
+    ("wrwx fag bearing 22211e1",{"entities": [(24-7, 31-7, "MMAT")]}),
+    ("wrwx 32213a bearing manfcode32213amanffag",{"entities": [(35-7, 40-7, "MMAT")]}),
+    ("wrwx 60072rsr fag deep grove bearing",{"entities": [(12-7, 20-7, "MMAT")]}),
+    ("wrwx fag 6004zz bearing",{"entities": [(16-7, 22-7, "MMAT")]}),
+    ("wrwx 3306a bearing manfcode3306amanffagm",{"entities": [(12-7, 17-7, "MMAT")]}),
+    ("wrwx fag 6004zz bearing",{"entities": [(16-7, 22-7, "MMAT")]}),
+    ("wrwx 60022rs bearing must be inafag make",{"entities": [(12-7, 19-14, "MMAT")]}),
+    ("wrwx 6005 2rs bearing 60052rsr fag",{"entities": [(12-7, 20-15, "MMAT")]}),
+    ("wrwx ball bearing 7218 mpua 20583 1116 3302",{"entities": [(25-7, 29-7, "MMAT")]}),
+    ("wrwx spherical roller bearing 22210 e xray repair rhc xray repair",{"entities": [(37-7, 42-7, "MMAT")]}),
+    ("wrwx ball bearing 7218 mpua 20583 1116 3302",{"entities": [(25-7, 29-7, "MMAT")]}),
+    ("wrwx split roller bearing mbo03016 interfood mbo03016",{"entities": [(33-7, 41-7, "MMAT")]}),
+    ("wrwx er24kbearing edm1fmq glenfarrow edm1fmq",{"entities": [(12-7, 17-7, "MMAT")]}),
+    ("wrwx n308 steel cage roller bearing gir15do ina gir15do",{"entities": [(12-7, 16-7, "MMAT")]}),
+    ("wrwx natr50 roller bearing msm121815 igus msm121815",{"entities": [(12-7, 18-7, "MMAT")]}),
+    ("wrwx 6308 metric ball bearinghk2520 ina hk 2520",{"entities": [(12-7, 16-7, "MMAT")]}),
+    ("wrwx 62142zr bearingsealed lj 7",{"entities": [(12-7, 16-7, "MMAT")]}),
+    ("wrwx 6215 bearing manfcode6215manffagmac",{"entities": [(12-7, 16-7, "MMAT")]}),
+    ("wrwx 6215 bearing manfcode6215manffagmac",{"entities": [(12-7, 16-7, "MMAT")]}),
+    ("wrwx 6221 bearing manfcode6221manffagmac",{"entities": [(12-7, 16-7, "MMAT")]}),
+    ("wrwx 63052zr bearing ball",{"entities": [(12-7, 16-19, "MMAT")]}),
+    ("wrwx 6305zr bearing ball",{"entities": [(12-7, 16-18, "MMAT")]}),
+    ("wrwx bearing 62022rs fag",{"entities": [(28-7, 31-18, "MANUF")]}),
+    ("wrwx bearing 63022rs fag",{"entities": [(28-7, 31-18, "MANUF")]}),
 ]
 
 @plac.annotations(
@@ -64,7 +85,7 @@ TRAIN_DATA = [
 # FUNCTIONS  ==================================
 
 # MAIN  =======================================
-def main(model=None, output_dir="model_entRuler", n_iter=50):
+def main(model=None, output_dir="model_entRuler", n_iter=70):
     # setup pipeline
     # load the model you want to use
     # use nlp.disable_pipes to disable all pipes but NER

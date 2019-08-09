@@ -12,55 +12,56 @@ import csv
 
 # MAIN  ========================================
 def main():
-    # declare containers
-    supplier_patterns = []
+    # set parameters to run either MMAT or MANUF (only one choice per run)
+    dataLabel = 'MMAT'  # MMAT or MANUF
 
-    # store\model\brmr_erp1\brmr_erp1.csv
-    iesa_txt = '../../../store/model/brmr_erp1/nu_demo_mmat.csv'
-    #brmr_csv = '../../../store/model/brmr_erp1/nu_iesa_erp/iesa_erp_nu.csv'
+    if dataLabel == 'MMAT':
+        dataIn = 'in_mmat.csv'  # in_mmat.csv or in_manuf.csv
+        dataOut = 'out_mmat_patterns.jsonl'  # out_mmat.jsonl or out_manuf.jsonl
+    elif dataLabel == 'MANUF':
+        dataIn = 'in_manuf.csv'  # in_mmat.csv or in_manuf.csv
+        dataOut = 'out_manuf_patterns.jsonl'  # out_mmat.jsonl or out_manuf.jsonl
+
+    # declare containers
+    patterns = []
+
+    # parameters
+    infile  = 'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/nu_demo/' + dataIn
+    outfile = 'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/nu_demo/' + dataOut
 
     # import erp csv
     doc = ''
-    with open(iesa_txt) as data:
+    with open(infile) as data:
         csv_reader = csv.reader(data, delimiter = '|')
         i = 0
         for line in csv_reader:
             if i > 0:  # skip header row
-                # populate supplier patterns
-                #line[0].strip()  # strip leading and trailing whitespace from supplier string
-                supplier_pattern = ''
-                supplier_prefix = '{"label":"MMAT","pattern":[{"lower":"'
-                supplier_inner = ''
-                supplier_suffix = '"}]}'
+                # populate patterns
+                pattern = ''
+                prefix = '{"label":"' + dataLabel + '", "pattern":[{"lower":"'
+                inner = ''
+                suffix = '"}]}'
                 for char in line:
                     if char == ' ':
-                        supplier_inner = supplier_inner + '"},{"lower":"'
+                        inner = inner + '"},{"lower":"'
                     else:
-                        supplier_inner = supplier_inner + char.lower()
-                supplier_pattern = supplier_prefix + supplier_inner + supplier_suffix + '\n'
-                #print(supplier_pattern)
+                        inner = inner + char.lower()
+                pattern = prefix + inner + suffix + '\n'
 
                 # detect duplicates and append only unique patterns
                 # to the patterns list
                 pattern_exists = False
-                for pattern in supplier_patterns:
-                    if supplier_pattern == pattern:
+                for p in patterns:
+                    if p == pattern:
                         pattern_exists = True
                 if not pattern_exists:
-                    supplier_patterns.append(supplier_pattern)
-                    #print(supplier_pattern)
+                    patterns.append(pattern)
             i += 1
-
-        '''
-        # populate txt obj
-        doc = doc + ('|'.join(row) + '\n')
-        i += 1
-        '''
 
     # create pattern files using jsonl
     # supplier patterns:
-    with open('nu_demo_mmat.jsonl', 'w') as outfile:
-        for line in supplier_patterns:
+    with open(outfile, 'w') as outfile:
+        for line in patterns:
             outfile.write(line)
             print(line)
 
