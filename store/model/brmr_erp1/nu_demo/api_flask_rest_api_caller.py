@@ -9,6 +9,7 @@ for name in names:
     # send get request and save response as response object
     #PARAMS = 'Stacy'
     r = requests.get(url = URL + name)#, params = PARAMS)
+
     # extracting data in json format
     data = r.json()
 
@@ -26,6 +27,6 @@ for name in names:
         age = 'none'
 
     if name == 'none':
-        print('n/a')
+        print('User not found')
     else:
         print('Name: {}, Role: {}, Age: {}'.format(name, role, age))

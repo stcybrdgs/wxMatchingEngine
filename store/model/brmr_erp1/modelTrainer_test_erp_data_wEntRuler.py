@@ -22,29 +22,6 @@ For more details, see the documentation:
 -   Training: https://spacy.io/usage/training
 -   NER: https://spacy.io/usage/linguistic-features#named-entities
 
-
-# brmr training data:
-("93345|FESTO cylinder 63-80-PPVA-N3 sku: PKU-10003511|9/23/18|6|ea|181.02",{"entities": [(47-7, 59-7, "SKU")]}),
-("00-3-A-F|SEW GEARBOX 60/1400RPM SEW SA57/T AD2 SA57/T AD2|P74-MOT-02186|SEW|SA57/T AD2",{"entities": [(65-7, 78-7,"SKU"),(83-7, 93-7, "MPN")]}),
-("FAG DEEP GROOVE BALL BEARING 6026-2RSRC3", {"entities": [(0, 3, "SUPPLIER"), (4, 28, "PRODUCT"), (29, 40, "MPN")]}),
-("19724|meyn lamp vision grading pll 55w/84 89.4140.904.0282|12/15/18|11|ft|342.43",{"entities": [(18-7, 22-7, "PRODUCT")]}),
-("22652|AFC large size o-ring|1/2/19|11|Ea|316.58",{"entities": [(28-7, 34-7, "PRODUCT")]}),
-("25027|schneider relay ca2 dn31 f7 telemec cad32f7|1/21/19|16|Pack|1515.84",{"entities": [(23-7, 28-7, "PRODUCT")]}),
-("80442|OMRON RELAY 24VAC DPCO MK|3/22/19|18|Ea|4.48",{"entities": [(19-7, 24-7, "PRODUCT")]}),
-("36199|HARTING SAFE EDGE CONNECTOR MALE R033|R033|8/8/18|1|Ea|341.8",{"entities": [(21-7, 45-7, "PRODUCT")]}),
-("25027|skf bearing 6216-2rs 6216-2rs1:skf|1/21/19|16|Pack|1515.84",{"entities": [(17-7, 24-7, "PRODUCT")]}),
-("55952|Push button greeng arrow by Reiser (Rieser ?)|11/18/18|16|Ea|1274.24",{"entities": [(13-7, 24-7, "PRODUCT")]}),
-("19720|Siemens brand auxilary contactor |12/15/18|11|ft|342.43",{"entities": [(27-7, 45-7, "PRODUCT")]}),
-("19724|Another Bussman fuse, 2amp w/antisurge feature|12/15/18|11|ft|342.43",{"entities": [(29-7, 33-7, "PRODUCT")]}),
-("93345|FESTO cylinder 63-80-PPVA-N3 |9/23/18|6|ea|181.02",{"entities": [(19-7, 27-7, "PRODUCT")]}),
-("70863|I need one Gas Strut engineering gas Strut,  . 3075aa-200n|3075AA-200N|8/31/18|1|each|31.75",{"entities": [(34-7, 55-7, "PRODUCT")]}),
-("88325|stanley wrench adjustable 150mm lg roebuck|3/1/19|14|ft|745.78",{"entities": [(21-7, 27-7, "PRODUCT")]}),
-("22652|A lmi repair kit for a dosing pump in eff plant (sp-u6)|1/2/19|11|Ea|316.58",{"entities": [(19-7, 29-7, "PRODUCT")]})
-
-# iesa mmat training data, pass 1:
-    #("93345|FESTO cylinder 63-80-PPVA-N3 sku: PKU-10003511|9/23/18|6|ea|181.02",{"entities": [(47-7, 59-7, "SKU")]}),
-    #("00-3-A-F|SEW GEARBOX 60/1400RPM SEW SA57/T AD2 SA57/T AD2|P74-MOT-02186|SEW|SA57/T AD2",{"entities": [(65-7, 78-7,"SKU"),(83-7, 93-7, "MPN")]}),
-
 '''
 
 # LIB IMPORTS =================================
@@ -69,60 +46,13 @@ import string_cleaner
 # GLOBALS  ====================================
 # training data
 TRAIN_DATA = [
-    ("bearing fag  60032rsr",{"entities": [(20-7, 28-7, "MMAT")]}),
-    ("bearing 6202c2z",{"entities": [(15-7, 22-7, "MMAT")]}),
-    ("bearing fag  6204c2z",{"entities": [(20-7, 27-7, "MMAT")]}),
-    ("bearing fag  62012rsr",{"entities": [(20-7, 28-7, "MMAT")]}),
-    ("bearing fag  60022rsr",{"entities": [(20-7, 28-7, "MMAT")]}),
-    ("bearing ball race 2307tvhc3 fag  2307",{"entities": [(25-7, 34-7, "MMAT")]}),
-    ("fag  7205btvp bearing 003431603 stork",{"entities": [(12-7, 20-7, "MMAT")]}),
-    ("bearing ball race nu307etvp2c3 fag  nu",{"entities": [(25-7, 37-7, "MMAT")]}),
-    ("fag  6310 zz c3 bearing",{"entities": [(12-7, 22-7, "MMAT")]}),
-    ("fag  6212 zz c3 bearing",{"entities": [(12-7, 22-7, "MMAT")]}),
-    ("bearing 6009 2rsr c3 fag",{"entities": [(15-7, 27-7, "MMAT")]}),
-    ("flanged bearing refsf79382z fag",{"entities": [(23-7, 34-7, "MMAT")]}),
-    ("bearing kr19dz fag  kr19dz 112024",{"entities": [(15-7, 21-7, "MMAT")]}),
-    ("bearing 62062rsva fag  62062rva 11430",{"entities": [(15-7, 24-7, "MMAT")]}),
-    ("bearing 60022rsrc3 fag  60022rsrc3",{"entities": [(15-7, 25-7, "MMAT")]}),
-    ("bearing nu2207etyp2 fag  nu2207etyp2",{"entities": [(15-7, 26-7, "MMAT")]}),
-    ("fag  6219 bearing",{"entities": [(12-7, 16-7, "MMAT")]}),
-    ("thrust bearing 51205 fag  make",{"entities": [(22-7, 27-7, "MMAT")]}),
-    ("BEARING FAG 22212EKC3 SCRUBBER FAN EF2",{"entities": [(19-7, 28-7, "MMAT")]}),
-    ("(BAKDCNTD) FAG Bearing 62082RSR",{"entities": [(30-7, 38-7, "MMAT")]}),
-    ("BEARING 3206B",{"entities": [(15-7, 20-7, "MMAT")]}),
-    ("CYLINDRICAL ROLLER BEARING NNF5020C 2LS",{"entities": [(34-7, 46-7, "MMAT")]}),
-    ("BEARING 608 2Z",{"entities": [(15-7, 21-7, "MMAT")]}),
-    ("BEARING FAG 6309C3",{"entities": [(19-7, 25-7, "MMAT")]}),
-    ("BALL BEARING 205SZZG 9076 6205 2RS NR 62",{"entities": [(20-7, 27-7, "MMAT")]}),
-    ("BEARING ROLLER 6004 2RSR FAG 60042RSH",{"entities": [(36-7, 44-7, "MMAT")]}),
-    ("BEARING FAG 3209 B TNG",{"entities": [(19-7, 25-7, "MMAT")]}),
-    ("BEARING 60102RS FAG",{"entities": [(15-7, 22-7, "MMAT")]}),
-    ("(DSCNTD)BALL BEARING 6213 9573 FAG",{"entities": [(28-7, 32-7, "MMAT")]}),
-    ("(DSCNTD)BALL BEARING 3313 9058 FAG",{"entities": [(28-7, 32-7, "MMAT")]}),
-    ("FAG BEARING 6000 BRAMMER",{"entities": [(19-7, 23-7, "MMAT")]}),
-    ("FAG BEARING 33210 BRAMMER",{"entities": [(19-7, 24-7, "MMAT")]}),
-    ("BEARINGFAG 2306 2RS SELF ALIGNING",{"entities": [(18-7, 26-7, "MMAT")]}),
-    ("FAG BEARING  RMS11 MRJ11/8",{"entities": [(20-7, 33-7, "MMAT")]}),
-    ("FAG BEARING 60072RSR",{"entities": [(19-7, 27-7, "MMAT")]}),
-    ("ROLLER BEARING 7310BUA FAG",{"entities": [(22-7, 29-7, "MMAT")]}),
-    ("BEARING 62132RSRC3 FAG",{"entities": [(15-7, 25-7, "MMAT")]}),
-    ("BEARING 3206B",{"entities": [(15-7, 20-7, "MMAT")]}),
-    ("(DSCNTD)BEARING N 214 make=FAG makecode",{"entities": [(23-7, 28-7, "MMAT")]}),
-    ("FAG BEARING NJ214ETVP2C3 BRAMMER",{"entities": [(19-7, 31-7, "MMAT")]}),
-    ("FAG BEARING 60022RSR",{"entities": [(19-7, 27-7, "MMAT")]}),
-    ("BEARINGROLLER FAG 21309KC3F TAPERED 45",{"entities": [(25-7, 34-7, "MMAT")]}),
-    ("BEARING FAG 1208K C3 CLEARANCE",{"entities": [(19-7, 27-7, "MMAT")]}),
-    ("(DSCNTD)BALL BEARING 6226 9101 FAG",{"entities": [(28-7, 32-7, "MMAT")]}),
-    ("(DSCNTD)BALL BEARING FAG LS13AC 5337 (KI",{"entities": [(32-7, 38-7, "MMAT")]}),
-    ("(DSCNTD) UVN58006363 BEARING  SLIDING",{"entities": [(16-7, 27-7, "MMAT")]}),
-    ("(DSCNTD) 62142ZR BEARING  SEALED LJ 7",{"entities": [(16-7, 23-7, "MMAT")]}),
-    ("(DSCNTD) KM 15 BEARING  LOCKNUT Make",{"entities": [(16-7, 21-7, "MMAT")]}),
-    ("BEARING 3204B",{"entities": [(15-7, 20-7, "MMAT")]}),
-    ("BEARING JK0S060",{"entities": [(15-7, 22-7, "MMAT")]}),
-    ("BEARING 3208B",{"entities": [(15-7, 20-7, "MMAT")]}),
-    ("FAG BEARING 60022RSR",{"entities": [(19-7, 27-7, "MMAT")]}),
-    ("BEARING 6011 2RSR FAG",{"entities": [(20-7, 24-7, "MMAT")]}),
-    ("BEARING BALL IMPERIAL 21/2X5X1 FAG",{"entities": [(29-7, 37-7, "MMAT")]}),
+    ("SPHERICAL ROLLER BEARING 21314 E COATING CELL RHC COATING CELL",{"entities": [(32-7, 37-7, "MMAT")]}),
+    ("Pallet circulation roller bearing NP60 RHP NP60 EC",{"entities": [(41-7, 45-7, "MMAT")]}),
+    ("Bearing 6306-*SKF Bearing N/A N/A",{"entities": [(15-7, 19-7, "MMAT")]}),
+    ("bearing HK35162RS NA NA",{"entities": [(15-7, 24-7, "MMAT")]}),
+    ("6404.c3 bearing  NSK 6020 DDU",{"entities": [(7-7, 14-7, "MMAT")]}),
+    ("6404.c3 02B90MMGR TBA TBA",{"entities": [(7-7, 14-7, "MMAT")]}),
+    ("needle roller bearing 24136CCK30 /C3W33:SKF BRAMMER 24136CCK30/C3W33:SKF",{"entities": [(29-7, 39-7, "MMAT")]}),
 ]
 
 @plac.annotations(
