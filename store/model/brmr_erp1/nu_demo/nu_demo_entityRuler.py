@@ -71,6 +71,8 @@ def main():
     # CONFIG  ---------------------- \\
     # -------------------------------- \\
     model = 'post'   # pre -> use non-trained model / post -> use trained model
+    mmat = 'on'  # on/off
+    manuf = 'off'  # on/off
     ruler = 'on'
     cleaner = 'on'
     number_tagger = 'off'
@@ -80,9 +82,9 @@ def main():
     # then run entity ruler again
     stemmer = 'off'
 
-    patterns_file = 'nu_demo_mmat.jsonl'
-    tender_file = 'demo_ners_descriptions_nonstock_test.csv'  # iesa descriptions
-    output_file = 'demo_ners_output_nonstock.txt'
+    patterns_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\out_mmat_patterns.jsonl'
+    tender_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\in_tender.csv'
+    #output_file = 'demo_ners_output_nonstock.txt'
     write_type = 'w'
 
     # -------------------------------- //
@@ -91,7 +93,7 @@ def main():
     # load model
     if model == 'pre':
         # load a language and invoke the entity ruler
-        nlp = spacy.load('en_core_web_sm', disable=['parser','ner']) #('en_core_web_sm', disable=['parser'])
+        nlp = spacy.load('en_core_web_sm', disable=['parser']) #('en_core_web_sm', disable=['parser'])
     elif model == 'post':
         nlp = spacy.load('model_entRuler')
 
@@ -165,6 +167,7 @@ def main():
     #for sent in doc.sents:
     #    print(sent)
 
+    '''
     with open(output_file, write_type) as outfile:
         s = ''
         prev_label = 'WRWX'
@@ -189,7 +192,9 @@ def main():
                         outfile.write(s.upper())
                         prev_label = 'MMAT'
                     elif prev_label == 'MMAT':
+                        pass
                         # don't write again
+    '''
 
     # DISPLACY VISUALIZER
     # get results for html doc
@@ -200,7 +205,7 @@ def main():
         i += 1
     # store nlp object as string in html var
     spacer = '---------------------------------------------------------\n'
-    header = 'IESA Named Entities Found in Tender\n'
+    header = 'Named Entities Found in Tender\n'
     doc = nlp(header + spacer + results + spacer + tender)
 
     html = displacy.render(doc, style="ent", page=True)  # use the entity visualizer
