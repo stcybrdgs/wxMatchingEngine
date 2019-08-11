@@ -1,14 +1,25 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
+from neo4j import GraphDatabase  # neo4j
+# rem: http://localhost:5000/user/Stacy
 
+# flask setup
 app = Flask(__name__)
 api = Api(app)
 
+# neo4j setup
+driver = GraphDatabase.driver('bolt://localhost:7687', auth=('neo4j', 'devpass'))
+with driver.session() as session:
+    result = session.run('MATCH (c:Category)-[:HAS_PRODUCT]->(p:Product) WHERE c.catName = \'Bearing\' RETURN DISTINCT p.manufacturer AS Manuf')
+for record in result:
+    print(record)
+
+# existing api
 users = [
     {
-        'name':'Stacy',
-        'role':['admin', 'user'],
-        'age':20
+        'name':'7205 BEGAP',
+        'role':'SKF ANGULAR CONTACT BEARING 7205BEGAP',
+        'age': 'Bore Diameter (d;dw;Di): 25 MM'
     },
     {
         'name':'Eric',
@@ -87,7 +98,7 @@ class User(Resource):
 # add the resource to your api and specify the route,
 # then finally run the flask application
 
-api.add_resource(User, '/user/<string:name>')
+api.add_resource(User, '/product/<string:name>')
 
 # rem running in debug mode enable flask to reload
 # automatically when code is updated and give warning messages

@@ -105,9 +105,9 @@ def main():
     stemmer = 'off'
 
     # declare inputs / outputs
-    mmat_pandas_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\out_mmat_pandas.xlsx'
-    mmat_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\out_mmat_patterns.jsonl'
-    manuf_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\out_manuf_patterns.jsonl'
+    mmat_pandas_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\out_mmat_pandas.xlsx'  # output
+    mmat_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\out_mmat_patterns.jsonl'  # input
+    manuf_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\out_manuf_patterns.jsonl'  # input
 
     if mmat == 'off' and manuf == 'off':
         patterns_file = mmat_file

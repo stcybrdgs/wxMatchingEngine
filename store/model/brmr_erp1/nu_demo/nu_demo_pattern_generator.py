@@ -13,7 +13,7 @@ import csv
 # MAIN  ========================================
 def main():
     # set parameters to run either MMAT or MANUF (only one choice per run)
-    dataLabel = 'MMAT'  # MMAT or MANUF
+    dataLabel = 'MANUF'  # MMAT or MANUF
 
     if dataLabel == 'MMAT':
         dataIn = 'in_mmat.csv'  # in_mmat.csv or in_manuf.csv
