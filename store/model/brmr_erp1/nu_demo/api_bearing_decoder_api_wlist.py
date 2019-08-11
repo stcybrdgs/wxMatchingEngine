@@ -43,7 +43,7 @@ def main():
 	counter = 0   # control counter for intermittent writes to external file
 
 	# declare input/output files
-	inFile = 'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/nu_demo/out_mmat_pandas.csv'
+	inFile = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\out_mmat_pandas.csv'
 	outFile = 'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/nu_demo/api_bearing_decoder_output.csv'
 
 	with open(outFile, 'w') as writeFile:

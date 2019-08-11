@@ -1,9 +1,9 @@
 import requests
 
 # set api-endpoint for local flask rest api
-URL = "http://127.0.0.1:5000/user/"
+URL = "http://127.0.0.1:5000/product/"
 
-names = ['Stacy', 'Anushree', 'Betty', 'Eric', 'Ron']
+names = ['Stacy', 'Anushree', 'Betty', 'Eric', 'Ron', '3313', '7205 BEGAP']
 
 for name in names:
     # send get request and save response as response object
