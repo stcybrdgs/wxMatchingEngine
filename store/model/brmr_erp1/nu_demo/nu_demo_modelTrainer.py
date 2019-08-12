@@ -45,6 +45,7 @@ import string_cleaner
 
 # GLOBALS  ====================================
 # training data
+# 28 patterns
 TRAIN_DATA = [
     ("wrwx ball bearing 6226 9101 fag",{"entities": [(25-7, 29-7, "MMAT")]}),
     ("wrwx ball bearing 1040 x 112in fag",{"entities": [(25-7, 29-7, "MMAT")]}),
@@ -74,6 +75,8 @@ TRAIN_DATA = [
     ("wrwx 6305zr bearing ball",{"entities": [(12-7, 16-18, "MMAT")]}),
     ("wrwx bearing 62022rs fag",{"entities": [(28-7, 31-18, "MANUF")]}),
     ("wrwx bearing 63022rs fag",{"entities": [(28-7, 31-18, "MANUF")]}),
+    ("wrwx 62052zr c3 bearing ball mak",{"entities": [(12-7, 31-19, "MANUF")]}),
+    ("wrwx 6206 2rs bearing 6206c2hrs fag MANUF",{"entities": [(12-7, 31-20, "MANUF")]}),
 ]
 
 @plac.annotations(
