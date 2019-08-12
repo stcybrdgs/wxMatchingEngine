@@ -1,33 +1,49 @@
 import requests
+import csv
 
 # set api-endpoint for local flask rest api
 URL = "http://127.0.0.1:5000/product/"
 
-names = ['Stacy', 'Anushree', 'Betty', 'Eric', 'Ron', '3313', '7205 BEGAP', '16016', '607']
+inFile = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\out_mmat_pandas.csv'
+manuf_ids = []
+with open(inFile) as data:
+    csv_reader = csv.reader(data, delimiter='|')
+    i = 0
+    for row in csv_reader:
+        if i > 0:
+            id = row[0]
+            manuf_ids.append(id)
+            # populate txt obj
+            #doc = doc + 'wrwx ' + ('|'.join(row) + '\n')
+        i += 1
 
-for name in names:
+for manuf_id in manuf_ids:
     # send get request and save response as response object
     #PARAMS = 'Stacy'
-    r = requests.get(url = URL + name)#, params = PARAMS)
+    r = requests.get(url = URL + manuf_id)  #, params = PARAMS)
 
     # extracting data in json format
     data = r.json()
 
     # Product	Manuf_Id	Manuf	Attributes
     try:
-        name = data['name']
+        product = data['product']
     except:
-        name = 'none'
+        product = 'none'
     try:
-        role = data['role']
+        manuf_id = data['manuf_id']
     except:
-        role = 'none'
+        manuf_id = 'none'
     try:
-        age = data['age']
+        manuf = data['manuf']
     except:
-        age = 'none'
+        manuf = 'none'
+    try:
+        attributes = data['attributes']
+    except:
+        attributes = 'none'
 
-    if name == 'none':
+    if manuf_id == 'none':
         print('Product not found')
     else:
-        print('Name: {}, Role: {}, Age: {}'.format(name, role, age))
+        print('Product: {}, Manuf: {}, Manuf_Id: {}, Attributes: {}'.format(product, manuf, manuf_id, attributes))
