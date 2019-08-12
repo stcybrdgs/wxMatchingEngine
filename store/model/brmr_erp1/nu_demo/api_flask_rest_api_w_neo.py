@@ -18,7 +18,7 @@ with driver.session() as session:
 products = []
 # Product	Manuf_Id	Manuf	Attributes
 for record in result:
-    print(record['Product'], record['Manuf_Id'], record['Manuf'], record['Attributes'])
+    print('{} : {} : {} : {}'.format(record['Product'], record['Manuf_Id'], record['Manuf'], record['Attributes']))
     products.append(
         {
             'product':record['Product'],
@@ -36,7 +36,7 @@ class Product(Resource):
     # method to get user data
     def get(self, manuf_id):
         for product in products:
-            if(manuf_id == product['manuf_id']):
+            if manuf_id == product['manuf_id'].replace(" ", "").lower():
                 return product, 200
         return 'Product not found', 404
 
