@@ -118,7 +118,7 @@ def main():
     elif mmat == 'on' and manuf == 'on':
         patterns_file = combine_pattern_files(mmat_file, manuf_file)
 
-    tender_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\in_tender.csv'
+    tender_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\nu_demo\in_tender_short.csv'
     #output_file = 'demo_ners_output_nonstock.txt'
     write_type = 'w'
 

@@ -30,5 +30,6 @@ print(products)
 
 
 '''
-'MATCH (c:Category)-[:HAS_PRODUCT]->(p:Product) WHERE c.catName = \'Bearing\' RETURN DISTINCT p.manufacturer AS Manuf'
+MATCH (c:Category)-[:HAS_PRODUCT]->(p:Product) WHERE c.catName = \'Bearing\' RETURN DISTINCT p.manufacturer AS Manuf
+MATCH (c:Category)-[:HAS_PRODUCT]->(p:Product) WHERE c.catName = 'Bearing' RETURN DISTINCT p.manufacturer AS Manuf
 '''
