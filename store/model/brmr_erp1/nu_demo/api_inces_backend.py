@@ -3,117 +3,186 @@
 Monday, August 12, 2019
 Stacy Bridges
 
-- this script makes GET request from ince's backend (brammer, rs)
-https://api.ince.live/product?apikey=4f032b1a18ab3f36&id=6001&brand=skf
+-	this script makes GET request from ince's backend (brammer, rs)
+	https://api.ince.live/product?apikey=4f032b1a18ab3f36&id=6001&brand=skf
+- 	the data pulled from the api is output to an excel spreadsheet (.xlsx)
+
+APIKey = hardcoded for now
+ID = the search string. Exact matches only but ignores special characters. Not case sensitive.
+Brand = optional
+
+//////////////
+Brammer xls fields:
+Category		Brand	Manufacturer PartNo		Brammer Web ID		Description		Details
+
+example:
+{
+	"id":"Brammer:100901675805",
+	"source":"Brammer",
+	"supplierID":"100901675805",
+	"brand":"HIMALAYAN",
+	"manufacturerID":"3100-13",
+	"searchID":"310013",
+	"description":"HIMALAYAN 3100 SAFETY BOOT BLACK SIZE 13",
+	"details":"",
+	"productCategory":"Tools and Maintenance Products >> Personal Protection Equipment (PPE) >> Footwear >> Safety Boots \r"
+
+}
+
+//////////////
+RS xls fields:
+Category		Brand	Manufacturer Part No	RS Stock No			Description	 	Price 		Unit
+
+example:
+{
+	"id":"RS:543-737",
+	"source":"RS",
+	"supplierID":"543-737",
+	"brand":"Richco",
+	"manufacturerID":"TCBS 8 01",
+	"searchID":"TCBS801",
+	"description":"TCBS 8 01, 12.7mm High Nylon Standard PCB Support Pillar With 4mm PCB Hole and 4mm Chassis Hole for M3.5 Screw",
+	"details":null,
+	"productCategory":"PCB Support Pillars"
+}
 
 '''
 # IMPORTS  ---------------------------------------------------------
 import csv
 import requests
+import pandas as pd
+from pandas import ExcelWriter
+import numpy as np
 
 # GLOBALS  ---------------------------------------------------------
-mMats = ['6001']  #['1601', '6001', '607', '3313']
+mMats = []
 
 # FUNCTIONS  -------------------------------------------------------
 def import_csv(d):
-	doc = ''
 	code = ''
 	with open(d) as data:
 		csv_reader = csv.reader(data, delimiter='|')
 		i = 0
 		for row in csv_reader:
 			if i > 0:
-				# populate txt obj
-				doc = doc + ('|'.join(row) + '\n')
-				code = row
+				if len(row) == 0:
+					code = ''
+				else:
+					code = row[0]
 				mMats.append(code)
 			i += 1
-	return doc
     # end function //
-
 
 # MAIN  ------------------------------------------------------------
 def main():
-	# declare input/output files
-	inFile = r'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/nu_demo/api_rs_component_id.csv'
-	outFile = ''
+	# define path to input file
+	inFile = r'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/nu_demo/api_ince_backend_search_ids.csv'
 
-	# import mmat file and populate mmats[]
+	# define path to output file
+	outFile = 'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/nu_demo/api_ince_backend_out.xlsx'
+
+	# external id inputs
 	import_csv(inFile)
 
-	# set api-endpoint for SKF
+	# clean special characters and spaces from codes in mMats[]
+	special_chars = ['\\','/','-','.']
+	i = 0
+	for code in mMats:
+		for char in special_chars:
+			mMats[i] = code.strip().replace(char, '')
+		#print(mMats[i])
+		i += 1
+
+	# setup pandas containers to hold contents of xlsx columns
+	p_searchId = []
+	p_sources = []  # field = source
+	p_brands = []  # field = brand
+	#p_manufacturerIDs = []  # field = manufacturerId
+	p_descriptions = []  # field = description
+	#p_details = []  # field = details
+
+	# set api-endpoint and parameters
 	URL = "https://api.ince.live/product"
 	apikey = '4f032b1a18ab3f36'
-	brand = 'FESTO'
+	# brand = 'FESTO'
 
 	i = 0
 	for code in mMats:
-		# sending get request and saving the response as response object
-		if len(code) == 0:
-			row_str = 'not found'
-		else:
-			PARAMS = {'apikey':apikey, 'id':code, 'brand':brand}
-			r = requests.get(url = URL, params = PARAMS)
+		# send get request to api and save the response in a response object
+		PARAMS = {'apikey':apikey, 'id':code}
+		r = requests.get(url = URL, params = PARAMS)
 
-			# extracting data in json format
-			data = r.json()
+		# extract the data in json format
+		data = r.json()
 
-			# id: brammer id					# source: brammer
-			# supplierID: supplier id			# brand: brand
-			# manufacturerID: manufacturer id	# searchID: ibid
-			# description: product description	# details: details
-			# productCategory: bearings, etc
+		# check to see if the api responds to the id request
+		try:
+			searchId = data[0]['searchID']
+		except:
+			searchId = 'id not found'
 
-			try:
-				manufacturerId = data['manufacturerID']
-			except:
-				manufacturerId = 'not found'
-			try:
-				category = data['productCategory']
-			except:
-				category = 'not found'
-			try:
-				brand = data['brand']
-			except:
-				brand = 'not found'
-			try:
-				description = data['description']
-			except:
-				description = 'not found'
+		# if api returns response to the id request,
+		# it will return a list, so proceed by parsing
+		# the list by looping through it index-wise
+		# to retrieve brandStr as brand and descriptionStr as brand:manufacturerID:description
+		if searchId != 'not found':
+			# because the api may return multiple dictionaries for a single searchID,
+			# we'll collect the results in list containers, and afterward append the lists
+			# to the column containers for pandas
+			j = 0
+			brandStr = []
+			descriptionStr = []
+			sourceStr = []
+			#detailsStr = []
+			for index in data:
+				# collect results in list containers
+				brandStr.append(data[j]['brand'])
 
-			# add them to the csv string
-			#row_str = row_str + designation + '|' + category + '|'
+				# handle errors where details return a null value
+				try:
+					details = data[j]['details']
+				except:
+					details = 'none'
 
-			'''
-				if j > 0:
-					attr_str = attr_str + ', '
-				attr_str = attr_str + name + ': ' + str(value) + ' ' + unit
+				descriptionStr.append(data[j]['brand'] + data[j]['manufacturerID'] + data[j]['description'])
+				#detailsStr.append(details)
+				sourceStr.append(data[j]['source'])
+
+				# print results to console
+				print('{}: {} | {} | {} | {} | {}'.format(
+					code,
+					data[j]['source'],
+					data[j]['brand'],
+					data[j]['manufacturerID'],
+					data[j]['description'],
+					data[j]['details']))
+
 				j += 1
 
-			# add the attributes to the csv string
-			row_str = row_str + attr_str
-			'''
-		print('Pass {}: {}, {}, {}, {}'.format(i,manufacturerId, category, brand, description))
+			# print results to pandas
+			p_searchId.append(code)
+			p_brands.append(brandStr)
+			p_descriptions.append(descriptionStr)
+			p_sources.append(sourceStr)
 
-		# store the string in a list so that it can be added to the csv
-		#rows_for_csv.append([row_str])
+		else:
+			# print results to pandas col arrays
+			p_searchId.append(code)
+			p_brands.append('')
+			p_descriptions.append('')
+			p_sources.append('')
 
-		# reset strings
-		#row_str = ''
-		#attr_str = ''
-		#exception = False
-		'''
-		counter += 1
-		if counter == 500:
-			# write data to csv file
-			writer.writerows(rows_for_csv)
-			counter = 0
-			rows_for_csv.clear()
-		'''
+			# print results to console
+			print(code, 'not found')
+
 		i+= 1
+	# end api call  //
 
-	# write data to csv file
-	#writer.writerows(rows_for_csv)
+	# print contents of pandas arrays to excel file (.xlsx)
+	df = pd.DataFrame({'searchId':p_searchId, 'source':p_sources, 'brand':p_brands, 'description':p_descriptions})
+	writer = pd.ExcelWriter(outFile)
+	df.to_excel(writer,'Product Data', index=False)
+	writer.save()
 
 	# end program
 	print('Done.')
