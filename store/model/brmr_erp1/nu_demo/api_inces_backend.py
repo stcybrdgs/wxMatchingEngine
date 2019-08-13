@@ -53,8 +53,16 @@ import requests
 import pandas as pd
 from pandas import ExcelWriter
 import numpy as np
+import sys
+import io
+
+# UTF-8 Encoding  --------------------------------------------------
+# allow printing of special characters to console without error
+sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding = 'utf-8')
+sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding = 'utf-8')
 
 # GLOBALS  ---------------------------------------------------------
+mMats_test = []
 mMats = []
 
 # FUNCTIONS  -------------------------------------------------------
@@ -75,22 +83,33 @@ def import_csv(d):
 
 # MAIN  ------------------------------------------------------------
 def main():
+	# config  ------------------------------------------------------\\
+	test = False
+	mMats_test = ['6001','9964', 'BES 516-325-S4-C', '9982','6001']
+
+	# config  ------------------------------------------------------//
+
 	# define path to input file
 	inFile = r'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/nu_demo/api_ince_backend_search_ids.csv'
 
 	# define path to output file
 	outFile = 'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/nu_demo/api_ince_backend_out.xlsx'
+	outFile_test = 'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/nu_demo/api_ince_backend_out_test.xlsx'
+
+	if test == True:
+		pdFile = outFile_test
+	else:
+		pdFile = outFile
 
 	# external id inputs
 	import_csv(inFile)
 
 	# clean special characters and spaces from codes in mMats[]
-	special_chars = ['\\','/','-','.']
+	special_chars = ['\\','/','-','.','_','+','"']
 	i = 0
 	for code in mMats:
 		for char in special_chars:
 			mMats[i] = code.strip().replace(char, '')
-		#print(mMats[i])
 		i += 1
 
 	# setup pandas containers to hold contents of xlsx columns
@@ -99,7 +118,7 @@ def main():
 	p_brands = []  # field = brand
 	#p_manufacturerIDs = []  # field = manufacturerId
 	p_descriptions = []  # field = description
-	#p_details = []  # field = details
+	p_details = []  # field = details
 
 	# set api-endpoint and parameters
 	URL = "https://api.ince.live/product"
@@ -107,7 +126,11 @@ def main():
 	# brand = 'FESTO'
 
 	i = 0
-	for code in mMats:
+	if test == True:
+		search_vals = mMats_test
+	else:
+		search_vals = mMats
+	for code in search_vals:
 		# send get request to api and save the response in a response object
 		PARAMS = {'apikey':apikey, 'id':code}
 		r = requests.get(url = URL, params = PARAMS)
@@ -125,7 +148,7 @@ def main():
 		# it will return a list, so proceed by parsing
 		# the list by looping through it index-wise
 		# to retrieve brandStr as brand and descriptionStr as brand:manufacturerID:description
-		if searchId != 'not found':
+		if searchId != 'id not found':
 			# because the api may return multiple dictionaries for a single searchID,
 			# we'll collect the results in list containers, and afterward append the lists
 			# to the column containers for pandas
@@ -133,7 +156,7 @@ def main():
 			brandStr = []
 			descriptionStr = []
 			sourceStr = []
-			#detailsStr = []
+			detailsStr = []
 			for index in data:
 				# collect results in list containers
 				brandStr.append(data[j]['brand'])
@@ -144,43 +167,43 @@ def main():
 				except:
 					details = 'none'
 
-				descriptionStr.append(data[j]['brand'] + data[j]['manufacturerID'] + data[j]['description'])
-				#detailsStr.append(details)
 				sourceStr.append(data[j]['source'])
+				descriptionStr.append(data[j]['brand'] + ':' + data[j]['description'])
+				detailsStr.append(data[j]['brand'] + ':' + str(details))
 
 				# print results to console
-				print('{}: {} | {} | {} | {} | {}'.format(
-					code,
-					data[j]['source'],
-					data[j]['brand'],
-					data[j]['manufacturerID'],
-					data[j]['description'],
-					data[j]['details']))
+				#print('{}: {} | {} | {} | {} | {}'.format(code,data[j]['source'],data[j]['brand'],data[j]['manufacturerID'],data[j]['description'],data[j]['details']))
+				print()
 
 				j += 1
 
-			# print results to pandas
+			# print results to console
+			print('{}: {} | {} | {} | {}'.format(code, sourceStr, brandStr, descriptionStr, detailsStr))
+
+			# print results to pandas col arrays
 			p_searchId.append(code)
+			p_sources.append(sourceStr)
 			p_brands.append(brandStr)
 			p_descriptions.append(descriptionStr)
-			p_sources.append(sourceStr)
+			p_details.append(detailsStr)
 
 		else:
+			# print results to console
+			print('{}: empty'.format(code))
+
 			# print results to pandas col arrays
 			p_searchId.append(code)
 			p_brands.append('')
 			p_descriptions.append('')
 			p_sources.append('')
-
-			# print results to console
-			print(code, 'not found')
+			p_details.append('')
 
 		i+= 1
 	# end api call  //
 
 	# print contents of pandas arrays to excel file (.xlsx)
-	df = pd.DataFrame({'searchId':p_searchId, 'source':p_sources, 'brand':p_brands, 'description':p_descriptions})
-	writer = pd.ExcelWriter(outFile)
+	df = pd.DataFrame({'searchId':p_searchId, 'source':p_sources, 'brand':p_brands, 'description':p_descriptions, 'details':p_details})
+	writer = pd.ExcelWriter(pdFile)
 	df.to_excel(writer,'Product Data', index=False)
 	writer.save()
 
