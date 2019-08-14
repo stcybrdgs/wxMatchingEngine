@@ -108,7 +108,6 @@ def main():
 	URL = "https://api.ince.live/product"
 	apikey = '4f032b1a18ab3f36'
 	supplier = 'RS'
-	# brand = 'FESTO'
 
 	i = 0
 	if test == True:
@@ -116,19 +115,29 @@ def main():
 	else:
 		search_vals = mMats
 	for code in search_vals:
+		print(code)  # test
 		# send get request to api and save the response in a response object
 		PARAMS = {'apikey':apikey, 'supplier':supplier, 'id':code}
-		r = requests.get(url = URL, params = PARAMS)
+		# handle code 500 server error
+		try:
+			r = requests.get(url = URL, params = PARAMS)
+			print(r)
+		except:
+			r = 'Status code 500'
+			i += 1
+			continue
 
 		# extract the data in json format
 		data = r.json()
-		#print(data)  # test
-
+		print(data)  # test
+		print(data['supplierID'])
 		# check to see if the api responds to the id request
 		try:
-			supplierId = data[0]['supplierID']
+			supplierId = data['supplierID']
 		except:
 			supplierId = 'id not found'
+
+		print(supplierId)
 
 		# if api returns response to the id request,
 		# it will return a list, so proceed by parsing
@@ -137,63 +146,70 @@ def main():
 		if supplierId != 'id not found':
 			# because the api may return multiple dictionaries for a single searchID,
 			# we'll collect the results in list containers, and afterward append the lists
-			# to the column containers for pandas
-			# -------------------------------------------------------------------------------------------------------------------
-			# wBrand    |  wManufacturerPartNo  |  wSupplierId    |  wSource    |  wDescription    |  wDetails   |  wCategory
-			# p_brands  |  p_manufacturerIds    |  p_supplierIds  |  p_sources  |  p_descriptions  |  p_details  |  p_categories
-			# -------------------------------------------------------------------------------------------------------------------
-			j = 0
+			# to the column containers for pandas; the mapping is:
+			# -----------------------------------------------------------------------------------------------------------------------------------
+			# api key:		brand	  |  manufacturerID	    |  supplierID     |  source     |  description     |  details    |  productCategory
+			# wx field:		wBrand    |  wManufacturerId    |  wSupplierId    |  wSource    |  wDescription    |  wDetails   |  wCategory
+			# py container:	p_brands  |  p_manufacturerIds  |  p_supplierIds  |  p_sources  |  p_descriptions  |  p_details  |  p_categories
+			# -----------------------------------------------------------------------------------------------------------------------------------
+			#j = 0
 			brandStr = []
 			descriptionStr = []
-			sourceStr = []
 			detailsStr = []
-			for index in data:
-				# collect results in list containers
-				brandStr.append(data[j]['brand'])
+			categoryStr = []
 
-				# handle errors where details return a null value
-				try:
-					details = data[j]['details']
-				except:
-					details = 'none'
+			#for index in data:
+			# collect results in list containers
+			brandStr.append(data['brand'])
+			descriptionStr.append(data['brand'] + ':' + data['description'])
+			# handle errors where details return a null value
+			try:
+				details = data['details']
+			except:
+				details = 'none'
+			detailsStr.append(data['brand'] + ':' + str(details))
+			categoryStr.append(data['productCategory'])
 
-				sourceStr.append(data[j]['source'])
-				descriptionStr.append(data[j]['brand'] + ':' + data[j]['description'])
-				detailsStr.append(data[j]['brand'] + ':' + str(details))
-
-				# print results to console
-				#print('{}: {} | {} | {} | {} | {}'.format(code,data[j]['source'],data[j]['brand'],data[j]['manufacturerID'],data[j]['description'],data[j]['details']))
-				print()
-
-				j += 1
+			#j += 1
 
 			# print results to console
-			print('{}: {} | {} | {} | {}'.format(code, sourceStr, brandStr, descriptionStr, detailsStr))
-
+			print('{}: {} | {} | {} | {} | {} | {} | {}'.format(
+				code, brandStr, data['manufacturerID'],
+				supplierId, data['source'], descriptionStr,
+				detailsStr, data['productCategory']))
 
 			# print results to pandas col arrays
-			p_searchId.append(code)
-			p_sources.append(sourceStr)
 			p_brands.append(brandStr)
+			p_manufacturerIds.append(data['manufacturerID'])
+			p_supplierIds.append(supplierId)
+			p_sources.append(data['source'])
 			p_descriptions.append(descriptionStr)
 			p_details.append(detailsStr)
+			p_categories.append(data['productCategory'])
 
 		else:
 			# print results to console
 			print('{}: empty'.format(code))
 
 			# print results to pandas col arrays
-			p_searchId.append(code)
 			p_brands.append('')
-			p_descriptions.append('')
+			p_manufacturerIds.append('')
+			p_supplierIds.append('')
 			p_sources.append('')
+			p_descriptions.append('')
 			p_details.append('')
+			p_categories.append('')
 
 		i+= 1
 	# end api call  //
 
 	# print contents of pandas arrays to excel file (.xlsx)
-	df = pd.DataFrame({'searchId':p_searchId, 'source':p_sources, 'brand':p_brands, 'description':p_descriptions, 'details':p_details})
+	# -----------------------------------------------------------------------------------------------------------------------------------
+	# api key:		brand	  |  manufacturerID	    |  supplierID     |  source     |  description     |  details    |  productCategory
+	# wx field:		wBrand    |  wManufacturerId    |  wSupplierId    |  wSource    |  wDescription    |  wDetails   |  wCategory
+	# py container:	p_brands  |  p_manufacturerIds  |  p_supplierIds  |  p_sources  |  p_descriptions  |  p_details  |  p_categories
+	# -----------------------------------------------------------------------------------------------------------------------------------
+	df = pd.DataFrame({'wBrand':p_brands, 'wManufacturerId':p_manufacturerIds, 'wSupplierId':p_supplierIds, 'wSource':p_sources, 'wDescription':p_descriptions, 'wDetails':p_details, 'wCategory':p_categories})
 	writer = pd.ExcelWriter(pdFile)
 	df.to_excel(writer,'Product Data', index=False)
 	writer.save()
