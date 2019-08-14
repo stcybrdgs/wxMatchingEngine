@@ -2,49 +2,28 @@
 '''
 Monday, August 12, 2019
 Stacy Bridges
--   REM THIS SCRIPT HAS DIFFERENT API FRONT END THAN api_inces-backend_2.py
+-   REM THIS SCRIPT HAS DIFFERENT API FRONT END THAN api_inces-backend.py
 -	this script makes GET request from ince's backend (brammer, rs)
 	https://api.ince.live/product?apikey=4f032b1a18ab3f36&id=6001&brand=skf
 - 	the data pulled from the api is output to an excel spreadsheet (.xlsx)
 
 APIKey = hardcoded for now
-ID = the search string. Exact matches only but ignores special characters. Not case sensitive.
+ID = the search string. Exact matches only but ignores special characters.
+Not case sensitive.
 Brand = optional
 
-//////////////
-Brammer xls fields:
-Category		Brand	Manufacturer PartNo		Brammer Web ID		Description		Details
+I've bodged together an option to query the supplier partcode for RS and Brammer
 
-example:
-{
-	"id":"Brammer:100901675805",
-	"source":"Brammer",
-	"supplierID":"100901675805",
-	"brand":"HIMALAYAN",
-	"manufacturerID":"3100-13",
-	"searchID":"310013",
-	"description":"HIMALAYAN 3100 SAFETY BOOT BLACK SIZE 13",
-	"details":"",
-	"productCategory":"Tools and Maintenance Products >> Personal Protection Equipment (PPE) >> Footwear >> Safety Boots \r"
+product?apikey=4f032b1a18ab3f36&supplier=RS&id=100-0151
 
-}
-
-//////////////
-RS xls fields:
-Category		Brand	Manufacturer Part No	RS Stock No			Description	 	Price 		Unit
-
-example:
-{
-	"id":"RS:543-737",
-	"source":"RS",
-	"supplierID":"543-737",
-	"brand":"Richco",
-	"manufacturerID":"TCBS 8 01",
-	"searchID":"TCBS801",
-	"description":"TCBS 8 01, 12.7mm High Nylon Standard PCB Support Pillar With 4mm PCB Hole and 4mm Chassis Hole for M3.5 Screw",
-	"details":null,
-	"productCategory":"PCB Support Pillars"
-}
+Supplier must be 'RS' or 'Brammer'. Not case sensitive.
+The ID will look against the supplier ID instead of the manufacturer ID.
+Exact matches only. That's the WX-something codes for Brammer and the XXX-XXXX codes for RS.
+If supplier is left out it'll work the same as before.
+I've also set it scraping the codes from the gaps in the Hayley file that have
+RS as the supplier as I don't have total coverage of the RS website yet. I've
+got over 200k now, but still looks like there are quite a lot that I don't have.
+Hopefully, that'll bump up our hit rate.
 
 '''
 # IMPORTS  ---------------------------------------------------------
@@ -84,8 +63,8 @@ def import_csv(d):
 # MAIN  ------------------------------------------------------------
 def main():
 	# config  ------------------------------------------------------\\
-	test = False
-	mMats_test = ['6001','9964', 'BES 516-325-S4-C', '6310', '9982','6001']
+	test = True
+	mMats_test = ['121-084', '155-816','155-106']
 
 	# config  ------------------------------------------------------//
 
@@ -113,16 +92,22 @@ def main():
 		i += 1
 
 	# setup pandas containers to hold contents of xlsx columns
-	p_searchId = []
-	p_sources = []  # field = source
-	p_brands = []  # field = brand
-	#p_manufacturerIDs = []  # field = manufacturerId
-	p_descriptions = []  # field = description
-	p_details = []  # field = details
+	# wBrand    |  wManufacturerPartNo  |  wSupplierId    |  wSource    |  wDescription    |  wDetails   |  wCategory
+	# p_brands  |  p_manufacturerIds    |  p_supplierIds  |  p_sources  |  p_descriptions  |  p_details  |  p_categories
+	p_brands = []  # field = wBrand
+	p_manufacturerIds = []  # field = wManufacturerPartNo
+	p_supplierIds = []  #  wSupplierId
+	p_sources = []  # field = wSource
+	p_descriptions = []  # field = wDescription
+	p_details = []  # field = wDetails
+	p_categories = []  # field = wCategory
 
 	# set api-endpoint and parameters
+	# product?apikey=4f032b1a18ab3f36&supplier=RS&id=100-0151
+	# https://api.ince.live/product?apikey=4f032b1a18ab3f36&supplier=RS&id=121-084
 	URL = "https://api.ince.live/product"
 	apikey = '4f032b1a18ab3f36'
+	supplier = 'RS'
 	# brand = 'FESTO'
 
 	i = 0
@@ -132,26 +117,31 @@ def main():
 		search_vals = mMats
 	for code in search_vals:
 		# send get request to api and save the response in a response object
-		PARAMS = {'apikey':apikey, 'id':code}
+		PARAMS = {'apikey':apikey, 'supplier':supplier, 'id':code}
 		r = requests.get(url = URL, params = PARAMS)
 
 		# extract the data in json format
 		data = r.json()
+		#print(data)  # test
 
 		# check to see if the api responds to the id request
 		try:
-			searchId = data[0]['searchID']
+			supplierId = data[0]['supplierID']
 		except:
-			searchId = 'id not found'
+			supplierId = 'id not found'
 
 		# if api returns response to the id request,
 		# it will return a list, so proceed by parsing
 		# the list by looping through it index-wise
 		# to retrieve brandStr as brand and descriptionStr as brand:manufacturerID:description
-		if searchId != 'id not found':
+		if supplierId != 'id not found':
 			# because the api may return multiple dictionaries for a single searchID,
 			# we'll collect the results in list containers, and afterward append the lists
 			# to the column containers for pandas
+			# -------------------------------------------------------------------------------------------------------------------
+			# wBrand    |  wManufacturerPartNo  |  wSupplierId    |  wSource    |  wDescription    |  wDetails   |  wCategory
+			# p_brands  |  p_manufacturerIds    |  p_supplierIds  |  p_sources  |  p_descriptions  |  p_details  |  p_categories
+			# -------------------------------------------------------------------------------------------------------------------
 			j = 0
 			brandStr = []
 			descriptionStr = []
