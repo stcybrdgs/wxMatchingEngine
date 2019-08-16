@@ -85,7 +85,10 @@ def import_csv(d):
 def main():
 	# config  ------------------------------------------------------\\
 	test = False
-	mMats_test = ['6001','9964', 'BES 516-325-S4-C', '6310', '9982','6001']
+	mMats_test = [
+		'6001','9964', 'BES 516-325-S4-C', '',
+		'6310', '9982','6001', '6836','6219Z','6220Z','6019Z','',
+		'6014M','6310M','6217MC3','6311M','6314MC3']
 
 	# config  ------------------------------------------------------//
 
@@ -113,17 +116,21 @@ def main():
 		i += 1
 
 	# setup pandas containers to hold contents of xlsx columns
-	p_searchId = []
-	p_sources = []  # field = source
-	p_brands = []  # field = brand
-	#p_manufacturerIDs = []  # field = manufacturerId
-	p_descriptions = []  # field = description
-	p_details = []  # field = details
+	# wBrand    |  wManufacturerPartNo  |  wSupplierId    |  wSource    |  wDescription    |  wDetails   |  wCategory
+	# p_brands  |  p_manufacturerIds    |  p_supplierIds  |  p_sources  |  p_descriptions  |  p_details  |  p_categories
+	p_searchIds = []  # field for search code to help align results to target xlsx
+	p_brands = []  # field = wBrand
+	p_manufacturerIds = []  # field = wManufacturerPartNo
+	p_supplierIds = []  #  wSupplierId
+	p_sources = []  # field = wSource
+	p_descriptions = []  # field = wDescription
+	p_details = []  # field = wDetails
+	p_categories = []  # field = wCategory
 
 	# set api-endpoint and parameters
 	URL = "https://api.ince.live/product"
 	apikey = '4f032b1a18ab3f36'
-	# brand = 'FESTO'
+	source = 'brammer'
 
 	i = 0
 	if test == True:
@@ -131,12 +138,28 @@ def main():
 	else:
 		search_vals = mMats
 	for code in search_vals:
+		if code == '': code = 'null'
+
 		# send get request to api and save the response in a response object
-		PARAMS = {'apikey':apikey, 'id':code}
+		PARAMS = {'apikey':apikey, 'source':source, 'id':code}
 		r = requests.get(url = URL, params = PARAMS)
 
-		# extract the data in json format
-		data = r.json()
+		try:
+			data = r.json()
+		except:
+			data = 'Server error'
+			print('{}: {}'.format(code, 'server error'))
+			# print results to pandas col arrays
+			p_searchIds.append(code)
+			p_brands.append('')
+			p_manufacturerIds.append('')
+			p_supplierIds.append('')
+			p_sources.append('')
+			p_descriptions.append('')
+			p_details.append('')
+			p_categories.append('')
+			i += 1
+			continue
 
 		# check to see if the api responds to the id request
 		try:
@@ -152,35 +175,56 @@ def main():
 			# because the api may return multiple dictionaries for a single searchID,
 			# we'll collect the results in list containers, and afterward append the lists
 			# to the column containers for pandas
+			# brand     |  manufacturerID       |  supplierID     |  source     |  description     |  details    |  productCategory
+			# wBrand    |  wManufacturerPartNo  |  wSupplierId    |  wSource    |  wDescription    |  wDetails   |  wCategory
+			# p_brands  |  p_manufacturerIds    |  p_supplierIds  |  p_sources  |  p_descriptions  |  p_details  |  p_categories
 			j = 0
-			brandStr = []
-			descriptionStr = []
-			sourceStr = []
-			detailsStr = []
-			for index in data:
-				# collect results in list containers
-				brandStr.append(data[j]['brand'])
+			#brandStr = []
+			#descriptionStr = []
+			#detailsStr = []
+			#categoryStr = []
+			#unique_brand = []
+			#unique_source = []
+			#for index in data:
+			# collect results in list containers
+			# search id
+			p_searchIds.append(code)
 
-				# handle errors where details return a null value
-				try:
-					details = data[j]['details']
-				except:
-					details = 'none'
+			# brand
+			p_brands.append(data[j]['brand'])
 
-				sourceStr.append(data[j]['source'])
-				descriptionStr.append(data[j]['brand'] + ':' + data[j]['description'])
-				detailsStr.append(data[j]['brand'] + ':' + str(details))
+			# manufacturer part no
+			try: manufacturerPartNo = data[j]['manufacturerID']
+			except: manufacturerPartNo = ''
+			p_manufacturerIds.append(manufacturerPartNo)
 
-				# print results to console
-				#print('{}: {} | {} | {} | {} | {}'.format(code,data[j]['source'],data[j]['brand'],data[j]['manufacturerID'],data[j]['description'],data[j]['details']))
-				print()
+			# supplier id
+			p_supplierIds.append(data[j]['supplierID'])
 
-				j += 1
+			# source
+			p_sources.append(data[j]['source'])
+
+			# description
+			p_descriptions.append(data[j]['description'])
+
+			# details
+			# handle errors where details return a null value
+			try: details = data[j]['details']
+			except: details = ''
+			p_details.append(details)
+
+			# categories
+			p_categories.append(data[j]['productCategory'])
+
+			#j += 1
 
 			# print results to console
-			print('{}: {} | {} | {} | {}'.format(code, sourceStr, brandStr, descriptionStr, detailsStr))
+			# p_brands  |  p_manufacturerIds    |  p_supplierIds  |  p_sources  |  p_descriptions  |  p_details  |  p_categories
+			print('{}: {} | {} | {} | {} | {} | {} | {}'.format(
+				code, p_brands[i], p_manufacturerIds[i], p_supplierIds[i],
+				p_sources[i], p_descriptions[i], p_details[i], p_categories[i]))
 
-
+			'''
 			# print results to pandas col arrays
 			p_searchId.append(code)
 			p_sources.append(sourceStr)
@@ -188,22 +232,26 @@ def main():
 			p_descriptions.append(descriptionStr)
 			p_details.append(detailsStr)
 
+			'''
 		else:
 			# print results to console
 			print('{}: empty'.format(code))
 
 			# print results to pandas col arrays
-			p_searchId.append(code)
+			p_searchIds.append(code)
 			p_brands.append('')
-			p_descriptions.append('')
+			p_manufacturerIds.append('')
+			p_supplierIds.append('')
 			p_sources.append('')
+			p_descriptions.append('')
 			p_details.append('')
+			p_categories.append('')
 
 		i+= 1
 	# end api call  //
 
 	# print contents of pandas arrays to excel file (.xlsx)
-	df = pd.DataFrame({'searchId':p_searchId, 'source':p_sources, 'brand':p_brands, 'description':p_descriptions, 'details':p_details})
+	df = pd.DataFrame({'searchId':p_searchIds, 'wBrand':p_brands, 'wManufacturerId':p_manufacturerIds, 'wSupplierId':p_supplierIds, 'wSource':p_sources, 'wDescription':p_descriptions, 'wDetails':p_details, 'wCategory':p_categories})
 	writer = pd.ExcelWriter(pdFile)
 	df.to_excel(writer,'Product Data', index=False)
 	writer.save()

@@ -63,8 +63,12 @@ def import_csv(d):
 # MAIN  ------------------------------------------------------------
 def main():
 	# config  ------------------------------------------------------\\
-	test = True
-	mMats_test = ['121-084', '155-816','155-106']
+	test = False
+	mMats_test = [
+		'111-3719','111-3720','120-1282','121-084','121-084','121-4327','123-8167',
+		'124-3642','124-4840','124-7261','124-7261','124-9147','124-9147','124-9147',
+		'124-9147','124-9147','124-9147','124-9147','124-9147','124-9147','124-9147'
+	]
 
 	# config  ------------------------------------------------------//
 
@@ -115,29 +119,34 @@ def main():
 	else:
 		search_vals = mMats
 	for code in search_vals:
-		print(code)  # test
+		#print(code)  # test
 		# send get request to api and save the response in a response object
 		PARAMS = {'apikey':apikey, 'supplier':supplier, 'id':code}
+		r = requests.get(url = URL, params = PARAMS)
+
+		# extract the data in json format
 		# handle code 500 server error
 		try:
-			r = requests.get(url = URL, params = PARAMS)
-			print(r)
+			data = r.json()
 		except:
-			r = 'Status code 500'
+			data = 'Status code 500'
+			print('{}: {}:{}'.format(code, 'server error', '[500]'))
+			# print results to pandas col arrays
+			p_brands.append('')
+			p_manufacturerIds.append('')
+			p_supplierIds.append('')
+			p_sources.append('')
+			p_descriptions.append('')
+			p_details.append('')
+			p_categories.append('')
 			i += 1
 			continue
 
-		# extract the data in json format
-		data = r.json()
-		print(data)  # test
-		print(data['supplierID'])
 		# check to see if the api responds to the id request
 		try:
 			supplierId = data['supplierID']
 		except:
 			supplierId = 'id not found'
-
-		print(supplierId)
 
 		# if api returns response to the id request,
 		# it will return a list, so proceed by parsing
