@@ -59,21 +59,30 @@ for h in master_headers:
 
 # add wrwx hash ids
 
-# tester
-print(master_headers, '\n', wx_headers)
-
-# create kv dictionary for output file
-kv_dict = {}
+# create dictionary for main worksheet in output file
+main_dict = {}
 i = 0
 for mh in master_headers:
-    kv_dict[mh] = master_cols[i]
+    main_dict[mh] = master_cols[i]
     i += 1
 i = 0
 for wxh in wx_headers:
-    kv_dict[wxh] = ''
+    main_dict[wxh] = ''
     i += 1
 
-df_out = pd.DataFrame(kv_dict)
+# tester
+print(master_headers, '\n', wx_headers)
+
+# create pandas data frames
+#df_summary = pd.DataFrame(summary_dict)  # summary worksheet
+df_main = pd.DataFrame(main_dict)  # main worksheet
+#df3_defs = pd.DataFrame(def_dict)  # col defs worksheet
+
+# create excel writer
 writer = pd.ExcelWriter(outfile)
-df_out.to_excel(writer,mastertab, index=False)
+
+# write data frames to excel file
+#df_summary.to_excel(writer, 'Summary', index=False)
+df_main.to_excel(writer, mastertab, index=False)
+#df_defs.to_excel(writer, 'WrWx Field Definitions', index=False)
 writer.save()
