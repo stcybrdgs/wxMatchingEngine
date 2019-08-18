@@ -13,16 +13,16 @@ import csv
 # MAIN  ========================================
 def main():
     # set parameters to run either MPN or BRND (only one choice per run)
-    dataLabel = 'MPN'  # MPN,  BRND, SPPLR
+    dataLabel = 'SPPLR'  # MPN,  BRND, SPPLR
 
     if dataLabel == 'MPN':
         dataIn = r'\in_mpn.csv'  # in_MPN.csv or in_BRND.csv
         ners_patterns = r'\mpn_ners_patterns.jsonl'  # out_MPN.jsonl or out_BRND.jsonl
     elif dataLabel == 'BRND':
-        dataIn = 'in_brnd.csv'  # in_MPN.csv or in_BRND.csv
+        dataIn = r'\in_brnd.csv'  # in_MPN.csv or in_BRND.csv
         ners_patterns = r'\brnd_ners_patterns.jsonl'  # out_MPN.jsonl or out_BRND.jsonl
     elif dataLabel == 'SPPLR':
-        dataIn = 'in_spplr.csv'  # in_MPN.csv or in_BRND.csv
+        dataIn = r'\in_spplr.csv'  # in_MPN.csv or in_BRND.csv
         ners_patterns = r'\spplr_ners_patterns.jsonl'  # out_MPN.jsonl or out_BRND.jsonl
 
     # declare containers
