@@ -66,20 +66,20 @@ def entRuler_tagger(doc):
 def update_meta_pipeline():
     pass
 
-def combine_pattern_files(mmats, manufs):
-    outFile = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\hayley\out_mmat_manuf_patterns.jsonl'
+def combine_pattern_files(mpns, brnds):
+    outFile = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output\out_mpn_brnd_patterns.jsonl'
     #print(outFile)
     of = open(outFile, 'wt')
-    mmatFile = open (mmats, 'rt')
-    manufFile = open(manufs, 'rt')
-    for line in mmatFile:
+    mpnFile = open (mpns, 'rt')
+    brndFile = open(brnds, 'rt')
+    for line in mpnFile:
         of.writelines(line)
         #print('.', end='', flush=True) # rem flush the output buffer
-    for line in manufFile:
+    for line in brndFile:
         of.writelines(line)
         #print('.', end='', flush=True) # rem flush the output buffer
-    mmatFile.close()
-    manufFile.close()
+    mpnFile.close()
+    brndFile.close()
     of.close()
 
     return outFile
@@ -91,9 +91,10 @@ def main():
     '''
     # CONFIG  ---------------------- \\
     # -------------------------------- \\
+    # brnd, mpn, spplr
     model = 'pre'   # pre -> use non-trained model / post -> use trained model
-    mmat = 'off'  # on/off
-    manuf = 'on'  # on/off
+    mpn = 'off'  # on/off
+    brnd = 'on'  # on/off
     ruler = 'on'
     cleaner = 'on'
     number_tagger = 'off'
@@ -105,21 +106,21 @@ def main():
     stemmer = 'off'
 
     # declare inputs / outputs
-    manuf_pandas_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\hayley\out_manuf_pandas.xlsx'  # output
-    mmat_pandas_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\hayley\out_mmat_pandas.xlsx'  # output
-    mmat_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\hayley\out_mmat_patterns.jsonl'  # input
-    manuf_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\hayley\out_manuf_patterns.jsonl'  # input
+    brnd_pandas_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output\out_brnd_pandas.xlsx'  # output
+    mpn_pandas_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output\out_mpn_pandas.xlsx'  # output
+    mpn_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input\mpn_ners_patterns.jsonl'  # input
+    brnd_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input\brnd_ners_patterns.jsonl'  # input
 
-    if mmat == 'off' and manuf == 'off':
-        patterns_file = mmat_file
-    if mmat == 'on' and manuf == 'off':
-        patterns_file = mmat_file
-    elif mmat == 'off' and manuf == 'on':
-        patterns_file = manuf_file
-    elif mmat == 'on' and manuf == 'on':
-        patterns_file = combine_pattern_files(mmat_file, manuf_file)
+    if mpn == 'off' and brnd == 'off':
+        patterns_file = mpn_file
+    if mpn == 'on' and brnd == 'off':
+        patterns_file = mpn_file
+    elif mpn == 'off' and brnd == 'on':
+        patterns_file = brnd_file
+    elif mpn == 'on' and brnd == 'on':
+        patterns_file = combine_pattern_files(mpn_file, brnd_file)
 
-    tender_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\hayley\in_description2.csv'
+    tender_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\master\Data for Test MR 13082019.csv'
     #output_file = 'demo_ners_output_nonstock.txt'
     write_type = 'w'
 
@@ -162,10 +163,10 @@ def main():
     doc = nlp(tender)
 
     # CONSOLE OUTPUT  ---------------------------------------------------------
-    if mmat == 'on' and manuf == 'off':
+    if mpn == 'on' and brnd == 'off':
         print('\n')
-        labels = ['MMAT']  # , 'PRODUCT', 'MPN', 'SKU']
-        alt_labels = ['Mmat']  # , 'Product', 'MfrPartNo', 'SkuID']
+        labels = ['MPN']  # , 'PRODUCT', 'MPN', 'SKU']
+        alt_labels = ['Mpn']  # , 'Product', 'MfrPartNo', 'SkuID']
         total_found = []
         total_unique_found = []
         for label in labels:
@@ -184,10 +185,10 @@ def main():
             total_found.append(tot_num)
             total_unique_found.append(unique_num)
 
-    if mmat == 'off' and manuf == 'on':
+    if mpn == 'off' and brnd == 'on':
         print('\n')
-        labels = ['MANUF']  # , 'PRODUCT', 'MPN', 'SKU']
-        alt_labels = ['Manuf']  # , 'Product', 'MfrPartNo', 'SkuID']
+        labels = ['BRND']  # , 'PRODUCT', 'MPN', 'SKU']
+        alt_labels = ['Brnd']  # , 'Product', 'MfrPartNo', 'SkuID']
         total_found = []
         total_unique_found = []
         for label in labels:
@@ -206,10 +207,10 @@ def main():
             total_found.append(tot_num)
             total_unique_found.append(unique_num)
 
-    if mmat == 'on' and manuf == 'on':
+    if mpn == 'on' and brnd == 'on':
         print('\n')
-        labels = ['MANUF', 'MMAT']  # , 'PRODUCT', 'MPN', 'SKU']
-        alt_labels = ['Manuf', 'Mmat']  # , 'Product', 'MfrPartNo', 'SkuID']
+        labels = ['BRND', 'MPN']  # , 'PRODUCT', 'MPN', 'SKU']
+        alt_labels = ['Brnd', 'Mpn']  # , 'Product', 'MfrPartNo', 'SkuID']
         total_found = []
         total_unique_found = []
         for label in labels:
@@ -228,15 +229,15 @@ def main():
             total_found.append(tot_num)
             total_unique_found.append(unique_num)
 
-    # pandas output for mmats  ------------------------------------------------
+    # pandas output for mpns  ------------------------------------------------
     # This technique allows you to isolate entities on
     # a sentence-by-sentence basis, which will allow
     # for matching entities on a record-by-record basis
-    if mmat == 'on':
-        w_MmatCodes = []
-        w_MmatCode_Alts = []
+    if mpn == 'on':
+        w_MpnCodes = []
+        w_MpnCode_Alts = []
         unique = []
-        mmat = ''
+        mpn = ''
         alts = ''
         #ent_exists = False
         j = 0
@@ -245,14 +246,14 @@ def main():
             for ent in sent.ents:
                 # ignore header record
                 if j > 0:
-                    if ent.label_ == 'MMAT':
+                    if ent.label_ == 'MPN':
                         if i == 0:
-                            # if it's the first label in the record, save it in mmats
-                            mmat = ent.text
+                            # if it's the first label in the record, save it in mpns
+                            mpn = ent.text
                             unique.append(ent.text)
                             i += 1
                         else:
-                            # if it's not the first label in the sentence, put it in mmat alts
+                            # if it's not the first label in the sentence, put it in mpn alts
                             # (if it is already in alts, don't put it in)
                             if ent.text not in unique:
                                 unique.append(ent.text)
@@ -264,36 +265,36 @@ def main():
 
             # store ent results for each record, ignoring the headers
             if j > 0:
-                w_MmatCodes.append(mmat.upper())
-                w_MmatCode_Alts.append(alts.upper())
+                w_MpnCodes.append(mpn.upper())
+                w_MpnCode_Alts.append(alts.upper())
 
                 # test ---------------
-                print('str ', j, 'w_MmatCodes: ', w_MmatCodes)
-                print('str ', j, 'w_MmatCode_Alts: ', w_MmatCode_Alts)
+                print('str ', j, 'w_MpnCodes: ', w_MpnCodes)
+                print('str ', j, 'w_MpnCode_Alts: ', w_MpnCode_Alts)
                 # test ---------------
 
             # reset vars for next record
             unique.clear()
-            mmat = ''
+            mpn = ''
             alts = ''
             j += 1
 
-        df = pd.DataFrame({ 'w_MmatCodes':w_MmatCodes,
-                            'w_MmatCode_Alts':w_MmatCode_Alts})
+        df = pd.DataFrame({ 'w_MpnCodes':w_MpnCodes,
+                            'w_MpnCode_Alts':w_MpnCode_Alts})
 
-        writer = pd.ExcelWriter(mmat_pandas_file)
-        df.to_excel(writer,'NERS_MMATs', index=False)
+        writer = pd.ExcelWriter(mpn_pandas_file)
+        df.to_excel(writer,'NERS_MPNs', index=False)
         writer.save()
 
-    # pandas output for manufs  ------------------------------------------------
+    # pandas output for brnds  ------------------------------------------------
     # This technique allows you to isolate entities on
     # a sentence-by-sentence basis, which will allow
     # for matching entities on a record-by-record basis
-    if manuf == 'on':
-        w_Manufs = []
-        w_Manuf_Alts = []
+    if brnd == 'on':
+        w_Brnds = []
+        w_Brnd_Alts = []
         unique = []
-        manuf_val = ''
+        brnd_val = ''
         alts = ''
         #ent_exists = False
         j = 0
@@ -302,14 +303,14 @@ def main():
             for ent in sent.ents:
                 # ignore header record
                 if j > 0:
-                    if ent.label_ == 'MANUF':
+                    if ent.label_ == 'BRND':
                         if i == 0:
-                            # if it's the first label in the record, save it in manuf
-                            manuf_val = ent.text
+                            # if it's the first label in the record, save it in brnd
+                            brnd_val = ent.text
                             unique.append(ent.text)
                             i += 1
                         else:
-                            # if it's not the first label in the sentence, put it in manuf alts
+                            # if it's not the first label in the sentence, put it in brnd alts
                             # (if it is already in alts, don't put it in)
                             if ent.text not in unique:
                                 unique.append(ent.text)
@@ -321,25 +322,25 @@ def main():
 
             # store ent results for each record, ignoring the headers
             if j > 0:
-                w_Manufs.append(manuf_val.upper())
-                w_Manuf_Alts.append(alts.upper())
+                w_Brnds.append(brnd_val.upper())
+                w_Brnd_Alts.append(alts.upper())
 
                 # test ---------------
-                print('str ', j, 'w_Manufs: ', w_Manufs)
-                print('str ', j, 'w_Manuf_Alts: ', w_Manuf_Alts)
+                print('str ', j, 'w_Brnds: ', w_Brnds)
+                print('str ', j, 'w_Brnd_Alts: ', w_Brnd_Alts)
                 # test ---------------
 
             # reset vars for next record
             unique.clear()
-            manuf_val = ''
+            brnd_val = ''
             alts = ''
             j += 1
 
-        df2 = pd.DataFrame({ 'w_Manufs':w_Manufs,
-                            'w_Manuf_Alts':w_Manuf_Alts})
+        df2 = pd.DataFrame({ 'w_Brnds':w_Brnds,
+                            'w_Brnd_Alts':w_Brnd_Alts})
 
-        writer2 = pd.ExcelWriter(manuf_pandas_file)
-        df2.to_excel(writer2,'NERS_Manufs', index=False)
+        writer2 = pd.ExcelWriter(brnd_pandas_file)
+        df2.to_excel(writer2,'NERS_Brnds', index=False)
         writer2.save()
 
 
@@ -353,7 +354,7 @@ def main():
         print("Saved model to", output_dir)
 
     # TEST  -----------------------------
-    mmats = []
+    mpns = []
 
     # DISPLACY VISUALIZER -----------------------------------------------------
     # get results for html doc
@@ -368,10 +369,10 @@ def main():
     doc = nlp(header + spacer + results + spacer + tender)
 
     colors = {
-        "MMAT": "#C3FFA1",
-        "MANUF": "#FFDDA1",
+        "MPN": "#C3FFA1",
+        "BRND": "#FFDDA1",
     }
-    options = {"ents": ["MMAT", "MANUF"], "colors": colors}
+    options = {"ents": ["MPN", "BRND"], "colors": colors}
     # displacy.serve(doc, style="ent", options=options)
     html = displacy.render(doc, style="ent", page=True, options=options)  # use the entity visualizer
     # write the html string to the xampp folder and launch in browser through localhost port

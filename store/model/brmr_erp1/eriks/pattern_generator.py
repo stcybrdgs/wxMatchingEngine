@@ -13,7 +13,7 @@ import csv
 # MAIN  ========================================
 def main():
     # set parameters to run either MPN or BRND (only one choice per run)
-    dataLabel = 'SPPLR'  # MPN,  BRND, SPPLR
+    dataLabel = 'BRND'  # MPN,  BRND, SPPLR
 
     if dataLabel == 'MPN':
         dataIn = r'\in_mpn.csv'  # in_MPN.csv or in_BRND.csv
