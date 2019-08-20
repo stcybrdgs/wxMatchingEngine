@@ -1,29 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
-Monday, August 12, 2019
+Monday, August 19, 2019
 Stacy Bridges
--   REM THIS SCRIPT HAS DIFFERENT API FRONT END THAN api_inces-backend.py
--	this script makes GET request from ince's backend (brammer, rs)
-	https://api.ince.live/product?apikey=4f032b1a18ab3f36&id=6001&brand=skf
-- 	the data pulled from the api is output to an excel spreadsheet (.xlsx)
-
-APIKey = hardcoded for now
-ID = the search string. Exact matches only but ignores special characters.
-Not case sensitive.
-Brand = optional
-
-I've bodged together an option to query the supplier partcode for RS and Brammer
-
-product?apikey=4f032b1a18ab3f36&supplier=RS&id=100-0151
-
-Supplier must be 'RS' or 'Brammer'. Not case sensitive.
-The ID will look against the supplier ID instead of the manufacturer ID.
-Exact matches only. That's the WX-something codes for Brammer and the XXX-XXXX codes for RS.
-If supplier is left out it'll work the same as before.
-I've also set it scraping the codes from the gaps in the Hayley file that have
-RS as the supplier as I don't have total coverage of the RS website yet. I've
-got over 200k now, but still looks like there are quite a lot that I don't have.
-Hopefully, that'll bump up our hit rate.
 
 '''
 # IMPORTS  ---------------------------------------------------------
@@ -63,21 +41,19 @@ def import_csv(d):
 # MAIN  ------------------------------------------------------------
 def main():
 	# config  ------------------------------------------------------\\
-	test = True
+	test = False
 	mMats_test = [
-		'6201-2Z','62012Z','624-2Z','6001','6003-2RSH','608-2Z','61800', '111-3719']
-		#[ ]'111-3719','111-3720','120-1282']
-	'''
-	mMats_test = [
-		'H 216','QBS-0018','8016','2201 2RS TV',
-		'2201 2RS TV','30303A', '3210B 2RSR TVH',
-		'466-8571','466-8638','466-8650'
+		'2201 2RS TV',
+		'2201 2RS TV',
+		'3210B 2RSR TVH',
+		'6004 2 RSR',
+		'6207 2ZR',
+		'6303 2ZR C3',
 	]
-	'''
+
+#		'6201-2Z','62012Z','624-2Z','6001','6003-2RSH','608-2Z','61800', '111-3719', '61800', 'ZCMD21L2']
 
 	# config  ------------------------------------------------------//
-
-
 	# define path to input file
 	inFile = r'C:/Users/stacy/My GitHub/wxMatchingEngine/store/model/brmr_erp1/eriks/input/in_api_ince_backend_search_ids.csv'
 
@@ -93,25 +69,6 @@ def main():
 	# external id inputs
 	if test == False:
 		import_csv(inFile)
-
-	# clean special characters and spaces from codes in mMats[]
-	'''
-	special_chars = ['\\','/','-','.','_','+','"']
-	i = 0
-	if test == True:
-		for code in mMats_test:
-			for char in special_chars:
-				nuCode = code.strip().replace(char, '')
-				mMats_test[i] = nuCode
-			print(nuCode)
-			i += 1
-	else:
-		for code in mMats:
-			for char in special_chars:
-				mMats[i] = code.strip().replace(char, '')
-			i += 1
-	print(mMats_test)  # test
-	'''
 
 	# setup pandas containers to hold contents of xlsx columns
 	# wBrand    |  wManufacturerPartNo  |  wSupplierId    |  wSource    |  wDescription    |  wSupplementalDetails   |  wCategory        |  wStatus
@@ -138,8 +95,6 @@ def main():
 	else:
 		search_vals = mMats
 
-	print(mMats_test)  # test
-
 	i = 0
 	for code in search_vals:
 		#print(code)  # test
@@ -147,14 +102,6 @@ def main():
 		#PARAMS = {'apikey':apikey, 'supplier':supplier, 'id':code}
 		PARAMS = {'apikey':apikey, 'id':code}
 		r = requests.get(url = URL, params = PARAMS)
-
-		# handle request returns null
-		'''
-		try:
-			isNull = data[0]
-		except:
-			continue
-		'''
 
 		# extract the data in json format
 		# handle code 500 server error
@@ -175,10 +122,6 @@ def main():
 			i += 1
 			continue
 
-		# handle server returns null
-		print(data)
-		print(data[0]['searchID'])
-
 		# check to see if the api responds to the id request
 		try:
 			searchId = data[0]['searchID']
@@ -198,39 +141,27 @@ def main():
 			# wx field:		wBrand    |  wManufacturerId    |  wSupplierId    |  wSource    |  wDescription    |  wSupplementalDetails 	|  wCategory		| wStatus
 			# py container:	p_brands  |  p_manufacturerIds  |  p_supplierIds  |  p_sources  |  p_descriptions  |  p_details  			|  p_categories		|
 			# -------------------------------------------------------------------------------------------------------------------------------------------------------
-			#j = 0
-			brandStr = []
-			descriptionStr = []
 			detailsStr = []
-			categoryStr = []
 
-			#for index in data:
-			# collect results in list containers
-			brandStr.append(data[0]['brand'])
-			descriptionStr.append(data[0]['description'])
 			# handle errors where details return a null value
 			try:
 				details = data[0]['details']
 			except:
 				details = 'none'
-			detailsStr.append(details)
-			categoryStr.append(data[0]['productCategory'])
-
-			#j += 1
 
 			# print results to console
 			print('{}: {} | {} | {} | {} | {} | {} | {}'.format(
-				code, brandStr, data[0]['manufacturerID'],
-				data[0]['supplierID'], data[0]['source'], descriptionStr,
-				detailsStr, data[0]['productCategory']))
+				code, data[0]['brand'], data[0]['manufacturerID'],
+				data[0]['supplierID'], data[0]['source'], data[0]['description'],
+				details, data[0]['productCategory']))
 
 			# print results to pandas col arrays
-			p_brands.append(brandStr)
+			p_brands.append(data[0]['brand'])  # (brandStr)
 			p_manufacturerIds.append(data[0]['manufacturerID'])
 			p_supplierIds.append(data[0]['supplierID'])
 			p_sources.append(data[0]['source'])
-			p_descriptions.append(descriptionStr)
-			p_details.append(detailsStr)
+			p_descriptions.append(data[0]['description'])  # (descriptionStr)
+			p_details.append(details)
 			p_categories.append(data[0]['productCategory'])
 			p_status.append('External')
 
@@ -250,6 +181,22 @@ def main():
 
 		i+= 1
 	# end api call  //
+
+	# clean up details
+	'''
+	j = 0
+	for item in p_details:
+		# if there are details returned by api, clean them up before
+		# printing them to the excel file
+		if p_details[j] != '':
+			nuDetail = p_details[j]
+			nuDetail = nuDetail.replace('- Bore', 'Bore')
+			nuDetail = nuDetail.replace('- Width', ', Width')
+			nuDetail = nuDetail.replace('- Outer', ', Outer')
+			nuDetail = nuDetail.strip()
+			p_details[j] = nuDetail
+		j += 1
+	'''
 
 	# print contents of pandas arrays to excel file (.xlsx)
 	# ---------------------------------------------------------------------------------------------------------------------------------------------------------
