@@ -12,8 +12,17 @@ import csv
 
 # MAIN  ========================================
 def main():
+    # CONFIG  -------------------------------------------------- \\
+    # ------------------------------------------------------------ \\
+
     # set parameters to run either MPN or BRND (only one choice per run)
-    dataLabel = 'BRND'  # MPN,  BRND, SPPLR
+    dataLabel = 'BRND'  # MPN, BRND, SPPLR
+
+    pattern_generator_inpath = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input'
+    pattern_generator_outpath = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input'
+
+    # ------------------------------------------------------------ //
+    # ---------------------------------------------------------- //
 
     if dataLabel == 'MPN':
         dataIn = r'\in_mpn.csv'  # in_MPN.csv or in_BRND.csv
@@ -25,12 +34,12 @@ def main():
         dataIn = r'\in_spplr.csv'  # in_MPN.csv or in_BRND.csv
         ners_patterns = r'\spplr_ners_patterns.jsonl'  # out_MPN.jsonl or out_BRND.jsonl
 
+    # parameters
+    infile  =  pattern_generator_inpath + dataIn
+    outfile =  pattern_generator_outpath + ners_patterns
+
     # declare containers
     patterns = []
-
-    # parameters
-    infile  = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input' + dataIn
-    outfile = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input' + ners_patterns
 
     # import erp csv
     doc = ''
