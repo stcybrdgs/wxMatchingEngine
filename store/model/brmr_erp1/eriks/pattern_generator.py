@@ -16,7 +16,7 @@ def main():
     # ------------------------------------------------------------ \\
 
     # set parameters to run either MPN or BRND (only one choice per run)
-    dataLabel = 'BRND'  # MPN, BRND, SPPLR
+    dataLabel = 'CMMDTY'  # MPN, BRND, SPPLR, CMMDTY
 
     pattern_generator_inpath = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input'
     pattern_generator_outpath = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input'
@@ -33,6 +33,9 @@ def main():
     elif dataLabel == 'SPPLR':
         dataIn = r'\in_spplr.csv'  # in_MPN.csv or in_BRND.csv
         ners_patterns = r'\spplr_ners_patterns.jsonl'  # out_MPN.jsonl or out_BRND.jsonl
+    elif dataLabel == 'CMMDTY':
+        dataIn = r'\in_cmmdty.csv'  # in_MPN.csv or in_BRND.csv
+        ners_patterns = r'\cmmdty_ners_patterns.jsonl'  # out_MPN.jsonl or out_BRND.jsonl
 
     # parameters
     infile  =  pattern_generator_inpath + dataIn
