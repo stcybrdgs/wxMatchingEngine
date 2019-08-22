@@ -66,20 +66,43 @@ def entRuler_tagger(doc):
 def update_meta_pipeline():
     pass
 
-def combine_pattern_files(mpns, brnds):
-    outFile = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output\out_mpn_brnd_patterns.jsonl'
+def combine_pattern_files(mpn = '', brnd = '', cmmdty = ''):
+    #   mpn   brnd    cmmdty      cases
+    #   1       1       0           C5
+    #   0       1       1           C6
+    #   1       0       1           C7
+    #   1       1       1           C8
+
+    outpath = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output'
+
+    if cmmdty == '': jlfile = r'\mpn_brnd_ners_patterns.jsonl'  # C5
+    elif mpn == '': jlfile = r'\brnd_cmmdty_ners_patterns.jsonl'  # C6
+    elif brnd == '': jlfile = r'\mpn_cmmdty_ners_patterns.jsonl'  # C7
+    else: jlfile = r'\mpn_brnd_cmmdty_ners_patterns.jsonl'  # C8
+
+    outfile = outpath + jlfile
+
     #print(outFile)
     of = open(outFile, 'wt')
-    mpnFile = open (mpns, 'rt')
-    brndFile = open(brnds, 'rt')
-    for line in mpnFile:
-        of.writelines(line)
-        #print('.', end='', flush=True) # rem flush the output buffer
-    for line in brndFile:
-        of.writelines(line)
-        #print('.', end='', flush=True) # rem flush the output buffer
+    if mpn != '':
+        mpnFile = open (mpn, 'rt')
+        for line in mpnFile:
+            of.writelines(line)
+            #print('.', end='', flush=True) # rem flush the output buffer
+    if brnd != '':
+        brndFile = open(brnd, 'rt')
+        for line in brndFile:
+            of.writelines(line)
+            #print('.', end='', flush=True) # rem flush the output buffer
+    if cmmdty != '':
+        cmmdtyFile = open(cmmdty, 'rt')
+        for line in cmmdtyFile:
+            of.writelines(line)
+            #print('.', end='', flush=True) # rem flush the output buffer
+
     mpnFile.close()
     brndFile.close()
+    cmmdtyFile.close()
     of.close()
 
     return outFile
@@ -91,10 +114,14 @@ def main():
     '''
     # CONFIG  -------------------------------------------------- \\
     # ------------------------------------------------------------ \\
+
     # brnd, mpn, spplr
     model = 'pre'   # pre -> use non-trained model / post -> use trained model
+
     mpn = 'off'  # on/off
-    brnd = 'on'  # on/off
+    brnd = 'off'  # on/off
+    cmmdty = 'on'  # on/off
+
     ruler = 'on'
     cleaner = 'on'
     number_tagger = 'off'
@@ -105,22 +132,44 @@ def main():
     # then run entity ruler again
     stemmer = 'off'
 
-    # declare inputs / outputs
+    # declare outputs
     brnd_pandas_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output\out_brnd_pandas.xlsx'  # output
     mpn_pandas_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output\out_mpn_pandas.xlsx'  # output
+    cmmdty_pandas_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output\out_cmmdty_pandas.xlsx'  # output
+
+    # declare inputs
     mpn_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input\mpn_ners_patterns.jsonl'  # input
     brnd_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input\brnd_ners_patterns.jsonl'  # input
+    cmmdty_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input\cmmdty_ners_patterns.jsonl'  # input
 
-    if mpn == 'off' and brnd == 'off':
+    #   mpn   brnd    cmmdty      cases
+    #   0       0       0           C1
+    #   1       0       0           C2
+    #   0       1       0           C3
+    #   0       0       1           C4
+    #   1       1       0           C5
+    #   0       1       1           C6
+    #   1       0       1           C7
+    #   1       1       1           C8
+
+    if mpn == 'off' and brnd == 'off' and cmmdty == 'off':              # C1
         patterns_file = mpn_file
-    if mpn == 'on' and brnd == 'off':
+    elif mpn == 'on' and brnd == 'off' and cmmdty == 'off':             # C2
         patterns_file = mpn_file
-    elif mpn == 'off' and brnd == 'on':
+    elif mpn == 'off' and brnd == 'on' and cmmdty == 'off':             # C3
         patterns_file = brnd_file
-    elif mpn == 'on' and brnd == 'on':
+    elif mpn == 'off' and brnd == 'off' and cmmdty == 'on':             # C4
+        patterns_file = cmmdty_file
+    elif mpn == 'on' and brnd == 'on' and cmmdty == 'off':              # C5
         patterns_file = combine_pattern_files(mpn_file, brnd_file)
+    elif mpn == 'off' and brnd == 'on' and cmmdty == 'on':              # C6
+        patterns_file = combine_pattern_files(brnd_file, cmmdty_file)
+    elif mpn == 'on' and brnd == 'off' and cmmdty == 'on':              # C7
+        patterns_file = combine_pattern_files(mpn_file, cmmdty_file)
+    elif mpn == 'on' and brnd == 'on' and cmmdty == 'on':               # C8
+        patterns_file = combine_pattern_files(mpn_file, brnd_file, cmmdty_file)
 
-    tender_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\master\Data for Test MR 13082019.csv'
+    tender_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output\Data for Test MR 13082019_wx_3.csv'
     #output_file = 'demo_ners_output_nonstock.txt'
     write_type = 'w'
 
@@ -163,7 +212,18 @@ def main():
     doc = nlp(tender)
 
     # CONSOLE OUTPUT  ---------------------------------------------------------
-    if mpn == 'on' and brnd == 'off':
+    #   mpn   brnd    cmmdty      cases
+    #   0       0       0           C1
+    #   1       0       0           C2
+    #   0       1       0           C3
+    #   0       0       1           C4
+    #   1       1       0           C5
+    #   0       1       1           C6
+    #   1       0       1           C7
+    #   1       1       1           C8
+    labels = []
+    alt_labels = []
+    if mpn == 'on' and brnd == 'off' and cmmdty == 'off':
         print('\n')
         labels = ['MPN']  # , 'PRODUCT', 'MPN', 'SKU']
         alt_labels = ['Mpn']  # , 'Product', 'MfrPartNo', 'SkuID']
@@ -343,6 +403,63 @@ def main():
         df2.to_excel(writer2,'NERS_Brnds', index=False)
         writer2.save()
 
+    # pandas output for cmmdty  ------------------------------------------------
+    # This technique allows you to isolate entities on
+    # a sentence-by-sentence basis, which will allow
+    # for matching entities on a record-by-record basis
+    if cmmdty == 'on':
+        w_Cmmdtys = []
+        w_Cmmdty_Alts = []
+        unique = []
+        cmmdty_val = ''
+        alts = ''
+        #ent_exists = False
+        j = 0
+        for sent in doc.sents:
+            i = 0
+            for ent in sent.ents:
+                # ignore header record
+                if j > 0:
+                    if ent.label_ == 'CMMDTY':
+                        if i == 0:
+                            # if it's the first label in the record, save it in brnd
+                            cmmdty_val = ent.text
+                            unique.append(ent.text)
+                            i += 1
+                        else:
+                            # if it's not the first label in the sentence, put it in brnd alts
+                            # (if it is already in alts, don't put it in)
+                            if ent.text not in unique:
+                                unique.append(ent.text)
+                                if alts == '':
+                                    alts = ent.text
+                                else:
+                                    alts = alts + ', ' + ent.text
+                        #print(ent.label_, ': ', ent.text)
+
+            # store ent results for each record, ignoring the headers
+            if j > 0:
+                w_Cmmdtys.append(cmmdty_val.upper())
+                w_Cmmdty_Alts.append(alts.upper())
+
+                # test ---------------
+                print('str ', j, 'w_Cmmdty: ', w_Cmmdtys)
+                print('str ', j, 'w_Cmmdty_Alts: ', w_Cmmdty_Alts)
+                # test ---------------
+
+            # reset vars for next record
+            unique.clear()
+            brnd_val = ''
+            alts = ''
+            j += 1
+
+        df3 = pd.DataFrame({ 'w_Cmmdtys':w_Cmmdtys,
+                            'w_Cmmdty_Alts':w_Cmmdty_Alts})
+
+        writer3 = pd.ExcelWriter(cmmdty_pandas_file)
+        df3.to_excel(writer3,'NERS_Cmmdtys', index=False)
+        writer3.save()
+
 
     # save the model  --------------------------------------------------------
     # save model with entity pattern updates made by the entity ruler
@@ -367,12 +484,13 @@ def main():
     spacer = '---------------------------------------------------------\n'
     header = 'Named Entities Found in Tender\n'
     doc = nlp(header + spacer + results + spacer + tender)
-
+    doc.user_data["title"] = "Named Entity Resolution"
     colors = {
         "MPN": "#C3FFA1",
         "BRND": "#FFDDA1",
+        "CMMDTY": "#F3DDA1"
     }
-    options = {"ents": ["MPN", "BRND"], "colors": colors}
+    options = {"ents": ["MPN", "BRND", "CMMDTY"], "colors": colors}
     # displacy.serve(doc, style="ent", options=options)
     html = displacy.render(doc, style="ent", page=True, options=options)  # use the entity visualizer
     # write the html string to the xampp folder and launch in browser through localhost port
