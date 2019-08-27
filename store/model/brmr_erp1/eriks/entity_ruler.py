@@ -119,8 +119,8 @@ def main():
     model = 'pre'   # pre -> use non-trained model / post -> use trained model
 
     mpn = 'off'  # on/off
-    brnd = 'off'  # on/off
-    cmmdty = 'on'  # on/off
+    brnd = 'on'  # on/off
+    cmmdty = 'off'  # on/off
 
     ruler = 'on'
     cleaner = 'on'
@@ -169,7 +169,7 @@ def main():
     elif mpn == 'on' and brnd == 'on' and cmmdty == 'on':               # C8
         patterns_file = combine_pattern_files(mpn_file, brnd_file, cmmdty_file)
 
-    tender_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output\Data for Test MR 13082019_wx_3.csv'
+    tender_file = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\output\Data for Test MR 13082019_wx_4_TESTER.csv'
     #output_file = 'demo_ners_output_nonstock.txt'
     write_type = 'w'
 
