@@ -16,7 +16,7 @@ def main():
     # ------------------------------------------------------------ \\
 
     # set parameters to run either MPN or BRND (only one choice per run)
-    dataLabel = 'CMMDTY'  # MPN, BRND, SPPLR, CMMDTY
+    dataLabel = 'BRND'  # MPN, BRND, SPPLR, CMMDTY
 
     pattern_generator_inpath = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input'
     pattern_generator_outpath = r'C:\Users\stacy\My GitHub\wxMatchingEngine\store\model\brmr_erp1\eriks\input'
