@@ -43,26 +43,38 @@ nlp = spacy.load("en_core_web_sm")
 matcher = Matcher(nlp.vocab)
 
 # define patterns for the matcher
-hello_patterns = [
-    [{"LOWER": "hello"}, {"IS_PUNCT": True}, {"LOWER": "world"}],
-    [{"LOWER": "hello"}, {"LOWER": "world"}]
+# rem regex can only be applied to attributes in TEXT, LOWER, TAG
+mpn_patterns = [
+    [{"TEXT": "6001"}],
+    [{"TEXT": "6001"}, {"IS_PUNCT":True}, {"TEXT":"2RS"}],
+    [{"TEXT": "6001"}, {"IS_SPACE":True}, {"TEXT":"2RS"}],
+    [{"TEXT": {"REGEX": "deff?in[ia]tely"}}]
 ]
 
 # add patterns to the matcher
-for item in hello_patterns:
-    matcher.add("HelloWorld", None, item)
+for item in mpn_patterns:
+    matcher.add("MPNS", None, item)
 
 # create nlp document
-doc = nlp(u"Hello, world! Hello world!")
+doc = nlp(u"Hello, world! Hello world! Hello-world, 6001, 6001-2RS, 6001 2RS")
 
 # find strings in nlp doc that match patterns in the matcher
 matches = matcher(doc)
 
 # for matches, print out info
 for match_id, start, end in matches:
-    string_id = nlp.vocab.strings[match_id]  # Get string representation
+    #string_id = nlp.vocab.strings[match_id]  # Get string representation
     span = doc[start:end]  # The matched span
-    print(match_id, string_id, start, end, span.text)
+    #print(match_id, string_id, start, end, span.text)
+    print(span.text)
+
+'''
+print('Match:', item)
+#for i in item:
+i = 0
+for val in item:
+    print(val)
+
 
 print('sent.text, sent.pos_: ------------')
 for sent in doc:
@@ -71,5 +83,6 @@ for sent in doc:
 print('ent.text, ent.label_: ------------')
 for ent in doc.ents:
     print(ent.text, ent.label_)
+'''
 
 print('Done.')
