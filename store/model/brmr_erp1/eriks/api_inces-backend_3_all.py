@@ -42,7 +42,10 @@ def import_csv(d):
 def main():
 	# config  ------------------------------------------------------\\
 	test = False
-	mMats_test = [
+	mMats_test = [  ]
+
+	'''
+	[
 		'2201 2RS TV',
 		'2201 2RS TV',
 		'3210B 2RSR TVH',
@@ -50,8 +53,7 @@ def main():
 		'6207 2ZR',
 		'6303 2ZR C3',
 	]
-
-#		'6201-2Z','62012Z','624-2Z','6001','6003-2RSH','608-2Z','61800', '111-3719', '61800', 'ZCMD21L2']
+	'''
 
 	# config  ------------------------------------------------------//
 	# define path to input file
@@ -97,6 +99,21 @@ def main():
 
 	i = 0
 	for code in search_vals:
+		# if the code is empty, no need to call the api, so
+		# put '' in the pandas arrays and skip this cycle of the caller
+		if code == '':
+			#print(code, ': empty')
+			p_brands.append('')
+			p_manufacturerIds.append('')
+			p_supplierIds.append('')
+			p_sources.append('')
+			p_descriptions.append('')
+			p_details.append('')
+			p_categories.append('')
+			p_status.append('')
+			i += 1
+			continue
+
 		#print(code)  # test
 		# send get request to api and save the response in a response object
 		#PARAMS = {'apikey':apikey, 'supplier':supplier, 'id':code}
@@ -124,7 +141,7 @@ def main():
 
 		# check to see if the api responds to the id request
 		try:
-			searchId = data[0]['searchID']
+			searchId = data[0]['searchID']  # searchId = data[0]['searchID']
 		except:
 			searchId = 'id not found'
 
@@ -133,6 +150,10 @@ def main():
 		# the list by looping through it index-wise
 		# to retrieve brandStr as brand and descriptionStr as brand:manufacturerID:description
 		if searchId != 'id not found':
+			print(code, '  ', end = '')
+			print(data[0]['brand'])
+			print('{}: {}: {}'.format(r, data[0]['searchID'], data))  # TEST -----------------------
+
 			# because the api may return multiple dictionaries for a single searchID,
 			# we'll collect the results in list containers, and afterward append the lists
 			# to the column containers for pandas; the mapping is:
@@ -154,6 +175,12 @@ def main():
 				code, data[0]['brand'], data[0]['manufacturerID'],
 				data[0]['supplierID'], data[0]['source'], data[0]['description'],
 				details, data[0]['productCategory']))
+			'''
+			print('{}: {} | {} | {} | {} | {} | {} | {}'.format(
+				code, data[0]['brand'], data[0]['manufacturerID'],
+				data[0]['supplierID'], data[0]['source'], data[0]['description'],
+				details, data[0]['productCategory']))
+			'''
 
 			# print results to pandas col arrays
 			p_brands.append(data[0]['brand'])  # (brandStr)
