@@ -7,6 +7,7 @@ Stacy Bridges
 This simplified code transforms an input set of brands into brand patterns
 that can be used for string matching by the NERS EntityRuler.
 
+
 """
 # import library components  ---------------------------------------------------
 import os, shutil
@@ -28,7 +29,7 @@ folder_path = os.path.dirname(os.path.abspath(__file__))
 # get names of .xlsx files that are in the folder that are also input files
 for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
     for file in f:
-        if '.xlsx' in file and 'in_' in file:
+        if '.xlsx' in file:
             # rem for full path use <files.append(os.path.join(r, file))>
             file_choices.append(file)
 
@@ -52,7 +53,7 @@ while gold_choice not in menu_choices:
     gold_choice = input()
 
 # identify i/o  ----------------------------------------------------------------
-outfile_name = 'out_brand_patterns.jsonl'
+outfile_name = 'ners_brand_patterns.jsonl'
 outfile_path = folder_path + '\\' + outfile_name
 brands_file = folder_path + '\\' + file_choices[int(gold_choice)-1]
 brands_sheet = 'Sheet1'
@@ -148,4 +149,4 @@ with open(outfile_path, 'w') as outfile:
 print('\n')
 print('Done.')
 print('{} brand patterns written'.format(brand_count))
-print('{}'.format(outfile_name))
+print('{}'.format(outfile_path))
