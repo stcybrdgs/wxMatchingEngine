@@ -78,6 +78,7 @@ tokens = []
 token = ''
 
 # build brand patterns  --------------------------------------------------------
+print('\nBuilding brand patterns...\n')
 for brand in brands:
     # iterate thru brands
     # and build patterns using the pattern/token components from above
@@ -145,7 +146,6 @@ with open(outfile_path, 'w') as outfile:
 
 # end program
 print('\n')
-print('{} brand patterns written to file:'.format(brand_count))
-print('{}'.format(outfile_name))
-print('\n')
 print('Done.')
+print('{} brand patterns written'.format(brand_count))
+print('{}'.format(outfile_name))
