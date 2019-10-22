@@ -17,11 +17,11 @@ from pandas import ExcelWriter
 from pandas import ExcelFile
 import numpy as np
 
-
-input_choices = []
+# print menu options to console  -----------------------------------------------
+# declare menu and file arrays
 menu_choices = []
+file_choices = []
 
-# print user input options to console  -----------------------------------------
 # get path of current folder
 folder_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -30,18 +30,14 @@ for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
     for file in f:
         if '.xlsx' in file and 'in_' in file:
             # rem for full path use <files.append(os.path.join(r, file))>
-            input_choices.append('loc - {}'.format(file))
-
-# add database options to files
-input_choices.append('db  - clean products (iesa)')
-input_choices.append('db  - brands (wx)')
+            file_choices.append(file)
 
 # print user menu
 print('\n-----------------------------------------')
 print('           Brand Input Options')
 print('-----------------------------------------')
 i = 0
-for ic in input_choices:
+for ic in file_choices:
     i += 1
     print('{}  {}'.format(i, ic))
     menu_choices.append(str(i))
@@ -56,8 +52,9 @@ while gold_choice not in menu_choices:
     gold_choice = input()
 
 # identify i/o  ----------------------------------------------------------------
-outfile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\out_brand_patterns.jsonl'
-brands_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\in_brand_test.xlsx'
+outfile_name = 'out_brand_patterns.jsonl'
+outfile_path = folder_path + '\\' + outfile_name
+brands_file = folder_path + '\\' + file_choices[int(gold_choice)-1]
 brands_sheet = 'Sheet1'
 brands_data = pd.read_excel(brands_file, brands_sheet)
 brands = brands_data['BRAND']
@@ -139,7 +136,7 @@ for brand in brands:
 # iterate through pattern array, writing each line to external file
 # that can then be picked up by the EntityRuler to map Brands to the model
 brand_count = 0
-with open(outfile, 'w') as outfile:
+with open(outfile_path, 'w') as outfile:
     for line in patterns:
         outfile.write(line)
         outfile.write('\n')
@@ -147,5 +144,8 @@ with open(outfile, 'w') as outfile:
         brand_count += 1
 
 # end program
-print('{} brand patterns written to JSONL file'.format(brand_count))
+print('\n')
+print('{} brand patterns written to file:'.format(brand_count))
+print('{}'.format(outfile_name))
+print('\n')
 print('Done.')
