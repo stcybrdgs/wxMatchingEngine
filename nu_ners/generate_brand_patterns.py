@@ -9,13 +9,16 @@ that can be used for string matching by the NERS EntityRuler.
 
 """
 # import library components  ---------------------------------------------------
-import os, shutil
+import os, shutil, sys
 import pathlib
 from pathlib import Path
 import pandas as pd
 from pandas import ExcelWriter
 from pandas import ExcelFile
 import numpy as np
+
+# import py files  -------------------------------------------------------------
+import menu
 
 def main():
     # print menu options to console  -----------------------------------------------
@@ -37,6 +40,9 @@ def main():
     print('\n-----------------------------------------')
     print('           Brand Input Files')
     print('-----------------------------------------')
+    spacer ='  '
+    print('{}{}{}'.format('m', spacer, 'Show Main Menu'))
+    menu_choices.append('m')
     i = 0
     for ic in file_choices:
         i += 1
@@ -44,13 +50,22 @@ def main():
         menu_choices.append(str(i))
 
     # get user input
-    print('\nSelect an input file (1-{}): '.format(i))
+    print('\nSelect an input file (or \'m\' for Main Menu)')
     gold_choice = input()
 
     # validate user input
     while gold_choice not in menu_choices:
-        print('Invalid choice! Select an input (1-{}): '.format(i))
+        print('Invalid choice! Select an input file (or \'m\' for Main Menu)')
         gold_choice = input()
+
+    if gold_choice == 'm':
+        menu.main()
+
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this program; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
 
     # identify i/o  ----------------------------------------------------------------
     outfile_name = 'ners_brand_patterns.jsonl'

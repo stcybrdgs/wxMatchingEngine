@@ -59,7 +59,7 @@ def main():
     writer.save()
 
     # end program  -----------------------------------------------------------------
-    print('\n{} Brands retrieved.'.format(row_count))
+    print('\n{} Brands written'.format(row_count))
     print(outfile_path)
     print('Done.')
 
