@@ -61,7 +61,7 @@ def main():
 
     # end program  -----------------------------------------------------------------
     print('\n')
-    print('{} Brands retrieved.'.format(row_count))
+    print('{} Brands written'.format(row_count))
     print(outfile_path)
     print('Done.')
 
