@@ -14,6 +14,7 @@ import get_brands_db_wx
 import get_data_org_iesa
 import get_data_cln_iesa
 import get_data_cln_org_iesa
+import add_wx_cols
 import tbd
 
 # global variables  ------------------------------------------------------------
@@ -23,10 +24,11 @@ menu_choices = []
 menu_options = [
     'Get brands (IESA.ProductsClean)',
     'Get brands (WrWx.Brands)',
-    'Get original data (IESA.ProductsOriginal)',
-    'Get clean data (IESA.ProductsClean)',
-    'Get clean + original data (IESA.ProductsOriginal JOIN IESA.ProductsClean)',
+    'Get data - original (IESA.ProductsOriginal)',
+    'Get data - clean (IESA.ProductsClean)',
+    'Get data - clean + original (IESA.ProductsOriginal JOIN IESA.ProductsClean)',
     'Generate brands patterns for NERS',
+    'Add WrWx Columns to data file',
     'Extract brands with NERS (ad hoc)',
     'Extract brands with NERS (IESA model)'
     ]
@@ -37,6 +39,7 @@ menu_functions = [
     get_data_cln_iesa,
     get_data_cln_org_iesa,
     generate_brand_patterns,
+    add_wx_cols,
     tbd,
     tbd
 ]
@@ -76,7 +79,7 @@ def main():
     is_program_running = True
     while is_program_running:
         # get & validate user input
-        print('Select a task (or \'m\' for menu, \'e\' to exit): ')
+        print('\nSelect a task (or \'m\' for menu, \'e\' to exit): ')
         menu_choice = input()
         while menu_choice not in menu_choices:
             print('Invalid choice! Select a task: ')
