@@ -90,6 +90,7 @@ def get_user_choice():
 # main  ------------------------------------------------------------------------
 def main():
     print('You called \'get_data_cln_iesa.py\'')  # temp message
+    print('Building menu...')
 
     connection = get_connection_object()  # get the connection object
     show_menu(connection)  # show the menu of category choices
