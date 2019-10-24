@@ -3,18 +3,15 @@
 """
 Sun 9/8/2019
 Stacy
-
 user runs add_wxcols.py from command line
 >> python add_wxcols.py
 - make a copy of the project file and save with a '_wx_v1' suffix
 - add the wx columns
 - rename add_wxcols.py as py_add_wxcols.py and move to the ners folder
-
 intro to xlsxwriter library at:
 https://pbpython.com/improve-pandas-excel-output.html
 and
 https://xlsxwriter.readthedocs.io/
-
 """
 # IMPORTS  ---------------------------------------------------------------------
 import os, shutil, sys
@@ -210,10 +207,6 @@ def main():
         # create pandas data frames
         df_main = pd.DataFrame(main_dict)  # main worksheet
 
-        print('TEST -- HERE --------------')
-        print(wxFilename)
-        print(wxFile)
-
         # create excel writer
         writer = pd.ExcelWriter(wxFile)
 
@@ -224,5 +217,3 @@ def main():
 
         # end program
         print('File complete:', wxFile)
-
-if __name__ == '__main__' : main()

@@ -32,7 +32,7 @@ def main():
     # get names of .xlsx files that are in the folder that are also input files
     for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
         for file in f:
-            if '.xlsx' in file:
+            if '.xlsx' in file and 'brand' in file:
                 # rem for full path use <files.append(os.path.join(r, file))>
                 file_choices.append(file)
 
