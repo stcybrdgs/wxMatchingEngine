@@ -17,21 +17,41 @@ menu_nums = []
 menu_choices = []
 
 # helper functions  ------------------------------------------------------------
-def get_menu_choices():
+def get_connection_object():
+    # connection info
+    server = 'sql.wrangle.works'
+    database = 'IESA'
+    username = 'stacy'
+    password = '8d39c!76b8d1'
+    connection = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
+    return connection
+
+def get_menu_choices(connection):
     # rem use SQL query to get the categories
-    choices = ['Show Main Menu', 'MechPT', 'Electrical', 'FluidPower', 'PPE', 'Tools']
+    sql = 'SELECT DISTINCT ProductCategory FROM ProductsOriginal ORDER BY ProductCategory ASC'
+    cursor = connection.cursor().execute(sql)
+    #choices = ['Show Main Menu', 'MechPT', 'Electrical', 'FluidPower', 'PPE', 'Tools']
+    choices = []
+    choices.append('Show Main Menu')
+    row = cursor.fetchone()
+    row_count = 0
+    while row:
+        for i in row:
+            choices.append(i)
+            row_count += 1
+        row = cursor.fetchone()
     return choices
 
-def show_menu():
+def show_menu(connection):
     global menu_nums
     global menu_choices
 
     # print user menu
-    print('\n-----------------------------------------')
-    print('           Get Original Data - Categories Menu')
-    print('-----------------------------------------')
+    print('\n------------------------------------------------------')
+    print('           Get Clean Data - Categories Menu')
+    print('------------------------------------------------------')
     spacer ='  '
-    menu_choices = get_menu_choices()
+    menu_choices = get_menu_choices(connection)
 
     i = 0
     num = ''
@@ -70,19 +90,14 @@ def get_user_choice():
 # main  ------------------------------------------------------------------------
 def main():
     print('You called \'get_data_cln_iesa.py\'')  # temp message
-    show_menu()  # show the menu of category choices
+
+    connection = get_connection_object()  # get the connection object
+    show_menu(connection)  # show the menu of category choices
     category = get_user_choice()  # get user choice of category
 
     # connect to db and query for data per user-selected category
     print('You selected the category \'' + category + '\'')
     print('Connecting to the database...')
-
-    # connection info
-    server = 'sql.wrangle.works'
-    database = 'IESA'
-    username = 'stacy'
-    password = '8d39c!76b8d1'
-    connection = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
 
     # query info
     data_query = [
