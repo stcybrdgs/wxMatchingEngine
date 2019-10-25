@@ -99,6 +99,7 @@ def main():
         # iterate thru brands
         # and build patterns using the pattern/token components from above
         brand = str(brand)  # eliminate any float objects
+        brand = brand.lower()  # convert brand to lowercase
         char_count = 0
         is_last_char = False
 

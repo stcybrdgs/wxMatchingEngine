@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+"""
+Wed, Oct 23, 2019
+Stacy Bridges
+
+"""
 # import library components  ---------------------------------------------------
 import os, shutil, sys
 import pathlib
@@ -15,31 +21,42 @@ import get_data_org_iesa
 import get_data_cln_iesa
 import get_data_cln_org_iesa
 import add_wx_cols
-import tbd
+import extract_brands_ners_adhoc
 
+import tbd
 # global variables  ------------------------------------------------------------
 menu_options = []
 menu_functions = []
 menu_choices = []
 menu_options = [
-    'Get brands (IESA.ProductsClean)',
-    'Get brands (WrWx.Brands)',
-    'Get data - original (IESA.ProductsOriginal)',
-    'Get data - clean (IESA.ProductsClean)',
-    'Get data - clean + original (IESA.ProductsOriginal JOIN IESA.ProductsClean)',
-    'Generate brands patterns for NERS',
-    'Add WrWx Columns to data file',
-    'Extract brands with NERS (ad hoc)',
-    'Extract brands with NERS (IESA model)'
+    'Session - Start logging',
+    'Session - Archive session',
+    'Get Brands (IESA.ProductsClean)',
+    'Get Brands (WrWx.Brands)',
+    'Get Data - Original (IESA.ProductsOriginal)',
+    'Get Data - Clean (IESA.ProductsClean)',
+    'Get Data - Clean + Original (IESA.ProductsOriginal JOIN IESA.ProductsClean)',
+    'Add WrWx columns to data file',
+    'NERS - generate patterns for Brands (JSONL)',
+    'NERS - generate patterns for MPNs (JSONL)',
+    'NERS - extract Brands (ad hoc)',
+    'NERS - extract Brands (IESA model)',
+    'NERS - extract MPNs (ad hoc)',
+    'NERS - extract MPNs (IESA model)'
     ]
 menu_functions = [
+    tbd,
+    tbd,
     get_brands_db_iesa,
     get_brands_db_wx,
     get_data_org_iesa,
     get_data_cln_iesa,
     get_data_cln_org_iesa,
-    generate_brand_patterns,
     add_wx_cols,
+    generate_brand_patterns,
+    tbd,
+    extract_brands_ners_adhoc,
+    tbd,
     tbd,
     tbd
 ]
