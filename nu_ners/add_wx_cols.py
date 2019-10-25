@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 # coding: utf8
 """
-Sun 9/8/2019
+Thr Oct 24, 2019
 Stacy
 user runs add_wxcols.py from command line
 >> python add_wxcols.py
 - make a copy of the project file and save with a '_wx_v1' suffix
 - add the wx columns
-- rename add_wxcols.py as py_add_wxcols.py and move to the ners folder
-intro to xlsxwriter library at:
+rem xlsxwriter library docs at:
 https://pbpython.com/improve-pandas-excel-output.html
 and
 https://xlsxwriter.readthedocs.io/
@@ -132,24 +131,7 @@ def main():
         # get the name of the project file
         wxFilename = user_selected_file[0:len(user_selected_file)-5] + '_wx_v1.xlsx'
         wxFile = projectDir + '\\' + wxFilename
-        '''
-        count_xlsx = 0
-        for item in os.listdir(projectDir):
-            name = os.path.splitext(item)[0]
-            ext = os.path.splitext(item)[1]
-            if count_xlsx > 1:
-                # throw an error if there is more than one project file
-                print('Error: There can be only one .xlsx file at the base of {}'.format(projectDir))
-                break
-            if ext == '.xlsx':
-                count_xlsx += 1
-                # name the project file
-                projectFilename = name + ext
-                projectFile = projectDir + '\\' + projectFilename
-                # name the wx outfile
-                wxFilename = name + '_wx_v1' + ext
-                wxFile = projectDir + '\\' + wxFilename
-        '''
+
         # declare arrays to hold data from the project and metadata files
         pf_headers = []
         pf_cols = []
