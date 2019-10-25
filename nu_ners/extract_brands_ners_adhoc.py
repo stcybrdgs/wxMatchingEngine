@@ -98,6 +98,7 @@ def main():
     #outFile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_brand_patterns.jsonl'
     # declare outputs
     brnd_pandas_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\00_ners_out_brands.xlsx'  # output
+    wx_1_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\test_data_cln_org_iesa_PPE_wx_v1.xlsx' # output
 
     # declare inputs
     brnd_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_brand_patterns.jsonl'  # input
@@ -109,6 +110,10 @@ def main():
 
     # ------------------------------------------------------------ //
     # ---------------------------------------------------------- //
+
+    # SETUP PD DATAFRAMES  -----------------------------------------------------
+    # read Brands infile into pd dataframe
+    # read Tender infile into pd dataframe
 
     # load model
     nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner']) #('en_core_web_sm', disable=['parser'])
@@ -141,16 +146,7 @@ def main():
 
     doc = nlp(tender)
 
-    # CONSOLE OUTPUT  ---------------------------------------------------------
-    #   mpn   brnd    cmmdty      cases
-    #   0       0       0           C1
-    #   1       0       0           C2
-    #   0       1       0           C3
-    #   0       0       1           C4
-    #   1       1       0           C5
-    #   0       1       1           C6
-    #   1       0       1           C7
-    #   1       1       1           C8
+    # FIND ENTITIES  -----------------------------------------------------------
     labels = []
     alt_labels = []
     print('\n')
@@ -223,16 +219,34 @@ def main():
         alts = ''
         j += 1
 
+        # FOR THE CHUNKER
+        # It basically creates a new dataframe object with the new data row
+        # at the end of the dataframe. The old dataframe will be unchanged.
+        # data = [{'Region':'East','Company':'Shop Rite','Product':'Fruits','Month':'December','Sales': 1265}]
+        # df.append(data,ignore_index=True,sort=False)
+
+        # DataFrame.insert(self, loc, column, value, allow_duplicates=False)
+        # loc : int # insertion index, must verify0 <= loc <= len(cols)
+        # column: string, number, or hashable object -- this is label of inserted col
+        # value: int, Series, or array-like
+        # allow_duplicates: bool, optional
+
+        # FOR INSERTING BRANDS BACK INTO wx_v1
+        # df = pd.DataFrame.insert(0, 'w_Brnds_Test')
+        # or
+        # df = pd.read_csv("nba.csv")
+        # df.get(["Salary", "Team", "Name"])
+
         df = pd.DataFrame({ 'w_Brnds':w_Brnds,
                             'w_Brnd_Alts':w_Brnd_Alts})
 
-        writer = pd.ExcelWriter(brnd_pandas_file)
+        writer = pd.ExcelWriter(wx_1_file)  #brnd_pandas_file)
         df.to_excel(writer,'NERS_Brnds', index=False)
         writer.save()
 
     # save the model  --------------------------------------------------------
     # save model with entity pattern updates made by the entity ruler
-    output_dir = Path('demo_model')
+    output_dir = Path('ners_adhoc_model')
     if not output_dir.exists():
         output_dir.mkdir()
     nlp.to_disk(output_dir)
@@ -253,16 +267,13 @@ def main():
     header = 'Named Entities Found in Target File:\n'
     doc = nlp(header + spacer + results + spacer + tender)
     doc.user_data["title"] = "Named Entity Resolution System (NERS)"
-    colors = {
-        "MPN": "#C3FFA1",
-        "BRND": "#FFDDA1",
-        "CMMDTY": "#F3DDA1"
-    }
+    colors = {"BRND": "#FFDDA1"}
+    #colors = {"MPN": "#C3FFA1", "BRND": "#FFDDA1", "CMMDTY": "#F3DDA1"}
     options = {"ents": ["MPN", "BRND", "CMMDTY"], "colors": colors}
     # displacy.serve(doc, style="ent", options=options)
     html = displacy.render(doc, style="ent", page=True, options=options)  # use the entity visualizer
     # write the html string to the xampp folder and launch in browser through localhost port
-    with open('C:/Users/stacy/My Localhost/index.html', 'w') as data:
+    with open('C:/Users/stacy/Desktop/IESA Project - Europe/IESA Phase 2/ners/displacy/index.html', 'w') as data:
         data.write(html)
 
     print('\n' + results)
