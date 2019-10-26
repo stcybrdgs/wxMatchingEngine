@@ -31,6 +31,7 @@ menu_choices = []
 menu_options = [
     'Session - Start logging',
     'Session - Archive session',
+    'Session - Clean session',
     'Get Brands (IESA.ProductsClean)',
     'Get Brands (WrWx.Brands)',
     'Get Data - Original (IESA.ProductsOriginal)',
@@ -45,6 +46,7 @@ menu_options = [
     'NERS - extract MPNs (IESA model)'
     ]
 menu_functions = [
+    tbd,
     tbd,
     tbd,
     get_brands_db_iesa,
