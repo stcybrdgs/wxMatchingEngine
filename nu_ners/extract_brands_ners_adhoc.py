@@ -98,12 +98,13 @@ def main():
     #outFile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_brand_patterns.jsonl'
     # declare outputs
     brnd_pandas_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\00_ners_out_brands.xlsx'  # output
-    wx_1_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\test_data_cln_org_iesa_PPE_wx_v1.xlsx' # output
+    # wx_1_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\test_data_cln_org_iesa_PPE_wx_v1.xlsx' # output
 
     # declare inputs
     brnd_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_brand_patterns.jsonl'  # input
     patterns_file = brnd_file
 
+    # rem tender_file = user-selected column from wx_1_file dataframe TENDER
     tender_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\test_brands_old_input.csv'
     #tender_file = r'C:\Users\stacy\Desktop\NERS Demo\descriptions_nonstock.csv'
     write_type = 'w'
@@ -146,7 +147,7 @@ def main():
 
     doc = nlp(tender)
 
-    # FIND ENTITIES  -----------------------------------------------------------
+    # COUNT ENTITIES  ----------------------------------------------------------
     labels = []
     alt_labels = []
     print('\n')
@@ -173,50 +174,30 @@ def main():
     # This technique allows you to isolate entities on
     # a sentence-by-sentence basis, which will allow
     # for matching entities on a record-by-record basis
-    w_Brnds = []
-    w_Brnd_Alts = []
+    wBrnd_all = []
     unique = []
-    brnd_val = ''
-    alts = ''
-    #ent_exists = False
+    unique_str = ''
     j = 0
     for sent in doc.sents:
-        i = 0
-        for ent in sent.ents:
-            # ignore header record
-            if j > 0:
-                if ent.label_ == 'BRND':
-                    if i == 0:
-                        # if it's the first label in the record, save it in brnd
-                        brnd_val = ent.text
-                        unique.append(ent.text)
-                        i += 1
-                    else:
-                        # if it's not the first label in the sentence, put it in brnd alts
-                        # (if it is already in alts, don't put it in)
+        if j > 0:  # no need to process the header
+            for ent in sent.ents:
+                # ignore header record
+                if j > 0:
+                    if ent.label_ == 'BRND':
                         if ent.text not in unique:
                             unique.append(ent.text)
-                            if alts == '':
-                                alts = ent.text
-                            else:
-                                alts = alts + ', ' + ent.text
-                    #print(ent.label_, ': ', ent.text)
-
-        # store ent results for each record, ignoring the headers
-        if j > 0:
-            w_Brnds.append(brnd_val.upper())
-            w_Brnd_Alts.append(alts.upper())
-
-            # test ---------------
-            print('Record: {}'.format(j))
-            #print('str ', j, 'w_Brnds: ', w_Brnds)
-            #print('str ', j, 'w_Brnd_Alts: ', w_Brnd_Alts)
-            # test ---------------
-
-        # reset vars for next record
-        unique.clear()
-        brnd_val = ''
-        alts = ''
+            brnd_count = 0
+            for brnd in unique:
+                delimiter = ''
+                brnd_count += 1
+                if brnd_count == len(unique): brnd_delimiter = ''
+                else: brnd_delimiter = ', '
+                unique_str = unique_str + brnd + brnd_delimiter
+            unique_str = unique_str.upper()
+            wBrnd_all.append(unique_str)
+            unique.clear()  # reset var for next record
+            unique_str = '' # reset var for next record
+            print('Record: {}'.format(j))  # print record account to console
         j += 1
 
         # FOR THE CHUNKER
@@ -237,10 +218,9 @@ def main():
         # df = pd.read_csv("nba.csv")
         # df.get(["Salary", "Team", "Name"])
 
-        df = pd.DataFrame({ 'w_Brnds':w_Brnds,
-                            'w_Brnd_Alts':w_Brnd_Alts})
+        df = pd.DataFrame({ 'wBrnd_all':wBrnd_all })
 
-        writer = pd.ExcelWriter(wx_1_file)  #brnd_pandas_file)
+        writer = pd.ExcelWriter(brnd_pandas_file)  #brnd_pandas_file)
         df.to_excel(writer,'NERS_Brnds', index=False)
         writer.save()
 
