@@ -22,8 +22,121 @@ import get_data_cln_iesa
 import get_data_cln_org_iesa
 import add_wx_cols
 import extract_brands_ners_adhoc
-
 import tbd
+
+# helper functinos  ------------------------------------------------------------
+def show_main_menu():
+    global num_menu_items
+    global menu_choices
+    menu_choices.clear()
+    num_menu_items = 0
+    # print user menu
+    print('\n-----------------------------------------')
+    print('           Main Menu - Brand Tasks')
+    print('-----------------------------------------')
+    spacer ='   '
+    print('{}{}{}'.format('m', spacer, 'Show Main Menu'))
+    print('{}{}{}'.format('e', spacer, 'Exit Program'))
+    menu_choices.append('e')
+    menu_choices.append('m')
+    for opt in menu_options:
+        num_menu_items += 1
+        if num_menu_items < 10: spacer = '   '
+        else: spacer = '  '
+        print('{}{}{}'.format(num_menu_items, spacer, opt))
+        menu_choices.append(str(num_menu_items))
+    print('\n')
+
+def show_submenu(menu_title, file_choices):
+    global menu_choices
+    menu_choices.clear()
+    # print user menu
+    print('\n-----------------------------------------')
+    print('           ' + menu_title)
+    print('-----------------------------------------')
+    spacer ='  '
+    print('{}{}{}'.format('m', spacer, 'Show Main Menu'))
+    menu_choices.append('m')
+    i = 0
+    for ic in file_choices:
+        i += 1
+        print('{}  {}'.format(i, ic))
+        menu_choices.append(str(i))
+
+def extract_brands_ners_adhoc_menu():
+    #print('This is the Menu Driver for \'NERS - extract Brands (ad hoc)\'')
+    # check for jsonl file
+    #    if none, alert;
+    #    else confirm user wants to use existing file
+    # check for data file; if none, alert
+    # if jsonl && data present data files and ask user to pick one
+    # after user picks one, run extract_brands_ners_adhoc()
+
+    # print menu options to console  -------------------------------------------
+    # declare menu and file arrays
+    #menu_choices = []
+    #data_file_choices = []
+    jsonl_file_exists = False
+    jsonl_files = []
+    jsonl_choice = ''
+
+    # get path of current folder
+    folder_path = os.path.dirname(os.path.abspath(__file__))
+
+    # get names of .xlsx files that are in the folder that are also input files
+    for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
+        for file in f:
+            #print(file)
+            if 'ners' in file and 'patterns' in file and 'jsonl' in file:
+                # rem for full path use <files.append(os.path.join(r, file))>
+                jsonl_file_exists = True
+                #jsonl_files.append(file)
+                jsonl_files.append(file)
+                #break
+
+    if jsonl_file_exists:
+        show_submenu('Patterns Files', jsonl_files)
+        #print('SUBMENU TEST: the files are:')
+        #for file in jsonl_files:
+            #print(file)
+    else:
+        # if there is no JSONL file, redirect the user to the main menu
+        # so that they can make one
+        print('You need a JSONL patterns file to run this task. To make one, press \'m\' to return to the main menu.')
+        user_input = input()
+        while user_input != 'm':
+            print('Invalid input. Press \'m\' to return to the main menu.')
+            user_input = input()
+        main()
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this function; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+
+    # get user input
+    print('\nSelect an input file (or \'m\' for Main Menu)')
+    jsonl_choice = input()
+
+    # validate user input
+    while jsonl_choice not in menu_choices:
+        print('Invalid choice! Select an input file (or \'m\' for Main Menu)')
+        jsonl_choice = input()
+
+    if jsonl_choice == 'm':
+        main()
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this program; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+    else:
+        jsonl_choice = jsonl_files[int(jsonl_choice)-1]
+        print('You chose: {}'.format(jsonl_choice))
+        print(jsonl_files)
+
+    sys.exit() # TEST
+
 # global variables  ------------------------------------------------------------
 menu_options = []
 menu_functions = []
@@ -43,7 +156,8 @@ menu_options = [
     'NERS - extract Brands (ad hoc)',
     'NERS - extract Brands (IESA model)',
     'NERS - extract MPNs (ad hoc)',
-    'NERS - extract MPNs (IESA model)'
+    'NERS - extract MPNs (IESA model)',
+    'NERS - manage Displacy Visualizer'
     ]
 menu_functions = [
     tbd,
@@ -57,34 +171,13 @@ menu_functions = [
     add_wx_cols,
     generate_brand_patterns,
     tbd,
-    extract_brands_ners_adhoc,
+    extract_brands_ners_adhoc_menu,
+    tbd,
     tbd,
     tbd,
     tbd
 ]
 num_menu_items = 0
-
-# helper functinos  ------------------------------------------------------------
-def show_main_menu():
-    global num_menu_items
-    global menu_choices
-    num_menu_items = 0
-    # print user menu
-    print('\n-----------------------------------------')
-    print('           Main Menu - Brand Tasks')
-    print('-----------------------------------------')
-    spacer ='   '
-    print('{}{}{}'.format('m', spacer, 'Show Main Menu'))
-    print('{}{}{}'.format('e', spacer, 'Exit Program'))
-    menu_choices.append('e')
-    menu_choices.append('m')
-    for opt in menu_options:
-        num_menu_items += 1
-        if num_menu_items < 10: spacer = '   '
-        else: spacer = '  '
-        print('{}{}{}'.format(num_menu_items, spacer, opt))
-        menu_choices.append(str(num_menu_items))
-    print('\n')
 
 # main program  ----------------------------------------------------------------
 def main():
@@ -105,14 +198,21 @@ def main():
             menu_choice = input()
 
         # execute user-selected task
+        # handle 'm' and 'e'
         if menu_choice == 'e': is_program_running = False
         elif menu_choice == 'm': show_main_menu()
+
+        # test menu driver for NERS - extract Brands (ad hoc)
         else:
-            print('\n-----------------------------------------')
-            print('You selected: {}'.format(menu_options[int(menu_choice)-1]))
             index = int(menu_choice)-1
-            print('\nRunning module: ')
-            print(menu_functions[index])
-            menu_functions[index].main()
+            if menu_options[index] == 'NERS - extract Brands (ad hoc)':
+                menu_functions[index]()
+            else:
+                print('\n-----------------------------------------')
+                print('You selected: {}'.format(menu_options[int(menu_choice)-1]))
+                index = int(menu_choice)-1
+                print('\nRunning module: ')
+                print(menu_functions[index])
+                menu_functions[index].main()
 
 if __name__ == '__main__' : main()
