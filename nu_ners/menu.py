@@ -72,7 +72,8 @@ def extract_brands_ners_adhoc_menu():
     # if jsonl && data present data files and ask user to pick one
     # after user picks one, run extract_brands_ners_adhoc()
 
-    # print menu options to console  -------------------------------------------
+    # get the user's choice of which jsonl file to use -------------------------
+    # print menu options to console
     # declare menu and file arrays
     #menu_choices = []
     #data_file_choices = []
@@ -95,7 +96,7 @@ def extract_brands_ners_adhoc_menu():
                 #break
 
     if jsonl_file_exists:
-        show_submenu('Patterns Files', jsonl_files)
+        show_submenu('NERS - Select patterns', jsonl_files)
         #print('SUBMENU TEST: the files are:')
         #for file in jsonl_files:
             #print(file)
@@ -132,10 +133,100 @@ def extract_brands_ners_adhoc_menu():
         sys.exit()
     else:
         jsonl_choice = jsonl_files[int(jsonl_choice)-1]
-        print('You chose: {}'.format(jsonl_choice))
-        print(jsonl_files)
+        print('\nYou chose: {}'.format(jsonl_choice))
+        #print(jsonl_files)
 
-    sys.exit() # TEST
+    # get the user's choice of which tender file to use ------------------------
+    # print menu options to console
+    # declare menu and file arrays
+    #menu_choices = []
+    #data_file_choices = []
+    tender_file_exists = False
+    tender_files = []
+    tender_choice = ''
+
+    # get path of current folder
+    folder_path = os.path.dirname(os.path.abspath(__file__))
+
+    # get names of .xlsx files that are in the folder that are also input files
+    for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
+        for file in f:
+            #print(file)
+            if 'db_data' in file:
+                # rem for full path use <files.append(os.path.join(r, file))>
+                tender_file_exists = True
+                #jsonl_files.append(file)
+                tender_files.append(file)
+                #break
+
+    if tender_file_exists:
+        show_submenu('NERS - Select tender', tender_files)
+        #print('SUBMENU TEST: the files are:')
+        #for file in jsonl_files:
+            #print(file)
+    else:
+        # if there is no tender file, redirect the user to the main menu
+        # so that they can make one
+        print('You need a \'db_data\' file to run this task. To make one, press \'m\' to return to the main menu, then choose \'Get Data\'.')
+        #user_input.clear()
+        user_input = input()
+        while user_input != 'm':
+            print('Invalid input. Press \'m\' to return to the main menu.')
+            user_input = input()
+        main()
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this function; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+
+    # get user input
+    print('\nSelect an input file (or \'m\' for Main Menu)')
+    tender_choice = input()
+
+    # validate user input
+    while tender_choice not in menu_choices:
+        print('Invalid choice! Select an input file (or \'m\' for Main Menu)')
+        tender_choice = input()
+
+    if tender_choice == 'm':
+        main()
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this program; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+    else:
+        tender_choice = tender_files[int(tender_choice)-1]
+        print('\nYou chose: {}'.format(tender_choice))
+        #print(tender_files)
+
+    print('\nDo you want to extract brands using the following files (y/n)?')
+    print(jsonl_choice)
+    print(tender_choice)
+    yn_input = input()
+    while yn_input not in ('y', 'n'):
+        print('\nInvalid input.')
+        print('Do you want to extract brands using the following files (y/n)?')
+        print('   {}'.format(jsonl_choice))
+        print('   {}'.format(tender_choice))
+        yn_input = input()
+
+    if yn_input == 'y':
+        # call the extract function
+        #extract_brands_ners_adhoc(jsonl_choice, tender_choice)
+        # update user selections to reflect full path
+        jsonl_choice = folder_path + '\\' + jsonl_choice
+        tender_choice = folder_path + '\\' + tender_choice
+        print('\nExtracting Brands...')
+        extract_brands_ners_adhoc.main(jsonl_choice, tender_choice)
+    else:
+        main()
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this function; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
 
 # global variables  ------------------------------------------------------------
 menu_options = []
