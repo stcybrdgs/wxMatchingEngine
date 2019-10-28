@@ -97,7 +97,7 @@ def main():
 
     #outFile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_brand_patterns.jsonl'
     # declare outputs
-    brnd_pandas_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\00_ners_out_brands.xlsx'  # output
+    brnd_pandas_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_extracted_brands.xlsx'  # output
     # wx_1_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\test_data_cln_org_iesa_PPE_wx_v1.xlsx' # output
 
     # declare inputs
