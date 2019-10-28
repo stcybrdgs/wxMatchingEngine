@@ -32,7 +32,7 @@ def main():
     # get names of .xlsx files that are in the folder that are also input files
     for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
         for file in f:
-            if '.xlsx' in file and 'brand' in file:
+            if '.xlsx' in file and 'brand' in file and 'extract' not in file:
                 # rem for full path use <files.append(os.path.join(r, file))>
                 file_choices.append(file)
 
@@ -68,7 +68,8 @@ def main():
         sys.exit()
 
     # identify i/o  ----------------------------------------------------------------
-    outfile_name = 'ners_brand_patterns.jsonl'
+    f = file_choices[int(gold_choice)-1]
+    outfile_name = 'ners_' + f[0:len(f)-5]  + '_patterns.jsonl'
     outfile_path = folder_path + '\\' + outfile_name
     brands_file = folder_path + '\\' + file_choices[int(gold_choice)-1]
     brands_sheet = 'Sheet1'
@@ -164,7 +165,8 @@ def main():
     # end program
     print('\n')
     print('Done.')
-    print('{} brand patterns written'.format(brand_count))
+    print('JSONL file created.')
+    print('{} brand patterns written to:'.format(brand_count))
     print('{}'.format(outfile_path))
 
 if __name__ == '__main__' : main()
