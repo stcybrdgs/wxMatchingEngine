@@ -73,7 +73,7 @@ def import_csv(d):
     # end function //
 
 # MAIN  ========================================
-def main():
+def main(patterns_file, tender_file):
     '''
     NERS Demo w/ Sample Data
     '''
@@ -97,15 +97,15 @@ def main():
 
     #outFile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_brand_patterns.jsonl'
     # declare outputs
-    brnd_pandas_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_extracted_brands.xlsx'  # output
+    #brnd_pandas_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_extracted_brands.xlsx'  # output
     # wx_1_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\test_data_cln_org_iesa_PPE_wx_v1.xlsx' # output
 
     # declare inputs
-    brnd_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_brand_patterns.jsonl'  # input
-    patterns_file = brnd_file
+    #brnd_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_brand_patterns.jsonl'  # input
+    #patterns_file = brnd_file
 
     # rem tender_file = user-selected column from wx_1_file dataframe TENDER
-    tender_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\test_brands_old_input.csv'
+    #tender_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\test_brands_old_input.csv'
     #tender_file = r'C:\Users\stacy\Desktop\NERS Demo\descriptions_nonstock.csv'
     write_type = 'w'
 
