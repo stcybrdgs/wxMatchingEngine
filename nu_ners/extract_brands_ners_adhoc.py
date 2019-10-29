@@ -113,7 +113,7 @@ def create_tender_csv(tender_file):
     column_choice = get_column_choice(tender_file) # get user's choice of column to extract brand from
 
     # get column_choice from tender_file and turn the col into a csv
-    print('Creating csv file of selected tender column...')
+    print('\nCreating csv file of selected tender column...\n')
     data = df_tender[column_choice]
     folder_path = os.path.dirname(os.path.abspath(__file__))
     csv_filename = folder_path + '\\' + 'brand_tender.csv'
@@ -155,8 +155,8 @@ def main(patterns_file, tender_file):
     '''
     print('module: extract_brands_ners_adhoc.py')
     print('\n')
-    print(patterns_file)
-    print(tender_file)
+    #print(patterns_file)
+    #print(tender_file)
     #sys.exit()
 
     # CONFIG  -------------------------------------------------- \\
@@ -252,7 +252,7 @@ def main(patterns_file, tender_file):
                     unique.append(ent.text)
                     unique_num += 1
                 tot_num += 1
-        print('\nFound {} total, {} unique.\n'.format(tot_num, unique_num))
+        #print('\nFound {} total, {} unique.\n'.format(tot_num, unique_num))
         total_found.append(tot_num)
         total_unique_found.append(unique_num)
 
@@ -283,7 +283,7 @@ def main(patterns_file, tender_file):
             wBrnd_all.append(unique_str)
             unique.clear()  # reset var for next record
             unique_str = '' # reset var for next record
-            print('row {}'.format(j))  # print record account to console
+            print('> {}'.format(j))  # print record account to console
         j += 1
 
         # FOR THE CHUNKER
@@ -318,9 +318,9 @@ def main(patterns_file, tender_file):
     nlp.to_disk(output_dir)
 
     print("\nNERS Model was saved to ", output_dir)
-    print('Extracted Brands saved to ', brnd_pandas_file)
+    print('Extracted Brands saved to:\n', brnd_pandas_file)
     # TEST  -----------------------------
-    mpns = []
+    #mpns = []
 
     # DISPLACY VISUALIZER -----------------------------------------------------
     # get results for html doc
@@ -344,6 +344,7 @@ def main(patterns_file, tender_file):
         data.write(html)
 
     print('\n' + results)
+
 
     # end program
     print('Done.')
