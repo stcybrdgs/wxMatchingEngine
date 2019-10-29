@@ -56,6 +56,8 @@ def show_submenu(menu_title, file_choices):
     print('-----------------------------------------')
     spacer ='  '
     print('{}{}{}'.format('m', spacer, 'Show Main Menu'))
+    print('{}{}{}'.format('e', spacer, 'Exit Program'))
+    menu_choices.append('e')
     menu_choices.append('m')
     i = 0
     for ic in file_choices:
@@ -152,7 +154,7 @@ def extract_brands_ners_adhoc_menu():
     for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
         for file in f:
             #print(file)
-            if 'db_data' in file:
+            if 'wx_v1' in file:
                 # rem for full path use <files.append(os.path.join(r, file))>
                 tender_file_exists = True
                 #jsonl_files.append(file)
