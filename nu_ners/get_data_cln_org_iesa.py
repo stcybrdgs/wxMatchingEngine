@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+"""
+Thr, Oct 24, 2019
+Stacy Bridges
+
+"""
 # import library components  ---------------------------------------------------
 # import shutil
 import os, sys
@@ -28,7 +34,7 @@ def get_connection_object():
 
 def get_menu_choices(connection):
     # rem use SQL query to get the categories
-    sql = 'SELECT DISTINCT ProductCategory FROM ProductsOriginal ORDER BY ProductCategory ASC'
+    sql = 'SELECT DISTINCT ProductCategory FROM ProductsOriginal ORDEkm ,, R BY ProductCategory ASC'
     cursor = connection.cursor().execute(sql)
     #choices = ['Show Main Menu', 'MechPT', 'Electrical', 'FluidPower', 'PPE', 'Tools']
     choices = []
