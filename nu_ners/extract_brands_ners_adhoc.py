@@ -42,10 +42,12 @@ import numpy as np
 
 # IMPORT PY FILES  =============================
 import py_string_cleaner
+import menu
 
 # GLOBALS  =====================================
 global row_heads
 row_heads = []
+df_tender = []
 
 # FUNCTIONS  ===================================
 def sentence_segmenter(doc):
@@ -53,6 +55,80 @@ def sentence_segmenter(doc):
         if token.text == 'wrwx':
             doc[token.i].is_sent_start = True
     return doc
+    # end function //
+
+def get_column_choice(tender_file):
+    global df_tender
+    # get the columns from the file
+    # df.columns.tolist()
+    tender_col_choices = []
+    tender_col_nums = []
+    df_tender = pd.read_excel(tender_file, sheet_name=0)  # read tender file into dataframe
+    for head in df_tender:
+        tender_col_choices.append(head)  # copy tender headers into array
+
+    # print user menu
+    print('\n-----------------------------------------')
+    print('           Tender Columns')
+    print('-----------------------------------------')
+    spacer ='  '
+    print('{}{}{}'.format('m', spacer, 'Show Main Menu'))
+    tender_col_nums.append('m')
+    col_num = ''
+    i = 0
+    for tc in tender_col_choices:
+        i += 1
+        print('{}  {}'.format(i, tc))
+        tender_col_nums.append(str(i))
+
+    # get user input
+    print('\nSelect the column for extracting brands (or \'m\' for Main Menu)')
+    col_choice = input()
+
+    # validate user input
+    while col_choice not in tender_col_nums:
+        print('Invalid choice! Select a column (or \'m\' for Main Menu)')
+        col_choice = input()
+
+    if col_choice == 'm':
+        menu.main()
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this program; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+    else:
+        col_choice = tender_col_choices[int(col_choice)-1]
+        print('\nYou chose: {}'.format(col_choice))
+        #print(jsonl_files)
+
+    return col_choice
+    # end function //
+
+def create_tender_csv(tender_file):
+    global df_tender
+    # get name of column that user wants to use to extract brands
+    # and turn that colummn into a csv file
+    # return the full path of the csv to the calling function
+    column_choice = get_column_choice(tender_file) # get user's choice of column to extract brand from
+
+    # get column_choice from tender_file and turn the col into a csv
+    print('Creating csv file of selected tender column...')
+    data = df_tender[column_choice]
+    folder_path = os.path.dirname(os.path.abspath(__file__))
+    csv_filename = folder_path + '\\' + 'brand_tender.csv'
+    with open(csv_filename, 'w') as outfile:
+        outfile.write('description\n')
+        for line in data:
+            outfile.write(str(line) + '\n')
+            #outfile.write('\n')
+            print(line)
+
+    print('\n\nThe selected data column was written to:\n{}'.format(csv_filename))
+    print('\nPress \'Enter\' to continue...')
+    input()
+
+    return csv_filename
     # end function //
 
 def import_csv(d):
@@ -77,7 +153,11 @@ def main(patterns_file, tender_file):
     '''
     NERS Demo w/ Sample Data
     '''
-    print('\nNERS - extract Brands (ad hoc)')
+    print('module: extract_brands_ners_adhoc.py')
+    print('\n')
+    print(patterns_file)
+    print(tender_file)
+    #sys.exit()
 
     # CONFIG  -------------------------------------------------- \\
     # ------------------------------------------------------------ \\
@@ -97,7 +177,7 @@ def main(patterns_file, tender_file):
 
     #outFile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_brand_patterns.jsonl'
     # declare outputs
-    #brnd_pandas_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_extracted_brands.xlsx'  # output
+    brnd_pandas_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_extracted_brands.xlsx'  # output
     # wx_1_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\test_data_cln_org_iesa_PPE_wx_v1.xlsx' # output
 
     # declare inputs
@@ -137,15 +217,21 @@ def main(patterns_file, tender_file):
                 nlp.add_pipe(nu_ruler)#, before='ner')
         '''
 
-    # show pipeline components:
-    print(nlp.pipe_names)
+    # ask user to select a column from the user-selected data file
+    # and turn it into a csv file that can be imported by NERS
+    tender_col_csv = create_tender_csv(tender_file)  # create the csv and return csv filename
+    tender = import_csv(tender_col_csv)  # import the csv
 
-    # import test tender and clean it up
-    tender = import_csv(tender_file)  # import
+    print('\nCleaning the tender input...')
     if cleaner == 'on':
         tender = py_string_cleaner.clean_doc(tender)  #  clean
 
     doc = nlp(tender)
+
+    print('\nExtracting brands...')
+
+    # show pipeline components:
+    print(nlp.pipe_names)
 
     # COUNT ENTITIES  ----------------------------------------------------------
     labels = []
@@ -197,7 +283,7 @@ def main(patterns_file, tender_file):
             wBrnd_all.append(unique_str)
             unique.clear()  # reset var for next record
             unique_str = '' # reset var for next record
-            print('Record: {}'.format(j))  # print record account to console
+            print('row {}'.format(j))  # print record account to console
         j += 1
 
         # FOR THE CHUNKER
@@ -230,8 +316,9 @@ def main(patterns_file, tender_file):
     if not output_dir.exists():
         output_dir.mkdir()
     nlp.to_disk(output_dir)
-    print("Saved model to", output_dir)
 
+    print("\nNERS Model was saved to ", output_dir)
+    print('Extracted Brands saved to ', brnd_pandas_file)
     # TEST  -----------------------------
     mpns = []
 
