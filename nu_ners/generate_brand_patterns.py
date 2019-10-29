@@ -12,6 +12,7 @@ that can be used for string matching by the NERS EntityRuler.
 import os, shutil, sys
 import pathlib
 from pathlib import Path
+import unicodedata  # use to normalize international characters
 import pandas as pd
 from pandas import ExcelWriter
 from pandas import ExcelFile
@@ -100,6 +101,8 @@ def main():
         # iterate thru brands
         # and build patterns using the pattern/token components from above
         brand = str(brand)  # eliminate any float objects
+        brand = unicodedata.normalize('NFKD', brand).encode('ASCII', 'ignore')  # convert int'l chars
+        brand = brand.decode('utf-8')  # convert bytes to strings
         brand = brand.lower()  # convert brand to lowercase
         char_count = 0
         is_last_char = False
