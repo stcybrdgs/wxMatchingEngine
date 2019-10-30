@@ -222,7 +222,6 @@ def extract_brands_ners_adhoc_menu():
         # update user selections to reflect full path
         jsonl_choice = folder_path + '\\' + jsonl_choice
         tender_choice = folder_path + '\\' + tender_choice
-        print('\nExtracting Brands...')
         extract_brands_ners_adhoc.main(jsonl_choice, tender_choice)
     else:
         main()
