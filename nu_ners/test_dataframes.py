@@ -10,25 +10,34 @@ tender_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\d
 tender_col_choices = []
 tender_col_nums = []
 
+oBrand_all_in = []
+wBrand_all_in = []
+wBrand_all_out = []
+
 df_tender = pd.read_excel(tender_file, sheet_name=0)  # read tender file into dataframe
+
 for head in df_tender:
-    tender_col_choices.append(head)  # copy tender headers into array
+#    print(head, df_tender[head].count())  # get count of records in each column
+    if head == 'oBrand':
+        for row in df_tender[head]:
+            oBrand_all_in.append(row)
+    if head == 'wBrand_all':
+        for row in df_tender[head]:
+            wBrand_all_in.append(row)
 
-for head in tender_col_choices:
-    print(head, df_tender[head].count())  # get count of records in each column
-
-print(df_tender['ID'].count())
-
-# oMPN   7996
-# ovMPN 15593
-ofile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\00_test_pd_output.xlsx'
-df_del_dict = {}
-for head in df_tender:
-    if head == 'wKeyWords':
-        df_del_dict.update({head:'Success!'})
+brands = ['skf', 'cooper', 'smc', 'centurion']
+unique = ['skf', 'centurion']
+existing = ''
+i = 0
+for b in brands:
+    existing = str(df_tender['wBrand_all'][i]).lower()
+    if b not in unique and (existing.find(b) < 0):
+        print(i, '  ', b)
     else:
-        df_del_dict.update({head:df_tender[head]})
-df_del = pd.DataFrame(df_del_dict)
-writer = pd.ExcelWriter(ofile)
-df_del.to_excel(writer, 'TestData', index=False)
-writer.save()
+        print(i, '   no uniques')
+    i += 1
+
+for i in range(0,5):
+    s = df_tender['wBrand_all'][i]
+    print(str(s).lower())
+    if str(s) == 'nan': print('NAN')
