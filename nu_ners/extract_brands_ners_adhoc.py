@@ -119,14 +119,14 @@ def create_tender_csv(tender_file):
     data = df_tender[column_choice]
     folder_path = os.path.dirname(os.path.abspath(__file__))
     csv_filename = folder_path + '\\' + 'brand_tender.csv'
-    with open(csv_filename, 'w') as outfile:
+    with open(csv_filename, 'w', encoding='utf-8') as outfile:  # encoding handles charmap errors
         outfile.write('description\n')
         for line in data:
             outfile.write(str(line) + '\n')
             #outfile.write('\n')
             print(line)
 
-    print('\n\nThe selected data column was written to:\n{}'.format(csv_filename))
+    print('\n\nThe selected data column was written to the csv file at:\n{}'.format(csv_filename))
     print('\nPress \'Enter\' to continue...')
     input()
 
@@ -179,7 +179,7 @@ def main(patterns_file, tender_file):
 
     #outFile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_brand_patterns.jsonl'
     # declare outputs
-    brnd_pandas_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_extracted_brands.xlsx'  # output
+    # brnd_pandas_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_extracted_brands.xlsx'  # output
     # wx_1_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\test_data_cln_org_iesa_PPE_wx_v1.xlsx' # output
 
     # declare inputs
@@ -262,30 +262,43 @@ def main(patterns_file, tender_file):
     # This technique allows you to isolate entities on
     # a sentence-by-sentence basis, which will allow
     # for matching entities on a record-by-record basis
-    wBrnd_all = []
+    wBrand_ext = []
     unique = []
     unique_str = ''
+    existing_str = ''
     j = 0
     for sent in doc.sents:
         if j > 0:  # no need to process the header
+            existing_str = str(df_tender['wBrand_all'][j-1]).lower()  # !!! ------------------------ !!!
+            if existing_str == 'nan':  # !!! ------------------------ !!
+                existing_str = ''  # !!! ------------------------ !!
             for ent in sent.ents:
-                # ignore header record
-                if j > 0:
-                    if ent.label_ == 'BRND':
-                        if ent.text not in unique:
-                            unique.append(ent.text)
+                if ent.label_ == 'BRND':
+                    # add condition 'and (existing_str.find(ent.text) < 0)'
+                    # to account for any brands already extracted by prior runs
+                    if ent.text not in unique and (existing_str.find(ent.text) < 0):  # !!! -------- !!!
+                        unique.append(ent.text)
             brnd_count = 0
             for brnd in unique:
                 delimiter = ''
                 brnd_count += 1
-                if brnd_count == len(unique): brnd_delimiter = ''
-                else: brnd_delimiter = ', '
+                if brnd_count == len(unique):
+                    brnd_delimiter = ''
+                else:
+                    brnd_delimiter = ', '
                 unique_str = unique_str + brnd + brnd_delimiter
+            if existing_str != '' and unique_str != '':
+                unique_str = existing_str + ', ' + unique_str  # add new brands to those from prior runs  # !!! -------- !!!
+            elif existing_str != '' and unique_str == '':
+                unique_str = existing_str
             unique_str = unique_str.upper()
-            wBrnd_all.append(unique_str)
+            # trim trailing commas
+            #if unique_str[len(unique_str)-1:len(unique_str)] == ',':  # !!! -------- !!!
+            #    unique_str = unique_str[0:len(unique_str)-1]  # !!! -------- !!!
+            wBrand_ext.append(unique_str)
+            print(j)  # print record account to console
             unique.clear()  # reset var for next record
             unique_str = '' # reset var for next record
-            print('> {}'.format(j))  # print record account to console
         j += 1
 
         # FOR THE CHUNKER
@@ -300,17 +313,27 @@ def main(patterns_file, tender_file):
         # value: int, Series, or array-like
         # allow_duplicates: bool, optional
 
-        # FOR INSERTING BRANDS BACK INTO wx_v1
-        # df = pd.DataFrame.insert(0, 'w_Brnds_Test')
-        # or
-        # df = pd.read_csv("nba.csv")
-        # df.get(["Salary", "Team", "Name"])
-
-
     # SETUP DATAFRAME  ---------------------------------------------------------
-    df = pd.DataFrame({ 'wBrnd_all':wBrnd_all })
-    writer = pd.ExcelWriter(brnd_pandas_file)  #brnd_pandas_file)
-    df.to_excel(writer,'NERS_Brnds', index=False)
+    # first, combine newly extracted brands with any brands that already exist
+    # in the wBrand_all column of the wx_v1 file
+    '''
+    nu_wBrand_all = []  # use this [] to combine wBrand_ext with wBrand_all
+    nu_unique = []
+    for row in df_tender[wBrand_all]:
+        for str in row
+        if
+    '''
+
+    df_ofile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\db_data_cln_org_iesa_PPE_wx_v1.xlsx'
+    df_del_dict = {}
+    for head in df_tender:
+        if head == 'wBrand_all':
+            df_del_dict.update({head:wBrand_ext})
+        else:
+            df_del_dict.update({head:df_tender[head]})
+    df_del = pd.DataFrame(df_del_dict)
+    writer = pd.ExcelWriter(df_ofile)
+    df_del.to_excel(writer, 'TestData', index=False)
     writer.save()
 
     # save the model  ----------------------------------------------------------
@@ -321,7 +344,7 @@ def main(patterns_file, tender_file):
     nlp.to_disk(output_dir)
 
     print("\nNERS Model was saved to ", output_dir)
-    print('Extracted Brands saved to:\n', brnd_pandas_file)
+    print('Extracted Brands saved to:\n', df_ofile)
     # TEST  -----------------------------
     #mpns = []
 
