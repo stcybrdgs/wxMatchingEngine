@@ -48,6 +48,8 @@ import menu
 global row_heads
 row_heads = []
 df_tender = []
+tender_col_choices = []
+tender_col_nums = []
 
 # FUNCTIONS  ===================================
 def sentence_segmenter(doc):
@@ -304,13 +306,14 @@ def main(patterns_file, tender_file):
         # df = pd.read_csv("nba.csv")
         # df.get(["Salary", "Team", "Name"])
 
-        df = pd.DataFrame({ 'wBrnd_all':wBrnd_all })
 
-        writer = pd.ExcelWriter(brnd_pandas_file)  #brnd_pandas_file)
-        df.to_excel(writer,'NERS_Brnds', index=False)
-        writer.save()
+    # SETUP DATAFRAME  ---------------------------------------------------------
+    df = pd.DataFrame({ 'wBrnd_all':wBrnd_all })
+    writer = pd.ExcelWriter(brnd_pandas_file)  #brnd_pandas_file)
+    df.to_excel(writer,'NERS_Brnds', index=False)
+    writer.save()
 
-    # save the model  --------------------------------------------------------
+    # save the model  ----------------------------------------------------------
     # save model with entity pattern updates made by the entity ruler
     output_dir = Path('ners_adhoc_model')
     if not output_dir.exists():
@@ -322,7 +325,7 @@ def main(patterns_file, tender_file):
     # TEST  -----------------------------
     #mpns = []
 
-    # DISPLACY VISUALIZER -----------------------------------------------------
+    # DISPLACY VISUALIZER  -----------------------------------------------------
     # get results for html doc
     results = ''
     i = 0
