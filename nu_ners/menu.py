@@ -133,6 +133,8 @@ def extract_brands_ners_adhoc_menu():
         # return to this program; therefore, it's important to invoke sys.exit()
         # upon the callback to terminate all py execution in the terminal
         sys.exit()
+    elif jsonl_choice =='e':
+        sys.exit()
     else:
         jsonl_choice = jsonl_files[int(jsonl_choice)-1]
         print('\nYou chose: {}'.format(jsonl_choice))
@@ -169,7 +171,7 @@ def extract_brands_ners_adhoc_menu():
     else:
         # if there is no tender file, redirect the user to the main menu
         # so that they can make one
-        print('You need a \'db_data\' file to run this task. To make one, press \'m\' to return to the main menu, then choose \'Get Data\'.')
+        print('\nYou also need a \'wx_v1\' file to run this task. To make one, press \'m\' to return to the main menu, then choose \'Get Data\'.')
         #user_input.clear()
         user_input = input()
         while user_input != 'm':
