@@ -324,7 +324,8 @@ def main(patterns_file, tender_file):
         if
     '''
 
-    df_ofile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\db_data_cln_org_iesa_PPE_wx_v1.xlsx'
+    #df_ofile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\db_data_cln_org_iesa_PPE_wx_v1.xlsx'
+    df_ofile = tender_file
     df_del_dict = {}
     for head in df_tender:
         if head == 'wBrand_all':
