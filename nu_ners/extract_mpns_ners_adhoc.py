@@ -145,8 +145,15 @@ def import_csv(d):
             row_head = row[0]
             row_heads.append(row_head)
             # populate txt obj
-            doc = doc + 'wrwx ' + ('|'.join(row) + '\n')
+            if i == 0:
+                # add top anchor to keep displacy from collapsing
+                doc = doc + 'wrwxstart ' + ('|'.join(row) + '\n')
+            else:
+                doc = doc + 'wrwx ' + ('|'.join(row) + '\n')
             i += 1
+
+    # add bottom anchor to keep displacy from collapsing
+    doc = doc + 'wrwxend ' + ('|'.join(row) + '\n')
     return doc
     # end function //
 
@@ -239,8 +246,8 @@ def main(patterns_file, tender_file):
     labels = []
     alt_labels = []
     print('\n')
-    labels = ['MPN']  # , 'PRODUCT', 'MPN', 'SKU']
-    alt_labels = ['Mpn']  # , 'Product', 'MfrPartNo', 'SkuID']
+    labels = ['BRND', 'WRWXSTART', 'WRWXEND']  # , 'PRODUCT', 'MPN', 'SKU']
+    alt_labels = ['Brnd', 'WrWxStart', 'WrWxEnd']  # , 'Product', 'MfrPartNo', 'SkuID']
     total_found = []
     total_unique_found = []
     for label in labels:
@@ -249,7 +256,7 @@ def main(patterns_file, tender_file):
         unique = []
         for ent in doc.ents:
             # print([ent.text, ent.label_], end='')
-            if ent.label_ == label:
+            if ent.label_ == 'MPN':
                 if ent.text not in unique:
                     unique.append(ent.text)
                     unique_num += 1
@@ -354,16 +361,17 @@ def main(patterns_file, tender_file):
     results = ''
     i = 0
     for item in alt_labels:
-        results = results + '{}: {} tot  {} unq\n'.format(item, total_found[i], total_unique_found[i])
+        if item == 'Mpn':
+            results = results + '{}: {} tot  {} unq\n'.format(item, total_found[i], total_unique_found[i])
         i += 1
     # store nlp object as string in html var
     spacer = '---------------------------------------------------------\n'
     header = 'Named Entities Found in Target File:\n'
     doc = nlp(header + spacer + results + spacer + tender)
     doc.user_data["title"] = "Named Entity Resolution System (NERS)"
-    #colors = {"BRND": "#FFDDA1"}
-    colors = {"MPN": "#C3FFA1"}  #, "BRND": "#FFDDA1", "CMMDTY": "#F3DDA1"}
-    options = {"ents": ["MPN", "BRND", "CMMDTY"], "colors": colors}
+    colors = {"BRND": "#FFDDA1", "WRWXSTART":"#ADC9E8", "WRWXEND":"#ADC9E8"}  # blue: #0075C9 | lt blue: #ADC9E8
+    #colors = {"MPN": "#C3FFA1", "BRND": "#FFDDA1", "CMMDTY": "#F3DDA1"}
+    options = {"ents": ["MPN", "BRND", "WRWXSTART", "WRWXEND"], "colors": colors}
     # displacy.serve(doc, style="ent", options=options)
     html = displacy.render(doc, style="ent", page=True, options=options)  # use the entity visualizer
     # write the html string to the xampp folder and launch in browser through localhost port
