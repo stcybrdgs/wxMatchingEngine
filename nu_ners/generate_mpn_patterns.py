@@ -161,6 +161,10 @@ def main():
     # that can then be picked up by the EntityRuler to map MPNs to the model
     mpn_count = 0
     with open(outfile_path, 'w') as outfile:
+        outfile.write('{"label":"WRWXSTART", "pattern":[{"lower":"wrwxstart"}]}')
+        outfile.write('\n')
+        outfile.write('{"label":"WRWXEND", "pattern":[{"lower":"wrwxend"}]}')
+        outfile.write('\n')
         for line in patterns:
             outfile.write(line)
             outfile.write('\n')
