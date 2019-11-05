@@ -175,7 +175,7 @@ def main(patterns_file, tender_file):
     model = 'pre'   # pre -> use non-trained model / post -> use trained model
     mpn = 'on'  # on/off
     ruler = 'on'
-    cleaner = 'on'
+    cleaner = 'off'
     number_tagger = 'off'
 
     # rem if stemmer is turned on after model does P2 training, then
@@ -234,6 +234,11 @@ def main(patterns_file, tender_file):
     print('\nCleaning the tender input...')
     if cleaner == 'on':
         tender = py_string_cleaner.clean_doc(tender)  #  clean
+    else:
+        tender = tender.lower()
+
+    #print(tender)
+    #sys.exit()
 
     doc = nlp(tender)
 
@@ -246,8 +251,8 @@ def main(patterns_file, tender_file):
     labels = []
     alt_labels = []
     print('\n')
-    labels = ['BRND', 'WRWXSTART', 'WRWXEND']  # , 'PRODUCT', 'MPN', 'SKU']
-    alt_labels = ['Brnd', 'WrWxStart', 'WrWxEnd']  # , 'Product', 'MfrPartNo', 'SkuID']
+    labels = ['MPN', 'WRWXSTART', 'WRWXEND']  # , 'PRODUCT', 'MPN', 'SKU']
+    alt_labels = ['Mpn', 'WrWxStart', 'WrWxEnd']  # , 'Product', 'MfrPartNo', 'SkuID']
     total_found = []
     total_unique_found = []
     for label in labels:
@@ -369,7 +374,7 @@ def main(patterns_file, tender_file):
     header = 'Named Entities Found in Target File:\n'
     doc = nlp(header + spacer + results + spacer + tender)
     doc.user_data["title"] = "Named Entity Resolution System (NERS)"
-    colors = {"BRND": "#FFDDA1", "WRWXSTART":"#ADC9E8", "WRWXEND":"#ADC9E8"}  # blue: #0075C9 | lt blue: #ADC9E8
+    colors = {"BRND": "#FFDDA1", "MPN": "#C3FFA1", "WRWXSTART":"#ADC9E8", "WRWXEND":"#ADC9E8"}  # blue: #0075C9 | lt blue: #ADC9E8
     #colors = {"MPN": "#C3FFA1", "BRND": "#FFDDA1", "CMMDTY": "#F3DDA1"}
     options = {"ents": ["MPN", "BRND", "WRWXSTART", "WRWXEND"], "colors": colors}
     # displacy.serve(doc, style="ent", options=options)
