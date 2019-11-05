@@ -1,3 +1,17 @@
+#!/usr/bin/env python
+# coding: utf8
+"""
+Mon, Nov 4, 2019
+Stacy Bridges
+
+This simplified code transforms an input set of mpns into mpn patterns
+that can be used for string matching by the NERS EntityRuler.
+
+This version uses an nlp object tokenizer to determine the pattern
+break points instead of the more complicated rules from previous versions.
+
+"""
+
 # IMPORTS  =====================================
 import os, sys, csv, json
 import spacy
@@ -22,106 +36,70 @@ def sentence_segmenter(doc):
     # end function //
 
 def import_csv(d):
-    #global row_heads
     doc = ''
     with open(d) as data:
         csv_reader = csv.reader(data, delimiter='|')
         i = 0
         for row in csv_reader:
-            # populate row_heads[]
-            #if i > 0:  # skip header row
-            #row_head = row[0]
-            #row_heads.append(row_head)
-            # populate txt obj
-            if i == 0:
-                # add top anchor to keep displacy from collapsing
-                doc = doc + 'wrwxstart ' + ('|'.join(row) + '\n')
-            else:
-                doc = doc + 'wrwx ' + ('|'.join(row) + '\n')
+            # add top anchor to keep displacy from collapsing
+            doc = doc + 'wrwx ' + ('|'.join(row) + '\n')
             i += 1
-
     # add bottom anchor to keep displacy from collapsing
-    doc = doc + 'wrwxend ' + ('|'.join(row) + '\n')
     return doc
     # end function //
 
 # MAIN  ===========================================
 def main():
-    test_mpns = [
-        '040/1.0',
-        '1/2/3-PIN/FEMALE',
-        '040"/1.0',
-        '1/2"/3-PIN/FEMALE',
-        '1577340000',
-        'BR1200GI',
-        '40.31.8.230.0000',
-        '40.52.8.110.0000',
-        '40/31',
-        '6EP1436-3BA00',
-        '60.13.8.230.0040',
-        '6AV2124-0QC02-0AX0',
-        'M22-DP-R-X0+M22-A',
-        'P1-25/EA/SVB',
-        'CR2032',
-        'EOC/5',
-        '239.46+16',
-        'P1000 (P1001)',
-        'P10/00',
-        'P 1796',
-        'PS\\02\\53'
-    ]
-
-    #tender = ''
-    #for num in test_mpns:
-    #    tender = tender + num.lower() + '\n'
-
-    #sys.exit()
+    # define i/o
+    #patterns_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_db_mpn_delme_test_patterns.jsonl'
+    mpn_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\db_mpn_delme_test.csv'
+    ofile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_db_mpn_delme_test_patterns.jsonl'
 
     # load model
-    nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner']) #('en_core_web_sm', disable=['parser'])
-    #elif model == 'post':nlp = spacy.load('demo_model')
-    nlp.add_pipe(sentence_segmenter, after='tagger')
+    nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])  # load blank english model
+    nlp.add_pipe(sentence_segmenter, after='tagger')  # add custom segmenter to nlp pipeline
+    tender = import_csv(mpn_file)  # import tender data
+    tender = tender.lower()  # convert tender data to lowercase
+    doc = nlp(tender)  # turn tender data into nlp object
 
-    # add pipes
-    #if ruler == 'on':
-    # load patterns from external file only if model is not already trained
-    patterns_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\ners_db_mpn_delme_test_patterns.jsonl'
-    nu_ruler = EntityRuler(nlp).from_disk(patterns_file)
-    # putting the ruler before ner will override ner decisions in favor of ruler patterns
-    nlp.add_pipe(nu_ruler)#, before='ner')
-
-    '''
-    # remember to swap precedence between ruler and ner after model training
-    if model == 'post':
-        # load patterns from external file only if model is not already trained
-        if "entity_ruler" not in nlp.pipe_names:
-            nu_ruler = EntityRuler(nlp).from_disk(patterns_file)
-            # putting the ner before ruler will override favor ner decisions
-            nlp.add_pipe(nu_ruler)#, before='ner')
-    '''
-
-    # ask user to select a column from the user-selected data file
-    # and turn it into a csv file that can be imported by NERS
-    #tender_col_csv = create_tender_csv(tender_file)  # create the csv and return csv filename
-    #tender = import_csv(tender_col_csv)  # import the csv
-
-    tender_file = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners\db_mpn_delme_test.csv'
-    tender = import_csv(tender_file)
-    tender = tender.lower()
-
-    #print(tender)
-    #sys.exit()
-
-    doc = nlp(tender)
-
+    patterns = []
+    i = 0
     for sent in doc.sents:
-        for tok in sent:
-            print('{}{}'.format(tok.text, '^'))
+        tokens = []
+        pattern = ''
+        if i > 0:  # skip the header
+            for tok in sent:
+                if tok.text.isspace():#tok.pos_ == 'SPACE':
+                    tokens.append(' ')
+                elif tok.text != 'wrwx':
+                    tokens.append(tok.text)  # put each token in an array that can call .len()
 
-    for sent in doc.sents:
-        for ent in sent.ents:
-            print(ent.text, ' | ', ent.label_)
+            # go thru tokens in the sentence and use them to build the jsonl pattern
+            j = 0
+            for token in tokens:
+                # if last list index is trailing whitespace, pop it off the list
+                j += 1
+                if len(tokens) == j and token == ' ':
+                    tokens.pop(j-1)
+            j = 0
+            pattern = ''
+            for token in tokens:
+                j += 1
+                if j == 1:
+                    pattern = pattern + '{"label":"MPN", "pattern":['
+                if len(tokens) == j:
+                    pattern = pattern + '{"lower":"' + token + '"}]}'
+                else:
+                    pattern = pattern + '{"lower":"' + token + '"},'
+            patterns.append(pattern)  # store the jsonl pattern for this sentence
+        tokens.clear()
+        i += 1
 
+    with open(ofile, 'w') as of:
+        for p in patterns:
+            print(p)
+            of.write(p)
+            of.write('\n')
 
     # end program
     print('Done.')
