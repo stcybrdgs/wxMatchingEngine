@@ -74,10 +74,10 @@ def main():
                 elif tok.text != 'wrwx':
                     tokens.append(tok.text)  # put each token in an array that can call .len()
 
-            # go thru tokens in the sentence and use them to build the jsonl pattern
+            # go thru tokens in the sentence and use them to build the jsonl patterns
             j = 0
             for token in tokens:
-                # if last list index is trailing whitespace, pop it off the list
+                # if the last list index is trailing whitespace, pop it off the list
                 j += 1
                 if len(tokens) == j and token == ' ':
                     tokens.pop(j-1)
@@ -85,16 +85,38 @@ def main():
             pattern = ''
             for token in tokens:
                 j += 1
+                # if the character \ or " exist in the token,
+                # then you need to add escape characters to the token
+                if token.find('\\') >= 0 or token.find('"') >= 0:
+                    token_str = ''
+                    for char in token:
+                        if char == '\\':
+                            #print('here: \\')
+                            token_str = token_str + '\\\\'
+                        elif char == '"':
+                            #print('here: \"')
+                            token_str = token_str + '\\\"'
+                        else:
+                            token_str = token_str + char
+                    token = token_str
+                # build the patterns
                 if j == 1:
-                    pattern = pattern + '{"label":"MPN", "pattern":['
+                    pattern = pattern + '{"label":"MPN", "pattern":['  # pattern prefix
                 if len(tokens) == j:
-                    pattern = pattern + '{"lower":"' + token + '"}]}'
+                    pattern = pattern + '{"lower":"' + token + '"}]}'  # outer pattern (suffix)
                 else:
-                    pattern = pattern + '{"lower":"' + token + '"},'
+                    pattern = pattern + '{"lower":"' + token + '"},'  # inner pattern
             patterns.append(pattern)  # store the jsonl pattern for this sentence
         tokens.clear()
         i += 1
 
+    # insert starting and ending anchors to prevent the displacy visualizer from collapsing
+    start_anchor = '{"label":"WRWXSTART", "pattern":[{"lower":"wrwxstart"}]}'
+    end_anchor = '{"label":"WRWXEND", "pattern":[{"lower":"wrwxend"}]}'
+    patterns.append(start_anchor)
+    patterns.append(end_anchor)
+
+    # write patterns to jsonl pattern file
     with open(ofile, 'w') as of:
         for p in patterns:
             print(p)
