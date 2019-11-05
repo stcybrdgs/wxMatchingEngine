@@ -40,9 +40,14 @@ from spacy.lang.en.stop_words import STOP_WORDS
 # rem keep ':' for skus that need it
 # rem keep ',' for numbers that need it
 # rem keep '.' for numbers that need it
+'''
 special_chars = ['!', '@', '#', '$', '%', '^', '&', '*', '(',
                 ')', '{', '}', '[', ']', '|', '\\', ';', '\"',
                 '\'', '<', '>', '?', '£', '.', ':', ',', '-', '=']
+'''
+special_chars = ['!', '@', '#', '$', '%', '^', '&', '*',
+                '{', '}', '[', ']', '|', ';',
+                '<', '>', '?', '£', ':', '=']
 
 nlp = spacy.load('en_core_web_sm')
 
@@ -63,7 +68,7 @@ def remove_accents(d):
 def remove_special_chars(d):
     for char in special_chars:
         if d.find(char) >= 0:
-            d = d.replace(char, ' ')
+            d = d.replace(char, '')
     return d
     # end function //
 

@@ -123,7 +123,7 @@ def main():
                     # if char is a space, make it empty so that spacy lib can use it
                     char = ''
                 if char == '"':
-                    char = ''
+                    char = '\\"'
                 # store the special char as a token
                 tokens.append(char)
             else:
