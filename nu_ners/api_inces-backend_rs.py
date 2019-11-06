@@ -84,7 +84,7 @@ def main():
 	# product?apikey=4f032b1a18ab3f36&supplier=RS&id=100-0151
 	# https://api.ince.live/product?apikey=4f032b1a18ab3f36&supplier=RS&id=121-084
 	# https://api.ince.live/product?apikey=4f032b1a18ab3f36&id=60032-RSH
-	URL = "https://api.ince.live/product"
+	URL = "https://api.wrangle.works/product"  #"https://api.ince.live/product"
 	apikey = '4f032b1a18ab3f36'
 	supplier = 'RS'
 
