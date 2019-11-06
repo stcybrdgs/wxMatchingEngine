@@ -14,8 +14,7 @@ from pandas import ExcelFile
 import numpy as np
 
 # import py files  -------------------------------------------------------------
-import generate_brand_patterns
-import generate_mpn_patterns
+import generate_brand_patterns_2
 import generate_mpn_patterns_2
 import get_brands_db_iesa
 import get_brands_db_wx
@@ -123,6 +122,47 @@ def generate_mpn_patterns_menu():
         gold_choice = file_choices[int(gold_choice)-1]
         print('\nYou chose: {}'.format(gold_choice))
         generate_mpn_patterns_2.main(gold_choice)
+    # end function //
+
+def generate_brand_patterns_menu():
+    global menu_choices
+    file_choices = []
+
+    # get path of current folder
+    folder_path = get_folder_path()
+
+    # get names of .xlsx files that are in the folder that are also input files
+    for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
+        for file in f:
+            if ('.xlsx' in file or '.csv' in file) and ('brand' in file and 'db' in file) and 'extract' not in file:
+                # rem for full path use <files.append(os.path.join(r, file))>
+                file_choices.append(file)
+
+    # show the submenu of file input options
+    show_submenu('Brand Input Files', file_choices)
+
+    # get user input
+    print('\nSelect an input file (or \'m\' for Main Menu)')
+    gold_choice = input()
+
+    # validate user input
+    while gold_choice not in menu_choices:
+        print('Invalid choice! Select an input file (or \'m\' for Main Menu)')
+        gold_choice = input()
+
+    if gold_choice == 'm':
+        main()
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this program; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+    elif gold_choice =='e':
+        sys.exit()
+    else:
+        gold_choice = file_choices[int(gold_choice)-1]
+        print('\nYou chose: {}'.format(gold_choice))
+        generate_brand_patterns_2.main(gold_choice)
     # end function //
 
 def extract_brands_ners_adhoc_menu():
@@ -489,7 +529,7 @@ menu_functions = [
     get_data_cln_iesa,
     get_data_cln_org_iesa,
     add_wx_cols,
-    generate_brand_patterns,
+    generate_brand_patterns_menu,
     generate_mpn_patterns_menu,
     extract_brands_ners_adhoc_menu,
     tbd,
@@ -530,6 +570,8 @@ def main():
             elif menu_options[index] == 'NERS - extract MPNs (ad hoc)':
                 menu_functions[index]()
             elif menu_options[index] == 'NERS - generate patterns for MPNs (JSONL)':
+                menu_functions[index]()
+            elif menu_options[index] == 'NERS - generate patterns for Brands (JSONL)':
                 menu_functions[index]()
             else:
                 print('\n-----------------------------------------')
