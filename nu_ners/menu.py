@@ -16,6 +16,7 @@ import numpy as np
 # import py files  -------------------------------------------------------------
 import generate_brand_patterns
 import generate_mpn_patterns
+import generate_mpn_patterns_2
 import get_brands_db_iesa
 import get_brands_db_wx
 import get_data_org_iesa
@@ -26,7 +27,14 @@ import extract_brands_ners_adhoc
 import extract_mpns_ners_adhoc
 import tbd
 
-# helper functinos  ------------------------------------------------------------
+# global variables  ------------------------------------------------------------
+menu_options = []
+menu_functions = []
+menu_choices = []
+menu_options = []
+menu_functions = []
+
+# helper functions  ------------------------------------------------------------
 def show_main_menu():
     global num_menu_items
     global menu_choices
@@ -48,6 +56,12 @@ def show_main_menu():
         print('{}{}{}'.format(num_menu_items, spacer, opt))
         menu_choices.append(str(num_menu_items))
     print('\n')
+    # end function //
+
+def get_folder_path():
+    # return path of current folder
+    return os.path.dirname(os.path.abspath(__file__))
+    # end function //
 
 def show_submenu(menu_title, file_choices):
     global menu_choices
@@ -66,6 +80,50 @@ def show_submenu(menu_title, file_choices):
         i += 1
         print('{}  {}'.format(i, ic))
         menu_choices.append(str(i))
+    # end function //
+
+def generate_mpn_patterns_menu():
+    global menu_choices
+    file_choices = []
+    #generate_mpn_patterns_2.main()  # 'db_mpn_delme_test.csv'
+    #sys.exit()
+
+    # get path of current folder
+    folder_path = get_folder_path()
+
+    # get names of .xlsx files that are in the folder that are also input files
+    for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
+        for file in f:
+            if ('.xlsx' in file or '.csv' in file) and ('mpn' in file and 'db' in file) and 'extract' not in file:
+                # rem for full path use <files.append(os.path.join(r, file))>
+                file_choices.append(file)
+
+    # show the submenu of file input options
+    show_submenu('MPN Input Files', file_choices)
+
+    # get user input
+    print('\nSelect an input file (or \'m\' for Main Menu)')
+    gold_choice = input()
+
+    # validate user input
+    while gold_choice not in menu_choices:
+        print('Invalid choice! Select an input file (or \'m\' for Main Menu)')
+        gold_choice = input()
+
+    if gold_choice == 'm':
+        main()
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this program; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+    elif gold_choice =='e':
+        sys.exit()
+    else:
+        gold_choice = file_choices[int(gold_choice)-1]
+        print('\nYou chose: {}'.format(gold_choice))
+        generate_mpn_patterns_2.main(gold_choice)
+    # end function //
 
 def extract_brands_ners_adhoc_menu():
     #print('This is the Menu Driver for \'NERS - extract Brands (ad hoc)\'')
@@ -233,6 +291,8 @@ def extract_brands_ners_adhoc_menu():
         # upon the callback to terminate all py execution in the terminal
         sys.exit()
 
+    # end function //
+
 def extract_mpns_ners_adhoc_menu():
     #print('This is the Menu Driver for \'NERS - extract MPNs (ad hoc)\'')
     # check for jsonl file
@@ -398,11 +458,9 @@ def extract_mpns_ners_adhoc_menu():
         # return to this function; therefore, it's important to invoke sys.exit()
         # upon the callback to terminate all py execution in the terminal
         sys.exit()
+    # end function //
 
-# global variables  ------------------------------------------------------------
-menu_options = []
-menu_functions = []
-menu_choices = []
+# populate menu options/functions  ---------------------------------------------
 menu_options = [
     'Session - Start logging',
     'Session - Archive session',
@@ -432,7 +490,7 @@ menu_functions = [
     get_data_cln_org_iesa,
     add_wx_cols,
     generate_brand_patterns,
-    generate_mpn_patterns,
+    generate_mpn_patterns_menu,
     extract_brands_ners_adhoc_menu,
     tbd,
     extract_mpns_ners_adhoc_menu,
@@ -461,15 +519,17 @@ def main():
 
         # execute user-selected task
         # handle 'm' and 'e'
-        if menu_choice == 'e': is_program_running = False
-        elif menu_choice == 'm': show_main_menu()
-
-        # test menu driver for NERS - extract Brands (ad hoc)
+        if menu_choice == 'e':
+            is_program_running = False
+        elif menu_choice == 'm':
+            show_main_menu()
         else:
             index = int(menu_choice)-1
             if menu_options[index] == 'NERS - extract Brands (ad hoc)':
                 menu_functions[index]()
             elif menu_options[index] == 'NERS - extract MPNs (ad hoc)':
+                menu_functions[index]()
+            elif menu_options[index] == 'NERS - generate patterns for MPNs (JSONL)':
                 menu_functions[index]()
             else:
                 print('\n-----------------------------------------')
