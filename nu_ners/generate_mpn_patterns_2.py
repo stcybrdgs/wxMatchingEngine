@@ -4,20 +4,24 @@
 Mon, Nov 4, 2019
 Stacy Bridges
 
-This simplified code transforms an imported set of mpns into mpn patterns
-that can be used for string matching by NERS. This version uses an nlp object
-tokenizer to determine the pattern break-points instead of using the more
-complicated rules-based approach from previous versions.
+This code transforms a column of MPNs into patterns that can be used by the NERS
+EntityRuler to map MPN codes to the MPN entity label within a statistical model.
+This code uses an NLP object tokenizer to identify break-points between tokens,
+and then it wraps the individual tokens in JSONL syntax.
+
+- input: .xlsx or .csv
+- output: .jsonl
 
 """
 # LIBRARY IMPORTS  =============================================================
-import os, sys, csv
+import os, sys, csv  # utilities
 from pathlib import Path
 import spacy
 from spacy import displacy
 from spacy.pipeline import EntityRuler, Tagger
 from spacy.language import Language
 from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
+import unicodedata  # use to normalize international characters
 import pandas as pd
 from pandas import ExcelWriter
 import numpy as np
@@ -42,27 +46,50 @@ def import_csv(d):
         csv_reader = csv.reader(data, delimiter='|')
         i = 0
         for row in csv_reader:
-            # add 'wrwx' marker to each record so that the sentence segmenter
-            # knows where to start each sentence/record
+            # rem add 'wrwx' marker to each record to assist the sentence segmenter
             doc = doc + 'wrwx ' + ('|'.join(row) + '\n')
             i += 1
     return doc
     # end function //
 
+def import_xlsx(d):
+    doc = ''
+    mpns_data = pd.read_excel(d, 'Sheet1')
+    mpns = mpns_data['MPN']
+    # prime the doc object with a header row to keep it aligned with the format
+    # used for csv import (ie, the header is not included in the pandas col array)
+    doc = doc + 'wrwx' + 'mpn' + '\n'
+    for mpn in mpns:
+        mpn = str(mpn)  # eliminate any float objects
+        mpn = unicodedata.normalize('NFKD', mpn).encode('ASCII', 'ignore')  # convert int'l chars
+        mpn = mpn.decode('utf-8')  # convert bytes to strings
+        # rem add 'wrwx' marker to each record to assist the sentence segmenter
+        doc = doc + 'wrwx ' + mpn + '\n'
+    return doc
+    # end function //
+
 # MAIN  ========================================================================
-def main(file_name = 'db_mpn_gold_test.xlsx'):  # default arg is a test file
+def main(file_name = 'db_mpn_gold_test.csv'):  # default arg is a test file
+
+    # get file and file extension
+    f_name, file_ext = os.path.splitext(file_name)
 
     # define i/o
     folder_path = get_folder_path()  # get path of current folder
     mpn_file = folder_path + '\\' + file_name
-    ofile = folder_path + '\\' + 'ners_' + file_name[0:len(file_name)-5] + '_patterns.jsonl'
+    ofile = folder_path + '\\' + 'ners_' + file_name[0:len(file_name)-len(file_ext)] + '_patterns.jsonl'
 
     # load spacy statistical model
     nlp = spacy.load('en_core_web_sm', disable=['parser', 'ner'])  # load blank english model
     nlp.add_pipe(sentence_segmenter, after='tagger')  # add custom segmenter to nlp pipeline
-    tender = import_csv(mpn_file)  # import tender data
-    tender = tender.lower()  # convert tender data to lowercase
-    doc = nlp(tender)  # turn tender data into nlp object
+
+    # import mpn file
+    if file_ext == '.csv':
+        mpn_file = import_csv(mpn_file)  # import as csv if csv
+    elif file_ext == '.xlsx':
+        mpn_file = import_xlsx(mpn_file)  # import as xlsx if xlsx
+    mpn_file = mpn_file.lower()  # convert tender data to lowercase
+    doc = nlp(mpn_file)  # turn mpn data into nlp object
 
     patterns = []
     i = 0
@@ -96,10 +123,8 @@ def main(file_name = 'db_mpn_gold_test.xlsx'):  # default arg is a test file
                     token_str = ''
                     for char in token:
                         if char == '\\':
-                            #print('here: \\')
                             token_str = token_str + '\\\\'
                         elif char == '"':
-                            #print('here: \"')
                             token_str = token_str + '\\\"'
                         else:
                             token_str = token_str + char
@@ -122,13 +147,19 @@ def main(file_name = 'db_mpn_gold_test.xlsx'):  # default arg is a test file
     patterns.append(end_anchor)
 
     # write patterns to jsonl pattern file
+    mpn_count = 0
     with open(ofile, 'w') as of:
         for p in patterns:
             print(p)
             of.write(p)
             of.write('\n')
+            mpn_count += 1
 
-    # end program
+    # provide console report to user and end the program
+    print('\n')
     print('Done.')
+    print('JSONL file created.')
+    print('{} mpn patterns written to:'.format(mpn_count))
+    print('{}'.format(ofile))
 
 if __name__ == '__main__' : main()
