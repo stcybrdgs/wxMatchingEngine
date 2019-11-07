@@ -119,6 +119,7 @@ def create_tender_csv(tender_file):
     data = df_tender[column_choice]
     folder_path = os.path.dirname(os.path.abspath(__file__))
     csv_filename = folder_path + '\\' + 'brand_tender.csv'
+
     with open(csv_filename, 'w', encoding='utf-8') as outfile:  # encoding handles charmap errors
         outfile.write('description\n')
         for line in data:
@@ -364,18 +365,20 @@ def main(patterns_file, tender_file):
         if item == 'Brnd':
             results = results + '{}: {} tot  {} unq\n'.format(item, total_found[i], total_unique_found[i])
         i += 1
+
     # store nlp object as string in html var
     spacer = '---------------------------------------------------------\n'
     header = 'Named Entities Found in Target File:\n'
     doc = nlp(header + spacer + results + spacer + tender)
     doc.user_data["title"] = "Named Entity Resolution System (NERS)"
     colors = {"BRND": "#FFDDA1", "WRWXSTART":"#ADC9E8", "WRWXEND":"#ADC9E8"}  # blue: #0075C9 | lt blue: #ADC9E8
-    #colors = {"MPN": "#C3FFA1", "BRND": "#FFDDA1", "CMMDTY": "#F3DDA1"}
     options = {"ents": ["MPN", "BRND", "WRWXSTART", "WRWXEND"], "colors": colors}
-    # displacy.serve(doc, style="ent", options=options)
     html = displacy.render(doc, style="ent", page=True, options=options)  # use the entity visualizer
+
     # write the html string to the xampp folder and launch in browser through localhost port
-    with open('C:/Users/stacy/Desktop/IESA Project - Europe/IESA Phase 2/ners/displacy/index.html', 'w') as data:
+    folder_path = os.path.dirname(os.path.abspath(__file__))
+    ofile = folder_path + '\\' + 'displacy\\index.html'
+    with open(ofile, 'w') as data:
         data.write(html)
 
     print('\n' + results)

@@ -330,7 +330,6 @@ def extract_brands_ners_adhoc_menu():
         # return to this function; therefore, it's important to invoke sys.exit()
         # upon the callback to terminate all py execution in the terminal
         sys.exit()
-
     # end function //
 
 def extract_mpns_ners_adhoc_menu():
