@@ -15,6 +15,7 @@ Selects the primary brand for each record:
 
 """
 # library imports  -------------------------------------------------------------
+import os, sys
 import pandas as pd
 from pandas import ExcelWriter
 import numpy as np
@@ -27,10 +28,12 @@ def show_brand_frequency(unique_brands, unique_brands_counts):
         print('{} | {}'.format(ub, ubcount))
         i += 1
 
-def main():
+def main(user_selected_file):
     # main  ------------------------------------------------------------------------
-    file_name = r'db_data_org_electrical_short_wx_v1.xlsx'
-    file_path = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners_v2\ners\db_data_org_electrical_short_wx_v1.xlsx'
+    # get file name and full path to file
+    folder_path = os.path.dirname(os.path.abspath(__file__))
+    file_name = user_selected_file
+    file_path = folder_path + '\\' + file_name
 
     # read the project and metadata files into dataframes
     df_data = pd.read_excel(file_path, sheet_name=0)
@@ -130,7 +133,6 @@ def main():
     writer.save()
 
     # end program
-    # show a list of brand frequency
     #show_brand_frequency(unique_brands, unique_brands_counts)
     print('Primary brands written')
     print('{} total, {} unique'.format(brand_tot_count, len(unique_brands)))

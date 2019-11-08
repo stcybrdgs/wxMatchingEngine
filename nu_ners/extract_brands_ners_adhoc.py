@@ -375,7 +375,7 @@ def main(patterns_file, tender_file):
     options = {"ents": ["MPN", "BRND", "WRWXSTART", "WRWXEND"], "colors": colors}
     html = displacy.render(doc, style="ent", page=True, options=options)  # use the entity visualizer
 
-    # write the html string to the xampp folder and launch in browser through localhost port
+    # write the html string displacy folder
     folder_path = os.path.dirname(os.path.abspath(__file__))
     ofile = folder_path + '\\' + 'displacy\\index.html'
     with open(ofile, 'w') as data:

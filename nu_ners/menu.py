@@ -14,6 +14,7 @@ from pandas import ExcelFile
 import numpy as np
 
 # import py files  -------------------------------------------------------------
+import compute_wbrand_primary
 import generate_brand_patterns_2
 import generate_mpn_patterns_2
 import get_brands_db_iesa
@@ -576,7 +577,58 @@ def add_wx_cols_menu():
     # end function //
 
 def compute_primary_brands_menu():
-    print('compute_primary_brands_menu')
+    print('compute_primary_brands_menu()')
+    # print menu options to console  -----------------------------------------------
+    # declare menu and file arrays
+    global menu_choices
+    file_choices = []
+    console_message = ''
+
+    # get path of current folder
+    folder_path = os.path.dirname(os.path.abspath(__file__))
+
+    # get names of .xlsx files that are in the folder that are also input files
+    for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
+        for file in f:
+            if '.xlsx' in file and 'data' in file and '_wx_v1' in file:
+                # rem for full path use <files.append(os.path.join(r, file))>
+                file_choices.append(file)
+
+    show_submenu('wx_v1 Files', file_choices)
+
+    # get user input
+    if len(file_choices) == 0:
+        console_message = '\nNo data files available. Select \'m\' for Main Menu'
+    else:
+        console_message = '\nSelect a data file (or \'m\' for Main Menu)'
+    print(console_message)
+    user_choice = input()
+
+    # validate user input
+    while user_choice not in menu_choices:
+        print('Invalid choice! {}'.format(console_message))
+        user_choice = input()
+
+    if user_choice == 'e':
+        sys.exit()
+    elif user_choice == 'm':
+        main()
+
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this program; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+
+    # TEST
+    user_selected_file = file_choices[int(user_choice)-1]
+    print('You chose: ', user_selected_file)
+
+    compute_wbrand_primary.main(user_selected_file)
+    # show menu of wx_v1 options
+    # user picks a file
+    # send user selected file to function
+
     # end function //
 
 # populate menu options/functions  ---------------------------------------------
