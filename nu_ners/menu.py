@@ -499,6 +499,86 @@ def extract_mpns_ners_adhoc_menu():
         sys.exit()
     # end function //
 
+def add_wx_cols_menu():
+    print('add_wx_cols_menu()')
+    # print menu options to console  -----------------------------------------------
+    # declare menu and file arrays
+    global menu_choices
+    file_choices = []
+    console_message = ''
+
+    # get path of current folder
+    folder_path = os.path.dirname(os.path.abspath(__file__))
+
+    # get names of .xlsx files that are in the folder that are also input files
+    for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
+        for file in f:
+            if '.xlsx' in file and 'data' in file and '_wx_v1' not in file:
+                # rem for full path use <files.append(os.path.join(r, file))>
+                file_choices.append(file)
+
+    show_submenu('Data Files', file_choices)
+
+    # get user input
+    if len(file_choices) == 0:
+        console_message = '\nNo data files available. Select \'m\' for Main Menu'
+    else:
+        console_message = '\nSelect a data file (or \'m\' for Main Menu)'
+    print(console_message)
+    user_choice = input()
+
+    # validate user input
+    while user_choice not in menu_choices:
+        print('Invalid choice! {}'.format(console_message))
+        user_choice = input()
+
+    if user_choice == 'e':
+        sys.exit()
+    elif user_choice == 'm':
+        main()
+
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this program; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+
+    # see if user-selected file has already been made into a wx_v1 file
+    user_selected_file = file_choices[int(user_choice)-1]
+    wx_files = []
+    wx_file_exists = False
+    # find wx_v1 filenames and put them in array
+    for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
+        for file in f:
+            if 'xlsx' in file and 'wx_v1' in file:
+                wx_files.append(file)
+
+    for f in wx_files:
+        if user_selected_file[0:len(user_selected_file)-5] in f:
+            wx_file_exists = True
+
+    # if the wx_v1 file already exists, see if user wants to overwrite it
+    want_to_add_cols = True
+    if wx_file_exists:
+        print('A \'wx_v1\' file already exists for that data. Overwrite (y/n)?')
+        yn_choice = input()
+        while yn_choice not in ['y', 'n', 'Y', 'N']:
+            print('Invalid choice! Overwrite (y/n)?')
+            yn_choice = input()
+        if yn_choice == 'n':
+            want_to_add_cols = False
+
+    # if the user wants to overwrite the existing wx_1 file, or
+    # if there is not yet a wx_1 file for the user-selected data file, then
+    # create the new wx_1 file
+    if want_to_add_cols:
+        add_wx_cols.main(user_selected_file)
+    # end function //
+
+def compute_primary_brands_menu():
+    print('compute_primary_brands_menu')
+    # end function //
+
 # populate menu options/functions  ---------------------------------------------
 menu_options = [
     'Session - Start logging',
@@ -510,6 +590,7 @@ menu_options = [
     'Get Data - Clean (IESA.ProductsClean)',
     'Get Data - Clean + Original (IESA.ProductsOriginal JOIN IESA.ProductsClean)',
     'Add WrWx columns to data file',
+    'Compute primary brands (wBrand_primary)',
     'NERS - generate patterns for Brands (JSONL)',
     'NERS - generate patterns for MPNs (JSONL)',
     'NERS - extract Brands (ad hoc)',
@@ -527,7 +608,8 @@ menu_functions = [
     get_data_org_iesa,
     get_data_cln_iesa,
     get_data_cln_org_iesa,
-    add_wx_cols,
+    add_wx_cols_menu,
+    compute_primary_brands_menu,
     generate_brand_patterns_menu,
     generate_mpn_patterns_menu,
     extract_brands_ners_adhoc_menu,
@@ -550,7 +632,7 @@ def main():
     is_program_running = True
     while is_program_running:
         # get & validate user input
-        print('\nSelect a task (or \'m\' for menu, \'e\' to exit): ')
+        print('\nSelect a task (or \'m\' for main menu, \'e\' to exit): ')
         menu_choice = input()
         while menu_choice not in menu_choices:
             print('Invalid choice! Select a task: ')
@@ -571,6 +653,11 @@ def main():
             elif menu_options[index] == 'NERS - generate patterns for MPNs (JSONL)':
                 menu_functions[index]()
             elif menu_options[index] == 'NERS - generate patterns for Brands (JSONL)':
+                menu_functions[index]()
+            elif menu_options[index] == 'Compute primary brands (wBrand_primary)':
+                menu_functions[index]()
+                break
+            elif menu_options[index] == 'Add WrWx columns to data file':
                 menu_functions[index]()
             else:
                 print('\n-----------------------------------------')
