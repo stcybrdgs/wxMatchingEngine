@@ -128,12 +128,6 @@ def main():
             results[i] = string_to_token_list(result)
             i += 1
 
-        '''
-        for list in results:
-            for token in list:
-                print(token)
-        '''
-
         # compare results[] to wRS_Code[] strings and add any unique tokens that
         # don't already exist in wRS_Code[]
         i = 0
@@ -153,8 +147,14 @@ def main():
             wRS_Code[i] = nu_rs_code
             i += 1
 
-    for code in wRS_Code:
-        print(code)
+    # print test set
+    ofile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners_v2\ners\rs_code_test.csv'
+    with open(ofile, 'w') as f:
+        f.write('wRS_Code')
+        f.write('\n')
+        for code in wRS_Code:
+            f.write(code)
+            f.write('\n')
 
     # end program
     print('Done')
