@@ -26,6 +26,7 @@ import add_wx_cols
 import extract_brands_ners_adhoc
 import extract_mpns_ners_adhoc
 import tbd
+import extract_rs_codes
 
 # global variables  ------------------------------------------------------------
 menu_options = []
@@ -167,14 +168,6 @@ def generate_brand_patterns_menu():
     # end function //
 
 def extract_brands_ners_adhoc_menu():
-    #print('This is the Menu Driver for \'NERS - extract Brands (ad hoc)\'')
-    # check for jsonl file
-    #    if none, alert;
-    #    else confirm user wants to use existing file
-    # check for data file; if none, alert
-    # if jsonl && data present data files and ask user to pick one
-    # after user picks one, run extract_brands_ners_adhoc()
-
     # get the user's choice of which jsonl file to use -------------------------
     # print menu options to console
     # declare menu and file arrays
@@ -334,14 +327,6 @@ def extract_brands_ners_adhoc_menu():
     # end function //
 
 def extract_mpns_ners_adhoc_menu():
-    #print('This is the Menu Driver for \'NERS - extract MPNs (ad hoc)\'')
-    # check for jsonl file
-    #    if none, alert;
-    #    else confirm user wants to use existing file
-    # check for data file; if none, alert
-    # if jsonl && data present data files and ask user to pick one
-    # after user picks one, run extract_mpn_ners_adhoc()
-
     # get the user's choice of which jsonl file to use -------------------------
     # print menu options to console
     # declare menu and file arrays
@@ -630,10 +615,98 @@ def compute_primary_brands_menu():
     # send user selected file to function
     # end function //
 
+def get_column_choice(file_name, title):
+    #global df_tender
+    # get the columns from the file
+    # df.columns.tolist()
+    file_name = get_folder_path() + '\\' + file_name
+    tender_col_choices = []
+    tender_col_nums = []
+    df_tender = pd.read_excel(file_name, sheet_name=0)  # read tender file into dataframe
+    for head in df_tender:
+        tender_col_choices.append(head)  # copy tender headers into array
+
+    # print user menu
+    print('\n-----------------------------------------')
+    print('                    ',title)
+    print('-----------------------------------------')
+    spacer ='  '
+    print('{}{}{}'.format('m', spacer, 'Show Main Menu'))
+    tender_col_nums.append('m')
+    col_num = ''
+    i = 0
+    for tc in tender_col_choices:
+        i += 1
+        print('{}  {}'.format(i, tc))
+        tender_col_nums.append(str(i))
+
+    # get user input
+    print('\nSelect the column for extracting values (or \'m\' for Main Menu)')
+    col_choice = input()
+
+    # validate user input
+    while col_choice not in tender_col_nums:
+        print('Invalid choice! Select a column (or \'m\' for Main Menu)')
+        col_choice = input()
+
+    if col_choice == 'm':
+        menu.main()
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this program; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+    else:
+        col_choice = tender_col_choices[int(col_choice)-1]
+        print('\nYou chose: {}'.format(col_choice))
+        #print(jsonl_files)
+
+    return col_choice
+    # end function //
+
 def extract_rs_codes_menu():
     print('\nextract_rs_codes_menu()')
-    file_name = 'db_data_org_electrical_nutest_wx_v1.xlsx'
-    extract_rs_codes.main(file_name, 'LongText')
+    #file_name = 'db_data_org_electrical_nutest_wx_v1.xlsx'  # test file
+    #extract_rs_codes.main(file_name, 'LongText')  # test column
+    global menu_choices
+    file_choices = []
+
+    # get path of current folder
+    folder_path = get_folder_path()
+
+    # get names of .xlsx files that are in the folder that are also input files
+    for r, d, f in os.walk(folder_path):  # rem r=root, d=dir, f=file
+        for file in f:
+            if '.xlsx' in file and 'data' in file and '_wx_v1' in file:
+                # rem for full path use <files.append(os.path.join(r, file))>
+                file_choices.append(file)
+
+    # show the submenu of file input options
+    show_submenu('wx_v1 Input Files', file_choices)
+
+    # get user input
+    print('\nSelect an input file (or \'m\' for Main Menu)')
+    gold_choice = input()
+
+    # validate user input
+    while gold_choice not in menu_choices:
+        print('Invalid choice! Select an input file (or \'m\' for Main Menu)')
+        gold_choice = input()
+
+    if gold_choice == 'm':
+        main()
+        # if the user chooses 'm', then program control goes back to menu.main(),
+        # which means that when menu.main() terminates, the program control will
+        # return to this program; therefore, it's important to invoke sys.exit()
+        # upon the callback to terminate all py execution in the terminal
+        sys.exit()
+    elif gold_choice =='e':
+        sys.exit()
+    else:
+        gold_choice = file_choices[int(gold_choice)-1]
+        print('\nYou chose: {}'.format(gold_choice))
+        col_choice = get_column_choice(gold_choice, 'wx_v1 Columns')
+        extract_rs_codes.main(gold_choice, col_choice)
     # end function //
 
 # populate menu options/functions  ---------------------------------------------
