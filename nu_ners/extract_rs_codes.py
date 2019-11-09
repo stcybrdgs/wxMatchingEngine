@@ -19,7 +19,7 @@ import numpy as np
 # clean_result()
 # cleans the regex result of any leading/trailing chars and returns result to caller
 def clean_result(result):
-    stop_chars = [' ', ',', '(', '{', '[', ')', '}', ']']
+    stop_chars = [' ', ',', '(', '{', '[', ')', '}', ']', 'RS', ':']
     token = ''
     for char in result[0]:
         if char not in stop_chars:
@@ -57,24 +57,25 @@ def string_to_token_list(string):
 # identify regex search patterns
 #[\s,({[]RS\d{3}[-]\d{3,4}[\s,)}]',  # # case 4: the regex is inline preceded by 'RS'
 rs_regex_strings = [
-    '[\s,({[]\d{3}[-]\d{3,4}[\s,)}]',  # # case 1: the regex is inline
-    '^\d{3}[-]\d{3,4}[\s,)}]',  # case 2: the regex is at start of line
-    '[\s,({[]\d{3}[-]\d{3,4}$'  # case 3: the regex is at end of line
+    '[\s,:({[]\d{3}[-]\d{3,4}[\s,)}]',  # # case: the regex is inline
+    '^\d{3}[-]\d{3,4}[\s,)}]',  # case: the regex is at start of line
+    '[\s,({[]\d{3}[-]\d{3,4}$',  # case: the regex is at end of line
+    '^\d{3}[-]\d{3,4}$'  # case: the regex is at start of line and no chars trail it
 ]
 
 # main  ========================================================================
-def main():
+def main(file_name, col_name):
     global rs_regex_strings
 
     # get input file
     folder_path = os.path.dirname(os.path.abspath(__file__))
-    infile = folder_path + '\\db_data_org_electrical_nutest_wx_v1.xlsx'
-    outfile = folder_path + '\\api_in_ids.csv'
+    infile = folder_path + '\\' + file_name
+    outfile = infile
 
     # get dataframe/column
     df_tender = pd.read_excel(infile, sheet_name=0)  # read file into dataframe
     df_headers = df_tender.columns
-    tender = df_tender['Description']  #mpns = df_tender['ManufacturerPartNo']
+    tender = df_tender[col_name]  #mpns = df_tender['ManufacturerPartNo']
 
     # if a wRS_Code col exists in the data, preserve it, else start a blank one
     wRS_Code = []
@@ -83,8 +84,8 @@ def main():
             wRS_Code.append(code)
 
     # find rs codes  -----------------------------------------------------------
-    # find rs codes per regex rules and store them in results array;
-    # later, we will merge wRS_Code[] with results[] to yield the final data column
+    # find rs codes per regex rules and store them in results array; afterward,
+    # we will merge wRS_Code[] with results[] to yield the final data column
     results = []
     rgx = 0
     for regex in rs_regex_strings:
@@ -120,6 +121,11 @@ def main():
     # merge results[] with wRS_Code[]  -----------------------------------------
     if len(wRS_Code) == 0:
         # if wRS_Code is empty, copy results into it
+        i = 0
+        for r in results:
+            if r == 'null':
+                results[i] = ''
+            i += 1
         wRS_Code = results
     else:
         # convert results[] from a list of strings into a list of token lists
@@ -147,6 +153,22 @@ def main():
             wRS_Code[i] = nu_rs_code
             i += 1
 
+    # write data to project file  ----------------------------------------------
+    p_dict = {}
+    for head in df_tender:
+        if head == 'wRS_Code':
+            p_dict.update({head:wRS_Code})
+        else:
+            p_dict.update({head:df_tender[head]})
+
+    if 'wRS_Code' not in df_headers:
+        p_dict.update({'wRS_Code':wRS_Code})
+
+    df_out = pd.DataFrame(p_dict)
+    writer = pd.ExcelWriter(outfile)
+    df_out.to_excel(writer, 'TestData', index=False)
+    writer.save()
+
     # print test set
     ofile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners_v2\ners\rs_code_test.csv'
     with open(ofile, 'w') as f:
@@ -157,6 +179,8 @@ def main():
             f.write('\n')
 
     # end program
+    print('\n')
+    print(file_name)
     print('Done')
 
 if __name__ == '__main__' : main()
