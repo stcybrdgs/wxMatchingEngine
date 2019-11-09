@@ -87,6 +87,7 @@ def main(file_name, col_name):
     # find rs codes per regex rules and store them in results array; afterward,
     # we will merge wRS_Code[] with results[] to yield the final data column
     results = []
+    result_count = 0
     rgx = 0
     for regex in rs_regex_strings:
         if rgx == 0:
@@ -96,8 +97,10 @@ def main(file_name, col_name):
                 # if the regex pattern is found, then clean it and add it to results[]
                 # else add '' to results[]
                 if result:
+                    result_count += 1
                     result = clean_result(result) # clean the result
                     results.append(result)
+                    print(result)
                 else:
                     results.append('null')
         else:
@@ -105,7 +108,9 @@ def main(file_name, col_name):
             for row in tender:
                 result = re.findall(regex, str(row))  # get regex result, if any
                 if result:
+                    result_count += 1
                     result = clean_result(result)
+                    print(result)
                     if results[i] == 'null':
                         # case: if results[i] == 'null' then insert result
                         results[i] = result
@@ -169,18 +174,10 @@ def main(file_name, col_name):
     df_out.to_excel(writer, 'TestData', index=False)
     writer.save()
 
-    # print test set
-    ofile = r'C:\Users\stacy\Desktop\IESA Project - Europe\IESA Phase 2\ners_v2\ners\rs_code_test.csv'
-    with open(ofile, 'w') as f:
-        f.write('wRS_Code')
-        f.write('\n')
-        for code in wRS_Code:
-            f.write(code)
-            f.write('\n')
-
     # end program
-    print('\n')
+    print('\n{} results written'.format(result_count))
     print(file_name)
-    print('Done')
+    print(outfile)
+    print('\nDone.')
 
 if __name__ == '__main__' : main()
