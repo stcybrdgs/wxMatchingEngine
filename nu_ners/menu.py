@@ -628,7 +628,12 @@ def compute_primary_brands_menu():
     # show menu of wx_v1 options
     # user picks a file
     # send user selected file to function
+    # end function //
 
+def extract_rs_codes_menu():
+    print('\nextract_rs_codes_menu()')
+    file_name = 'db_data_org_electrical_nutest_wx_v1.xlsx'
+    extract_rs_codes.main(file_name, 'LongText')
     # end function //
 
 # populate menu options/functions  ---------------------------------------------
@@ -642,6 +647,7 @@ menu_options = [
     'Get Data - Clean (IESA.ProductsClean)',
     'Get Data - Clean + Original (IESA.ProductsOriginal JOIN IESA.ProductsClean)',
     'Add WrWx columns to data file',
+    'Extract RS Codes',
     'Compute primary brands (wBrand_primary)',
     'NERS - generate patterns for Brands (JSONL)',
     'NERS - generate patterns for MPNs (JSONL)',
@@ -661,6 +667,7 @@ menu_functions = [
     get_data_cln_iesa,
     get_data_cln_org_iesa,
     add_wx_cols_menu,
+    extract_rs_codes_menu,
     compute_primary_brands_menu,
     generate_brand_patterns_menu,
     generate_mpn_patterns_menu,
@@ -708,8 +715,9 @@ def main():
                 menu_functions[index]()
             elif menu_options[index] == 'Compute primary brands (wBrand_primary)':
                 menu_functions[index]()
-                break
             elif menu_options[index] == 'Add WrWx columns to data file':
+                menu_functions[index]()
+            elif menu_options[index] == 'Extract RS Codes':
                 menu_functions[index]()
             else:
                 print('\n-----------------------------------------')
