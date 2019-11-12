@@ -46,6 +46,9 @@ def import_csv(d):
         csv_reader = csv.reader(data, delimiter='|')
         i = 0
         for row in csv_reader:
+            row = str(row)  # clear float inputs
+            row = unicodedata.normalize('NFKD', row).encode('ASCII', 'ignore')  # convert int'l chars
+            row = row.decode('utf-8') # convert bytes to strings
             # rem add 'wrwx' marker to each record to assist the sentence segmenter
             doc = doc + 'wrwx ' + ('|'.join(row) + '\n')
             i += 1

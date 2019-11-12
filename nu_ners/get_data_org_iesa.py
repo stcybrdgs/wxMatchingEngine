@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+"""
+Wed, Oct 23, 2019
+Stacy Bridges
+
+"""
 # import library components  ---------------------------------------------------
 # import shutil
 import os, sys
@@ -90,7 +96,7 @@ def get_user_choice():
 
 # main  ------------------------------------------------------------------------
 def main():
-    print('You called \'get_data_org_iesa.py\'')  # temp message
+    print('\nYou called \'get_data_org_iesa.py\'')  # temp message
     print('Building menu...')
 
     connection = get_connection_object()  # get the connection object
@@ -98,7 +104,7 @@ def main():
     category = get_user_choice()  # get user choice of category
 
     # connect to db and query for data per user-selected category
-    print('You selected the category \'' + category + '\'')
+    print('\nYou selected the category \'' + category + '\'')
     print('Connecting to the database...')
 
     # query info
@@ -109,6 +115,9 @@ def main():
         'FROM ProductsOriginal ',
         'WHERE ProductCategory = \'' + category + '\' ORDER BY ID ASC'
         ]
+
+    print('\n')
+    print(data_query)
 
     sql = ''
     for str in data_query:
@@ -168,7 +177,8 @@ def main():
     # end program
     print('\n')
     print('{} records written'.format(record_count))
-    print(data_file_name)
+    print('\n')
+    print('{}'.format(data_file_name))
     print(outfile)
     print('Done.')
 
