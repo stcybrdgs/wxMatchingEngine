@@ -616,6 +616,7 @@ def compute_primary_brands_menu():
     # end function //
 
 def get_column_choice(file_name, title):
+    print('\nBuilding column menu...')
     #global df_tender
     # get the columns from the file
     # df.columns.tolist()
@@ -650,7 +651,7 @@ def get_column_choice(file_name, title):
         col_choice = input()
 
     if col_choice == 'm':
-        menu.main()
+        main()
         # if the user chooses 'm', then program control goes back to menu.main(),
         # which means that when menu.main() terminates, the program control will
         # return to this program; therefore, it's important to invoke sys.exit()
@@ -711,9 +712,9 @@ def extract_rs_codes_menu():
 
 # populate menu options/functions  ---------------------------------------------
 menu_options = [
-    'Session - Start logging',
-    'Session - Archive session',
-    'Session - Clean session',
+    #'Session - Start logging',
+    #'Session - Archive session',
+    #'Session - Clean session',
     'Get Brands (IESA.ProductsClean)',
     'Get Brands (WrWx.Brands)',
     'Get Data - Original (IESA.ProductsOriginal)',
@@ -725,15 +726,15 @@ menu_options = [
     'NERS - generate patterns for Brands (JSONL)',
     'NERS - generate patterns for MPNs (JSONL)',
     'NERS - extract Brands (ad hoc)',
-    'NERS - extract Brands (IESA model)',
+    #'NERS - extract Brands (IESA model)',
     'NERS - extract MPNs (ad hoc)',
-    'NERS - extract MPNs (IESA model)',
-    'NERS - manage Displacy Visualizer'
+    #'NERS - extract MPNs (IESA model)',
+    #'NERS - manage Displacy Visualizer'
     ]
 menu_functions = [
-    tbd,
-    tbd,
-    tbd,
+    #tbd,
+    #tbd,
+    #tbd,
     get_brands_db_iesa,
     get_brands_db_wx,
     get_data_org_iesa,
@@ -745,10 +746,10 @@ menu_functions = [
     generate_brand_patterns_menu,
     generate_mpn_patterns_menu,
     extract_brands_ners_adhoc_menu,
-    tbd,
+    #tbd,
     extract_mpns_ners_adhoc_menu,
-    tbd,
-    tbd
+    #tbd,
+    #tbd
 ]
 num_menu_items = 0
 
