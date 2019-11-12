@@ -65,6 +65,7 @@ rs_regex_strings = [
 
 # main  ========================================================================
 def main(file_name, col_name):
+    print('\nExtracting RS Codes...')
     global rs_regex_strings
 
     # get input file
