@@ -33,6 +33,7 @@ from pathlib import Path
 from spacy.lemmatizer import Lemmatizer
 from spacy.lang.en import LEMMA_INDEX, LEMMA_EXC, LEMMA_RULES
 from spacy.lang.en.stop_words import STOP_WORDS
+import unicodedata
 import pandas as pd
 from pandas import ExcelWriter
 import numpy as np
@@ -60,6 +61,7 @@ def sentence_segmenter(doc):
     # end function //
 
 def get_column_choice(tender_file):
+    print('\nBuilding column menu...')
     global df_tender
     # get the columns from the file
     # df.columns.tolist()
@@ -118,10 +120,13 @@ def create_tender_csv(tender_file):
     print('\nCreating csv file of selected tender column...\n')
     data = df_tender[column_choice]
     folder_path = os.path.dirname(os.path.abspath(__file__))
-    csv_filename = folder_path + '\\' + 'mpn_tender.csv'
+    csv_filename = folder_path + '\\' + 'tender_mpn.csv'
     with open(csv_filename, 'w', encoding='utf-8') as outfile:  # encoding handles charmap errors
         outfile.write('description\n')
         for line in data:
+            line = str(line)  # clear float inputs
+            line = unicodedata.normalize('NFKD', line).encode('ASCII', 'ignore')  # convert int'l chars
+            line = line.decode('utf-8') # convert bytes to strings
             outfile.write(str(line) + '\n')
             #outfile.write('\n')
             print(line)
