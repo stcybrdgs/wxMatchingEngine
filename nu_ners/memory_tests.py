@@ -2,7 +2,6 @@
 """
 Thur Nov 14 2019
 Stacy Bridges
-
 """
 # import library components  ---------------------------------------------------
 import os, shutil, sys
@@ -16,12 +15,13 @@ import unicodedata  # use to normalize international characters
 
 # globals  ---------------------------------------------------------------------
 global char_limit_for_chunker
-char_limit_for_chunker = 1164
+char_limit_for_chunker = 10
 
 # helper functions  ------------------------------------------------------------
-def get_number_of_chunks(tender):
+def get_number_of_chunks(tender, row_num):
     global char_limit_for_chunker
     limit = char_limit_for_chunker
+    num_o_chunks = 0
 
     char_count = 0
     for row in tender:
@@ -34,7 +34,10 @@ def get_number_of_chunks(tender):
     remainder = char_count % limit
     if remainder > 0:
         remainder = 1
-    num_o_chunks = product + remainder
+    if num_o_chunks < row_num:
+        num_o_chunks = row_num
+    else:
+        num_o_chunks = product + remainder
 
     return num_o_chunks
     # end function //
@@ -76,7 +79,7 @@ tender = df_tender[col_name]  #mpns = df_tender['ManufacturerPartNo']
 # compute the stop points when the current chunk of data should be written
 # before moving on to the next chunk
 chunk_stop_points = []
-chunk_num = get_number_of_chunks(tender)
+chunk_num = get_number_of_chunks(tender, row_num)
 must_chunk = False
 
 if chunk_num > 1:
@@ -99,5 +102,3 @@ for row in tender:
     else:
         print(row)
     row_count += 1
-
-print('number of chunks: {}'.format(chunk_num))
